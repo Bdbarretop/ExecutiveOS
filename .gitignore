@@ -1,0 +1,38 @@
+# Gradle y compilación
+.gradle/
+.kotlin/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Configuración local (rutas del SDK de cada máquina)
+local.properties
+
+# Android Studio
+*.iml
+.idea/
+.navigation/
+
+# Secretos y firma: nunca al repositorio
+*.jks
+*.keystore
+keystore.properties
+*.pem
+secrets.properties
+google-services.json
+
+# Binarios generados
+*.apk
+*.aab
+*.ap_
+*.dex
+*.hprof
+
+# Respaldos y exportaciones con datos personales
+*.executiveos-backup
+exports/
+
+# Sistema
+.DS_Store
+Thumbs.db
