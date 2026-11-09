@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="es">
     <string name="app_name">EXECUTIVE OS</string>
 
     <string name="section_home">Inicio</string>
@@ -217,6 +217,169 @@
         <item>Consecuencias importantes</item>
         <item>Consecuencias críticas</item>
     </string-array>
+
+    <!-- Tareas -->
+    <string name="tasks_search">Buscar en título, contexto, proyecto o etiquetas</string>
+    <string name="tasks_new">Nueva tarea</string>
+    <string name="tasks_new_field">Título de la tarea</string>
+    <string name="tasks_filters">Filtros</string>
+    <string name="tasks_filters_active">Filtros (%1$d)</string>
+    <string name="tasks_filters_clear">Limpiar filtros</string>
+    <string name="tasks_empty_title">Sin tareas en esta vista</string>
+    <string name="tasks_empty_message">Prueba con otra vista o cambia los filtros. Lo que proceses desde la Bandeja aparecerá aquí.</string>
+    <string name="tasks_next_action">Siguiente: %1$s</string>
+    <string name="tasks_minutes">%1$d min</string>
+    <string name="tasks_subtask_of">Subtarea de %1$s</string>
+    <plurals name="tasks_blocked_by">
+        <item quantity="one">Depende de %1$d tarea pendiente</item>
+        <item quantity="many">Depende de %1$d tareas pendientes</item>
+        <item quantity="other">Depende de %1$d tareas pendientes</item>
+    </plurals>
+    <string name="tasks_action_failed">No se pudo completar la acción. No se ha modificado nada.</string>
+    <string name="tasks_done_completed">Tarea completada</string>
+    <string name="tasks_done_duplicated">Tarea duplicada</string>
+    <string name="tasks_done_archived">Tarea archivada</string>
+    <string name="tasks_done_updated">Estado actualizado</string>
+    <string name="tasks_action_complete">Completar</string>
+    <string name="tasks_action_start">Marcar en progreso</string>
+    <string name="tasks_action_duplicate">Duplicar</string>
+    <string name="tasks_action_archive">Archivar</string>
+    <string name="tasks_action_delegate">Delegar</string>
+    <string name="tasks_action_postpone">Posponer</string>
+
+    <string name="view_all">Todas</string>
+    <string name="view_today">Hoy</string>
+    <string name="view_upcoming">Próximas</string>
+    <string name="view_overdue">Vencidas</string>
+    <string name="view_critical">Críticas</string>
+    <string name="view_high">Alta prioridad</string>
+    <string name="view_in_progress">En progreso</string>
+    <string name="view_waiting">Esperando respuesta</string>
+    <string name="view_blocked">Bloqueadas</string>
+    <string name="view_completed">Completadas</string>
+    <string name="view_no_date">Sin fecha</string>
+
+    <string name="status_inbox">En bandeja</string>
+    <string name="status_pending">Pendiente</string>
+    <string name="status_in_progress">En progreso</string>
+    <string name="status_waiting">En espera</string>
+    <string name="status_blocked">Bloqueada</string>
+    <string name="status_completed">Completada</string>
+    <string name="status_cancelled">Cancelada</string>
+    <string name="status_archived">Archivada</string>
+
+    <string name="level_critical">CRÍTICA</string>
+    <string name="level_high">ALTA</string>
+    <string name="level_medium">MEDIA</string>
+    <string name="level_low">BAJA</string>
+    <string name="level_pending">Sin evaluar</string>
+    <string name="level_critical_word">crítica</string>
+    <string name="level_high_word">alta</string>
+    <string name="level_medium_word">media</string>
+    <string name="level_low_word">baja</string>
+
+    <string name="obligation_label">Obligación crítica</string>
+    <string name="obligation_none">Ninguna</string>
+    <string name="obligation_regulatory">Regulatoria</string>
+    <string name="obligation_legal">Legal</string>
+    <string name="obligation_audit">Auditoría</string>
+    <string name="obligation_material_risk">Riesgo material</string>
+    <string name="obligation_contractual">Compromiso contractual</string>
+    <string name="obligation_executive">Compromiso directivo</string>
+    <string name="obligation_warning">Requiere revisión especial: %1$s. La puntuación no reduce su importancia.</string>
+
+    <string name="filter_category">Categoría</string>
+    <string name="filter_project">Proyecto</string>
+    <string name="filter_priority">Prioridad</string>
+    <string name="filter_status">Estado</string>
+    <string name="filter_owner">Responsable</string>
+    <string name="filter_tags">Etiquetas</string>
+    <string name="filter_estimate">Tiempo estimado</string>
+    <string name="filter_date_from">Desde</string>
+    <string name="filter_date_to">Hasta</string>
+    <string name="estimate_up_to_30">Hasta 30 min</string>
+    <string name="estimate_up_to_60">Hasta 1 h</string>
+    <string name="estimate_up_to_120">Hasta 2 h</string>
+    <string name="estimate_over_120">Más de 2 h</string>
+
+    <!-- Prioridad en la ficha -->
+    <string name="priority_title">Prioridad</string>
+    <string name="priority_because">Prioridad %1$s porque %2$s.</string>
+    <string name="priority_from_scales">Prioridad %1$s según las escalas asignadas.</string>
+    <string name="priority_pending">Sin evaluar: falta definir %1$s. No se asume ningún valor.</string>
+    <string name="priority_score">Puntuación %1$s de 5,00</string>
+    <string name="priority_breakdown">%1$s: %2$d × %3$s = %4$s</string>
+    <string name="priority_manual_note">Ajuste manual: %1$s. Calculada: %2$s.</string>
+    <string name="priority_manual_label">Prioridad manual</string>
+    <string name="priority_manual_none">Sin ajuste</string>
+    <string name="priority_manual_reason">¿Por qué la ajustas? (obligatorio)</string>
+    <string name="scale_impact">impacto</string>
+    <string name="scale_urgency">urgencia</string>
+    <string name="scale_delay">riesgo de retraso</string>
+    <string name="reason_high_impact">tiene impacto elevado</string>
+    <string name="reason_high_urgency">requiere atención pronta</string>
+    <string name="reason_delay_risk">un retraso tendría consecuencias importantes</string>
+    <string name="reason_overdue">está vencida</string>
+    <string name="reason_due_soon">tiene una fecha próxima</string>
+    <string name="reason_dependencies">tiene dependencias pendientes</string>
+    <string name="reason_obligation">es una obligación crítica</string>
+    <string name="list_join_and">y</string>
+
+    <!-- Ficha: estructura -->
+    <string name="section_subtasks">Subtareas</string>
+    <string name="section_dependencies">Dependencias</string>
+    <string name="section_history">Historial</string>
+    <string name="task_status_label">Estado</string>
+    <string name="subtask_field">Nueva subtarea</string>
+    <string name="subtask_add">Añadir</string>
+    <string name="dependency_add">Añadir dependencia</string>
+    <string name="dependency_pick">¿De qué tarea depende?</string>
+    <string name="dependency_none_available">No hay otras tareas abiertas.</string>
+    <string name="dependency_remove">Quitar dependencia de %1$s</string>
+    <string name="dependency_cycle">No se puede añadir: crearía una dependencia circular.</string>
+    <string name="dependency_exists">Esa dependencia ya existe.</string>
+    <string name="history_empty">Sin movimientos registrados.</string>
+    <string name="complete_open_title">¿Completar de todos modos?</string>
+    <string name="complete_open_message">Esta tarea tiene subtareas o dependencias sin terminar.</string>
+
+    <string name="history_captured">Capturada</string>
+    <string name="history_created">Creada</string>
+    <string name="history_duplicated">Creada como copia</string>
+    <string name="history_to_task">Convertida en tarea</string>
+    <string name="history_to_project">Convertida en proyecto</string>
+    <string name="history_to_note">Convertida en nota</string>
+    <string name="history_delegated">Delegada</string>
+    <string name="history_postponed">Pospuesta</string>
+    <string name="history_archived">Archivada</string>
+    <string name="history_status">Cambio de estado</string>
+    <string name="history_priority">Cambio en las escalas de prioridad</string>
+    <string name="history_manual">Cambio en la prioridad manual</string>
+    <string name="history_obligation">Cambio en la obligación crítica</string>
+    <string name="history_date">Cambio de fechas</string>
+    <string name="history_subtask">Subtarea añadida</string>
+    <string name="history_dependency_added">Dependencia añadida</string>
+    <string name="history_dependency_removed">Dependencia quitada</string>
+
+    <!-- Motor de prioridad -->
+    <string name="settings_priority">Motor de prioridad</string>
+    <string name="settings_priority_description">Pesos y umbrales del cálculo</string>
+    <string name="priority_settings_title">Motor de prioridad</string>
+    <string name="priority_settings_weights">Pesos (deben sumar 100)</string>
+    <string name="priority_settings_thresholds">Umbrales (de 1,00 a 5,00)</string>
+    <string name="priority_settings_impact">Impacto (%)</string>
+    <string name="priority_settings_urgency">Urgencia (%)</string>
+    <string name="priority_settings_delay">Riesgo de retraso (%)</string>
+    <string name="priority_settings_critical">Crítica desde</string>
+    <string name="priority_settings_high">Alta desde</string>
+    <string name="priority_settings_medium">Media desde</string>
+    <string name="priority_settings_invalid">Revisa los valores: los pesos deben sumar 100 y los umbrales ir de menor a mayor.</string>
+    <string name="priority_settings_reset">Restaurar valores iniciales</string>
+    <string name="priority_settings_confirm_title">¿Aplicar los cambios?</string>
+    <plurals name="priority_settings_confirm_message">
+        <item quantity="one">%1$d tarea abierta cambiará de nivel. Las prioridades manuales no se modifican.</item>
+        <item quantity="many">%1$d tareas abiertas cambiarán de nivel. Las prioridades manuales no se modifican.</item>
+        <item quantity="other">%1$d tareas abiertas cambiarán de nivel. Las prioridades manuales no se modifican.</item>
+    </plurals>
 
     <!-- Plantillas -->
     <string name="templates_title">Plantillas de captura</string>

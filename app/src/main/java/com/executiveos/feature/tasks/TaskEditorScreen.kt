@@ -1,4 +1,4 @@
-package com.executiveos.feature.task
+package com.executiveos.feature.tasks
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.ArrayRes
@@ -27,10 +27,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +41,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
@@ -58,6 +62,7 @@ import com.executiveos.domain.capture.MissingField
 import com.executiveos.domain.capture.TaskValidationError
 import com.executiveos.domain.model.DelegationStatus
 import com.executiveos.domain.model.Task
+import com.executiveos.domain.priority.PriorityAssessment
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -73,6 +78,9 @@ private enum class EditorSection(@StringRes val title: Int) {
     DATES(R.string.section_g),
     PEOPLE(R.string.section_h),
     DOCUMENTATION(R.string.section_i),
+    SUBTASKS(R.string.section_subtasks),
+    DEPENDENCIES(R.string.section_dependencies),
+    HISTORY(R.string.section_history),
 }
 
 /** Cada acceso de la captura abre solo lo que hace falta. */
@@ -92,37 +100,70 @@ private fun initiallyExpanded(section: TaskSection?): List<String> = when (secti
 @Composable
 fun TaskEditorScreen(
     onClose: () -> Unit,
+    onOpenTask: (String) -> Unit,
     viewModel: TaskEditorViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val relations by viewModel.relations.collectAsStateWithLifecycle()
+    val priority by viewModel.priority.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val resources = LocalResources.current
     val close = { viewModel.flush(onClose) }
     var confirmConvert by remember { mutableStateOf(false) }
+    var showDelegate by remember { mutableStateOf(false) }
+    var showPostpone by remember { mutableStateOf(false) }
 
     BackHandler(onBack = close)
 
-    Column(
+    LaunchedEffect(viewModel) {
+        viewModel.events.collect { event ->
+            when (event) {
+                TaskEditorEvent.Close -> onClose()
+                is TaskEditorEvent.OpenTask -> onOpenTask(event.taskId)
+                is TaskEditorEvent.Message -> {
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar(resources.getString(event.text))
+                }
+            }
+        }
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .navigationBarsPadding()
             .imePadding(),
     ) {
-        Box {
-            ExecutiveTopBar(title = stringResource(R.string.task_title), onNavigateUp = close)
-            if (uiState.task?.sourceInboxItemId != null) {
-                Box(modifier = Modifier.align(Alignment.CenterEnd)) {
-                    EditorMenu(onConvert = { confirmConvert = true })
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box {
+                ExecutiveTopBar(title = stringResource(R.string.task_title), onNavigateUp = close)
+                if (uiState.task != null) {
+                    Box(modifier = Modifier.align(Alignment.BottomEnd)) {
+                        EditorMenu(
+                            canConvert = uiState.task?.sourceInboxItemId != null,
+                            onDuplicate = viewModel::duplicate,
+                            onDelegate = { showDelegate = true },
+                            onPostpone = { showPostpone = true },
+                            onArchive = viewModel::archive,
+                            onConvert = { confirmConvert = true },
+                        )
+                    }
                 }
             }
+            val task = uiState.task
+            when {
+                uiState.isLoading -> LoadingState()
+                task == null -> EmptyState(
+                    title = stringResource(R.string.task_title),
+                    message = stringResource(R.string.task_not_found),
+                )
+                else -> EditorForm(task, uiState, relations, priority, viewModel, onOpenTask)
+            }
         }
-        val task = uiState.task
-        when {
-            uiState.isLoading -> LoadingState()
-            task == null -> EmptyState(
-                title = stringResource(R.string.task_title),
-                message = stringResource(R.string.task_not_found),
-            )
-            else -> EditorForm(task, uiState, viewModel)
-        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        )
     }
 
     if (confirmConvert) {
@@ -131,7 +172,7 @@ fun TaskEditorScreen(
             title = { Text(stringResource(R.string.task_convert_project_title)) },
             text = { Text(stringResource(R.string.task_convert_project_message)) },
             confirmButton = {
-                TextButton(onClick = { viewModel.convertToProject(onClose) }) {
+                TextButton(onClick = viewModel::convertToProject) {
                     Text(stringResource(R.string.action_accept))
                 }
             },
@@ -142,10 +183,36 @@ fun TaskEditorScreen(
             },
         )
     }
+    if (showDelegate) {
+        DelegateTaskDialog(
+            onDismiss = { showDelegate = false },
+            onConfirm = { person ->
+                viewModel.delegate(person)
+                showDelegate = false
+            },
+        )
+    }
+    if (showPostpone) {
+        ExecutiveDatePickerDialog(
+            initialDate = uiState.task?.targetDate,
+            onDismiss = { showPostpone = false },
+            onDateSelected = { date ->
+                viewModel.postpone(date)
+                showPostpone = false
+            },
+        )
+    }
 }
 
 @Composable
-private fun EditorMenu(onConvert: () -> Unit) {
+private fun EditorMenu(
+    canConvert: Boolean,
+    onDuplicate: () -> Unit,
+    onDelegate: () -> Unit,
+    onPostpone: () -> Unit,
+    onArchive: () -> Unit,
+    onConvert: () -> Unit,
+) {
     var expanded by remember { mutableStateOf(false) }
     Box {
         IconButton(onClick = { expanded = true }) {
@@ -155,19 +222,33 @@ private fun EditorMenu(onConvert: () -> Unit) {
             )
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(
-                text = { Text(stringResource(R.string.inbox_action_to_project)) },
-                onClick = {
-                    expanded = false
-                    onConvert()
-                },
-            )
+            val entry: @Composable (Int, () -> Unit) -> Unit = { label, action ->
+                DropdownMenuItem(
+                    text = { Text(stringResource(label)) },
+                    onClick = {
+                        expanded = false
+                        action()
+                    },
+                )
+            }
+            entry(R.string.tasks_action_duplicate, onDuplicate)
+            entry(R.string.tasks_action_delegate, onDelegate)
+            entry(R.string.tasks_action_postpone, onPostpone)
+            entry(R.string.tasks_action_archive, onArchive)
+            if (canConvert) entry(R.string.inbox_action_to_project, onConvert)
         }
     }
 }
 
 @Composable
-private fun EditorForm(task: Task, uiState: TaskEditorUiState, viewModel: TaskEditorViewModel) {
+private fun EditorForm(
+    task: Task,
+    uiState: TaskEditorUiState,
+    relations: TaskRelationsUiState,
+    priority: PriorityAssessment?,
+    viewModel: TaskEditorViewModel,
+    onOpenTask: (String) -> Unit,
+) {
     var expanded by rememberSaveable {
         mutableStateOf(initiallyExpanded(viewModel.initialSection))
     }
@@ -177,6 +258,8 @@ private fun EditorForm(task: Task, uiState: TaskEditorUiState, viewModel: TaskEd
             .verticalScroll(rememberScrollState())
             .padding(bottom = Spacing.xl),
     ) {
+        StatusSelector(task.status, relations.hasOpenWork, viewModel::setStatus)
+        priority?.let { PrioritySummary(it) }
         EditorStatus(uiState)
         EditorSection.entries.forEach { section ->
             val isExpanded = section.name in expanded
@@ -188,7 +271,7 @@ private fun EditorForm(task: Task, uiState: TaskEditorUiState, viewModel: TaskEd
                     modifier = Modifier.padding(horizontal = Spacing.md, vertical = Spacing.sm),
                     verticalArrangement = Arrangement.spacedBy(Spacing.sm),
                 ) {
-                    SectionBody(section, task, uiState, viewModel)
+                    SectionBody(section, task, uiState, relations, viewModel, onOpenTask)
                 }
             }
             HorizontalDivider()
@@ -297,7 +380,9 @@ private fun SectionBody(
     section: EditorSection,
     task: Task,
     uiState: TaskEditorUiState,
+    relations: TaskRelationsUiState,
     viewModel: TaskEditorViewModel,
+    onOpenTask: (String) -> Unit,
 ) {
     val edit = viewModel::onEdit
     when (section) {
@@ -349,6 +434,8 @@ private fun SectionBody(
             ScaleSelector(R.string.field_delay_scale, R.array.delay_levels, task.delayRisk) {
                 edit { copy(delayRisk = it) }
             }
+            ObligationFields(task, edit)
+            ManualPriorityFields(task, edit)
         }
         EditorSection.DATES -> DateFields(task, edit)
         EditorSection.PEOPLE -> PeopleFields(task, edit)
@@ -357,6 +444,16 @@ private fun SectionBody(
             TaskField(R.string.field_links, task.links) { edit { copy(links = it) } }
             TaskField(R.string.field_references, task.references) { edit { copy(references = it) } }
         }
+        EditorSection.SUBTASKS ->
+            SubtasksSection(relations.subtasks, onOpenTask, viewModel::addSubtask)
+        EditorSection.DEPENDENCIES -> DependenciesSection(
+            dependencies = relations.dependencies,
+            candidates = relations.dependencyCandidates,
+            onOpen = onOpenTask,
+            onAdd = viewModel::addDependency,
+            onRemove = viewModel::removeDependency,
+        )
+        EditorSection.HISTORY -> HistorySection(relations.history)
     }
 }
 

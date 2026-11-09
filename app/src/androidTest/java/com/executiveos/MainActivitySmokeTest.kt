@@ -23,6 +23,8 @@ import com.executiveos.core.navigation.NavigationTags
 import com.executiveos.core.navigation.TopLevelDestination
 import com.executiveos.feature.capture.CAPTURE_SAVE_TAG
 import com.executiveos.feature.capture.CAPTURE_TITLE_TAG
+import com.executiveos.feature.tasks.TASKS_NEW_FIELD_TAG
+import com.executiveos.feature.tasks.TASKS_NEW_TAG
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -123,6 +125,23 @@ class MainActivitySmokeTest {
 
         waitForText(text(R.string.field_what_to_do))
         assertScreenTitle(R.string.task_title)
+    }
+
+    @Test
+    fun aTaskCanBeCreatedAndCompleted() {
+        openTopLevel(TopLevelDestination.TASKS)
+        composeRule.onNodeWithTag(TASKS_NEW_TAG).performClick()
+        composeRule.onNodeWithTag(TASKS_NEW_FIELD_TAG).performTextInput("Revisar indicadores")
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+        waitForText(text(R.string.task_status_label))
+
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+        openTopLevel(TopLevelDestination.TASKS)
+        waitForText("Revisar indicadores")
+
+        composeRule.onNodeWithContentDescription(text(R.string.action_more_options)).performClick()
+        composeRule.onNodeWithText(text(R.string.tasks_action_complete)).performClick()
+        waitForText(text(R.string.tasks_done_completed))
     }
 
     /** Vuelve a «Según el sistema» para no alterar las preferencias reales del teléfono. */

@@ -86,7 +86,8 @@ private fun CaptureButton(onClick: () -> Unit) {
 private fun NavDestination?.isFullScreen(): Boolean = this != null && (
     hasRoute(CaptureRoute::class) ||
         hasRoute(TaskEditorRoute::class) ||
-        hasRoute(TemplateEditorRoute::class)
+        hasRoute(TemplateEditorRoute::class) ||
+        hasRoute(PrioritySettingsRoute::class)
     )
 
 private fun NavDestination?.isIn(destination: TopLevelDestination): Boolean =

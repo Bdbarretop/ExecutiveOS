@@ -34,6 +34,7 @@ import com.executiveos.domain.model.ThemeMode
 fun SettingsScreen(
     onNavigateUp: () -> Unit,
     onOpenTemplates: () -> Unit,
+    onOpenPrioritySettings: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -42,6 +43,7 @@ fun SettingsScreen(
         onThemeSelected = viewModel::onThemeSelected,
         onNavigateUp = onNavigateUp,
         onOpenTemplates = onOpenTemplates,
+        onOpenPrioritySettings = onOpenPrioritySettings,
     )
 }
 
@@ -51,6 +53,7 @@ private fun SettingsContent(
     onThemeSelected: (ThemeMode) -> Unit,
     onNavigateUp: () -> Unit,
     onOpenTemplates: () -> Unit,
+    onOpenPrioritySettings: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         ExecutiveTopBar(
@@ -66,7 +69,7 @@ private fun SettingsContent(
             verticalArrangement = Arrangement.spacedBy(Spacing.lg),
         ) {
             AppearanceSection(uiState.themeMode, onThemeSelected)
-            CaptureSection(onOpenTemplates)
+            CaptureSection(onOpenTemplates, onOpenPrioritySettings)
             SystemStatusSection(uiState.databaseStatus)
         }
     }
@@ -109,22 +112,36 @@ private fun ThemeMode.labelRes(): Int = when (this) {
 }
 
 @Composable
-private fun CaptureSection(onOpenTemplates: () -> Unit) {
+private fun CaptureSection(onOpenTemplates: () -> Unit, onOpenPrioritySettings: () -> Unit) {
     Column {
         SectionTitle(R.string.settings_capture)
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onOpenTemplates)
-                .padding(vertical = Spacing.sm),
-        ) {
-            Text(stringResource(R.string.settings_templates))
-            Text(
-                text = stringResource(R.string.settings_templates_description),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+        SettingsLink(
+            R.string.settings_templates,
+            R.string.settings_templates_description,
+            onOpenTemplates,
+        )
+        SettingsLink(
+            R.string.settings_priority,
+            R.string.settings_priority_description,
+            onOpenPrioritySettings,
+        )
+    }
+}
+
+@Composable
+private fun SettingsLink(@StringRes title: Int, @StringRes description: Int, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = Spacing.sm),
+    ) {
+        Text(stringResource(title))
+        Text(
+            text = stringResource(description),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 

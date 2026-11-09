@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.executiveos.core.database.DefaultCategories
@@ -23,6 +24,9 @@ import com.executiveos.core.navigation.NavigationTags
 import com.executiveos.core.navigation.TopLevelDestination
 import com.executiveos.feature.capture.CAPTURE_SAVE_TAG
 import com.executiveos.feature.capture.CAPTURE_TITLE_TAG
+import com.executiveos.feature.tasks.TASKS_NEW_FIELD_TAG
+import com.executiveos.feature.tasks.TASKS_NEW_TAG
+import com.executiveos.feature.tasks.TASKS_SEARCH_TAG
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -167,6 +171,43 @@ class AppSmokeTest {
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.inbox_tab_processed, 1))
             .performClick()
         waitForText("Enviar acta")
+    }
+
+    @Test
+    fun aNewTaskCanBeCreatedSearchedAndCompleted() {
+        openTopLevel(TopLevelDestination.TASKS)
+        composeRule.onNodeWithTag(TASKS_NEW_TAG).performClick()
+        composeRule.onNodeWithTag(TASKS_NEW_FIELD_TAG).performTextInput("Revisar indicadores")
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+
+        waitForText(text(R.string.task_title))
+        waitForText(text(R.string.task_status_label))
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+        openTopLevel(TopLevelDestination.TASKS)
+        waitForText("Revisar indicadores")
+
+        composeRule.onNodeWithTag(TASKS_SEARCH_TAG).performTextInput("inexistente")
+        waitForText(text(R.string.tasks_empty_title))
+        composeRule.onNodeWithTag(TASKS_SEARCH_TAG).performTextClearance()
+        waitForText("Revisar indicadores")
+
+        composeRule.onNodeWithContentDescription(text(R.string.action_more_options)).performClick()
+        composeRule.onNodeWithText(text(R.string.tasks_action_complete)).performClick()
+        waitForText(text(R.string.tasks_done_completed))
+    }
+
+    @Test
+    fun aNewTaskShowsItsPriorityAsNotEvaluatedUntilItHasScales() {
+        openTopLevel(TopLevelDestination.TASKS)
+        composeRule.onNodeWithTag(TASKS_NEW_TAG).performClick()
+        composeRule.onNodeWithTag(TASKS_NEW_FIELD_TAG).performTextInput("Sin evaluar")
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+
+        waitForText(text(R.string.level_pending))
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            composeRule.onAllNodes(hasText("Sin evaluar: falta definir", substring = true))
+                .fetchSemanticsNodes().isNotEmpty()
+        }
     }
 
     @Test

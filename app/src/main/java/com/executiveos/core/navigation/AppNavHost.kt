@@ -16,8 +16,10 @@ import com.executiveos.core.designsystem.component.SectionPlaceholder
 import com.executiveos.feature.capture.QuickCaptureScreen
 import com.executiveos.feature.inbox.InboxScreen
 import com.executiveos.feature.more.MoreScreen
+import com.executiveos.feature.settings.PrioritySettingsScreen
 import com.executiveos.feature.settings.SettingsScreen
-import com.executiveos.feature.task.TaskEditorScreen
+import com.executiveos.feature.tasks.TaskEditorScreen
+import com.executiveos.feature.tasks.TasksScreen
 import com.executiveos.feature.templates.TemplateEditorScreen
 import com.executiveos.feature.templates.TemplatesScreen
 
@@ -34,7 +36,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         composable<InboxRoute> {
             InboxScreen(onOpenTask = { navController.navigate(TaskEditorRoute(it)) })
         }
-        composable<TasksRoute> { PendingSection(R.string.section_tasks, phase = 2) }
+        composable<TasksRoute> {
+            TasksScreen(onOpenTask = { navController.navigate(TaskEditorRoute(it)) })
+        }
         composable<ProjectsRoute> { PendingSection(R.string.section_projects, phase = 4) }
 
         navigation<MoreGraph>(startDestination = MoreRoute) {
@@ -54,6 +58,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 SettingsScreen(
                     onNavigateUp = navigateUp,
                     onOpenTemplates = { navController.navigate(TemplatesRoute) },
+                    onOpenPrioritySettings = { navController.navigate(PrioritySettingsRoute) },
                 )
             }
         }
@@ -69,7 +74,13 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 onManageTemplates = { navController.navigate(TemplatesRoute) },
             )
         }
-        composable<TaskEditorRoute> { TaskEditorScreen(onClose = navigateUp) }
+        composable<TaskEditorRoute> {
+            TaskEditorScreen(
+                onClose = navigateUp,
+                onOpenTask = { navController.navigate(TaskEditorRoute(it)) },
+            )
+        }
+        composable<PrioritySettingsRoute> { PrioritySettingsScreen(onClose = navigateUp) }
         composable<TemplatesRoute> {
             TemplatesScreen(
                 onNavigateUp = navigateUp,
