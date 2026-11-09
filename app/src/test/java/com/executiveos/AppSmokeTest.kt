@@ -3,6 +3,8 @@ package com.executiveos
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelected
@@ -32,6 +34,10 @@ import com.executiveos.feature.learning.LEARNING_NEW_TAG
 import com.executiveos.feature.learning.LEARNING_TITLE_FIELD_TAG
 import com.executiveos.feature.reviews.reviewAnswerTag
 import com.executiveos.feature.reviews.reviewOpenTag
+import com.executiveos.feature.settings.BACKUP_PASSWORD_ACCEPT_TAG
+import com.executiveos.feature.settings.BACKUP_PASSWORD_CONFIRM_TAG
+import com.executiveos.feature.settings.BACKUP_PASSWORD_TAG
+import com.executiveos.feature.settings.BACKUP_PROTECTED_TAG
 import com.executiveos.feature.planning.BLOCK_SAVE_TAG
 import com.executiveos.feature.planning.BLOCK_TITLE_TAG
 import com.executiveos.feature.planning.PLANNING_ADD_TAG
@@ -303,6 +309,23 @@ class AppSmokeTest {
         composeRule.waitUntil(TIMEOUT_MILLIS) {
             composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
         }
+    }
+
+    @Test
+    fun theBackupScreenWarnsAndOnlyAcceptsAMatchingPassword() {
+        openMoreSection(MoreDestination.SETTINGS)
+        composeRule.onNodeWithText(text(R.string.settings_backup)).performScrollTo().performClick()
+        waitForText(text(R.string.backup_warning))
+
+        composeRule.onNodeWithTag(BACKUP_PROTECTED_TAG).performScrollTo().performClick()
+        composeRule.onNodeWithTag(BACKUP_PASSWORD_TAG).performTextInput("clave larga")
+        composeRule.onNodeWithTag(BACKUP_PASSWORD_CONFIRM_TAG).performTextInput("distinta")
+        waitForText(text(R.string.backup_password_mismatch))
+        composeRule.onNodeWithTag(BACKUP_PASSWORD_ACCEPT_TAG).assertIsNotEnabled()
+
+        composeRule.onNodeWithTag(BACKUP_PASSWORD_CONFIRM_TAG).performTextClearance()
+        composeRule.onNodeWithTag(BACKUP_PASSWORD_CONFIRM_TAG).performTextInput("clave larga")
+        composeRule.onNodeWithTag(BACKUP_PASSWORD_ACCEPT_TAG).assertIsEnabled()
     }
 
     @Test

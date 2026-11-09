@@ -2,6 +2,7 @@ package com.executiveos.di
 
 import com.executiveos.core.notifications.AndroidNotificationPublisher
 import com.executiveos.core.notifications.WorkManagerReminderScheduler
+import com.executiveos.data.backup.ContentBackupRepository
 import com.executiveos.data.repository.DataStoreCaptureDraftRepository
 import com.executiveos.data.repository.DataStoreDailyFocusRepository
 import com.executiveos.data.repository.DataStoreUserPreferencesRepository
@@ -15,6 +16,7 @@ import com.executiveos.data.repository.OfflineProjectRepository
 import com.executiveos.data.repository.OfflineReminderRepository
 import com.executiveos.data.repository.OfflineTaskRepository
 import com.executiveos.data.repository.OfflineTemplateRepository
+import com.executiveos.domain.backup.BackupRepository
 import com.executiveos.domain.repository.CaptureDraftRepository
 import com.executiveos.domain.repository.CategoryRepository
 import com.executiveos.domain.repository.DailyFocusRepository
@@ -75,6 +77,9 @@ interface RepositoryModule {
 
     @Binds
     fun bindLearningRepository(impl: OfflineLearningRepository): LearningRepository
+
+    @Binds
+    fun bindBackupRepository(impl: ContentBackupRepository): BackupRepository
 
     @Binds
     fun bindReminderScheduler(impl: WorkManagerReminderScheduler): ReminderScheduler

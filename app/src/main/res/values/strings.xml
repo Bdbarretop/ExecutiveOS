@@ -731,6 +731,47 @@
     <string name="metrics_by_category_def">Tiempo real de las tareas completadas en el periodo. Las que no tienen tiempo real no cuentan.</string>
     <string name="metrics_no_category">Sin categoría</string>
 
+    <!-- Copia de seguridad -->
+    <string name="settings_data">Datos</string>
+    <string name="settings_backup">Copia de seguridad</string>
+    <string name="settings_backup_description">Exportar y restaurar tus datos</string>
+    <string name="backup_title">Copia de seguridad</string>
+    <string name="backup_warning_title">Cuida dónde guardas tus copias</string>
+    <string name="backup_warning">Una copia contiene toda tu información personal y profesional. Guárdala solo en un lugar de confianza: quien tenga un archivo sin cifrar puede leerlo.</string>
+    <string name="backup_export_section">Exportar</string>
+    <string name="backup_protected">Crear copia protegida</string>
+    <string name="backup_protected_description">JSON cifrado con contraseña. Es la opción recomendada y se puede restaurar.</string>
+    <string name="backup_plain">Exportar JSON sin cifrar</string>
+    <string name="backup_plain_description">Lo puede leer cualquiera que abra el archivo. Se puede restaurar.</string>
+    <string name="backup_csv">Exportar CSV</string>
+    <string name="backup_csv_description">Archivo ZIP con un CSV por tabla, para consultar en una hoja de cálculo. No se puede restaurar.</string>
+    <string name="backup_restore_section">Restaurar</string>
+    <string name="backup_restore">Restaurar una copia</string>
+    <string name="backup_restore_description">Se valida antes de cambiar nada y te pedirá confirmación.</string>
+    <string name="backup_not_included">No se incluyen el tema visual ni el borrador de captura, que son propios de este dispositivo.</string>
+    <string name="backup_working">Procesando…</string>
+    <string name="backup_password_title">Protege tu copia</string>
+    <string name="backup_password_field">Contraseña</string>
+    <string name="backup_password_confirm">Repite la contraseña</string>
+    <string name="backup_password_hint" tools:ignore="PluralsCandidate">Mínimo %1$d caracteres. Si la olvidas no se podrá recuperar la copia: no queda guardada en ningún sitio.</string>
+    <string name="backup_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="backup_plain_warning_title">¿Exportar sin cifrar?</string>
+    <string name="backup_plain_warning">El archivo contendrá tus datos en texto legible. No lo compartas ni lo guardes en lugares públicos.</string>
+    <string name="backup_export_done">Copia guardada</string>
+    <string name="backup_export_failed">No se pudo guardar la copia. Comprueba el espacio disponible. Tus datos no se han modificado.</string>
+    <string name="backup_ask_password_title">Esta copia está protegida</string>
+    <string name="backup_wrong_password">Contraseña incorrecta o archivo dañado.</string>
+    <string name="backup_invalid">El archivo no es una copia válida o está dañado. No se ha modificado nada.</string>
+    <string name="backup_newer">Esta copia es de una versión más reciente de la app. Actualiza la app para restaurarla.</string>
+    <string name="backup_confirm_title">¿Reemplazar todos tus datos?</string>
+    <string name="backup_confirm_summary">Copia del %1$s</string>
+    <string name="backup_confirm_warning">Todo lo que tienes ahora en la app se sustituirá por el contenido de la copia y no se podrá deshacer. Si dudas, crea antes una copia de tus datos actuales.</string>
+    <string name="backup_confirm_accept">Reemplazar mis datos</string>
+    <string name="backup_restored">Copia restaurada</string>
+    <string name="backup_restore_failed">No se pudo restaurar. Tus datos siguen como estaban.</string>
+    <string name="backup_blocks">Bloques de tiempo</string>
+    <string name="backup_goals">Objetivos de formación</string>
+
     <!-- Plantillas -->
     <string name="templates_title">Plantillas de captura</string>
     <string name="template_edit_title">Editar plantilla</string>

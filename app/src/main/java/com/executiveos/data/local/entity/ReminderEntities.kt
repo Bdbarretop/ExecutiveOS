@@ -78,6 +78,9 @@ interface ReminderDao {
     )
     suspend fun findActive(taskId: String): ReminderEntity?
 
+    @Query("SELECT * FROM reminders")
+    suspend fun all(): List<ReminderEntity>
+
     @Query("SELECT * FROM reminders WHERE id = :id AND status = 'SCHEDULED'")
     suspend fun findScheduled(id: String): ReminderEntity?
 

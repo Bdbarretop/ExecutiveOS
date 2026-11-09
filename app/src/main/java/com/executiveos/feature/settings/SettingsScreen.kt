@@ -36,6 +36,7 @@ fun SettingsScreen(
     onOpenTemplates: () -> Unit,
     onOpenPrioritySettings: () -> Unit,
     onOpenReminderSettings: () -> Unit,
+    onOpenBackup: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -46,6 +47,7 @@ fun SettingsScreen(
         onOpenTemplates = onOpenTemplates,
         onOpenPrioritySettings = onOpenPrioritySettings,
         onOpenReminderSettings = onOpenReminderSettings,
+        onOpenBackup = onOpenBackup,
     )
 }
 
@@ -57,6 +59,7 @@ private fun SettingsContent(
     onOpenTemplates: () -> Unit,
     onOpenPrioritySettings: () -> Unit,
     onOpenReminderSettings: () -> Unit,
+    onOpenBackup: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         ExecutiveTopBar(
@@ -73,6 +76,14 @@ private fun SettingsContent(
         ) {
             AppearanceSection(uiState.themeMode, onThemeSelected)
             CaptureSection(onOpenTemplates, onOpenPrioritySettings, onOpenReminderSettings)
+            Column {
+                SectionTitle(R.string.settings_data)
+                SettingsLink(
+                    R.string.settings_backup,
+                    R.string.settings_backup_description,
+                    onOpenBackup,
+                )
+            }
             SystemStatusSection(uiState.databaseStatus)
         }
     }

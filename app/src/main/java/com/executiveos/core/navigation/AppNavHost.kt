@@ -19,6 +19,7 @@ import com.executiveos.feature.planning.BlockEditorScreen
 import com.executiveos.feature.planning.PlanningScreen
 import com.executiveos.feature.projects.ProjectEditorScreen
 import com.executiveos.feature.projects.ProjectsScreen
+import com.executiveos.feature.settings.BackupScreen
 import com.executiveos.feature.settings.PrioritySettingsScreen
 import com.executiveos.feature.settings.ReminderSettingsScreen
 import com.executiveos.feature.settings.SettingsScreen
@@ -87,6 +88,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                     onOpenTemplates = { navController.navigate(TemplatesRoute) },
                     onOpenPrioritySettings = { navController.navigate(PrioritySettingsRoute) },
                     onOpenReminderSettings = { navController.navigate(ReminderSettingsRoute) },
+                    onOpenBackup = { navController.navigate(BackupRoute) },
                 )
             }
         }
@@ -115,6 +117,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             )
         }
         composable<BlockEditorRoute> { BlockEditorScreen(onClose = navigateUp) }
+        composable<BackupRoute> { BackupScreen(onNavigateUp = navigateUp) }
         composable<ReviewEditorRoute> { ReviewEditorScreen(onClose = navigateUp) }
         composable<LearningGoalRoute> { LearningGoalScreen(onClose = navigateUp) }
         composable<PrioritySettingsRoute> { PrioritySettingsScreen(onClose = navigateUp) }

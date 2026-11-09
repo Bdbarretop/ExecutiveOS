@@ -112,7 +112,8 @@ private fun NavDestination?.isFullScreen(): Boolean = this != null && (
         hasRoute(ProjectEditorRoute::class) ||
         hasRoute(BlockEditorRoute::class) ||
         hasRoute(ReviewEditorRoute::class) ||
-        hasRoute(LearningGoalRoute::class)
+        hasRoute(LearningGoalRoute::class) ||
+        hasRoute(BackupRoute::class)
     )
 
 private fun NavDestination?.isIn(destination: TopLevelDestination): Boolean =

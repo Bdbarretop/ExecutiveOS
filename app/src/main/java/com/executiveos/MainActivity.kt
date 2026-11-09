@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.executiveos.core.designsystem.theme.ExecutiveOsTheme
 import com.executiveos.core.designsystem.theme.resolvesToDark
 import com.executiveos.core.navigation.ExecutiveOsShell
+import com.executiveos.domain.reviews.ReviewType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,7 +62,10 @@ class MainActivity : ComponentActivity() {
     private fun consumeTaskExtra(intent: Intent) {
         intent.getStringExtra(EXTRA_TASK_ID)?.let { pendingTaskId.value = it }
         intent.removeExtra(EXTRA_TASK_ID)
-        intent.getStringExtra(EXTRA_REVIEW_TYPE)?.let { pendingReviewType.value = it }
+        // La actividad es pública: otra app podría enviar un valor arbitrario.
+        intent.getStringExtra(EXTRA_REVIEW_TYPE)
+            ?.takeIf { value -> ReviewType.entries.any { it.name == value } }
+            ?.let { pendingReviewType.value = it }
         intent.removeExtra(EXTRA_REVIEW_TYPE)
     }
 

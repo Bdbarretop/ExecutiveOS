@@ -24,6 +24,7 @@ import kotlinx.serialization.Serializable
 @Serializable data class ProjectEditorRoute(val projectId: String)
 
 @Serializable data object MetricsRoute
+@Serializable data object BackupRoute
 @Serializable data class LearningGoalRoute(val goalId: String)
 
 /** Sin [date] se abre la revisión del periodo actual. */
