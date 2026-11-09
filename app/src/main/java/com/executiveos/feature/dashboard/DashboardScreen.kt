@@ -295,6 +295,8 @@ private fun AlertType.labelRes(): Int = when (this) {
     AlertType.BLOCKED_TASKS -> R.plurals.alert_blocked
     AlertType.PENDING_DEPENDENCIES -> R.plurals.alert_dependencies
     AlertType.CRITICAL_WITHOUT_NEXT_ACTION -> R.plurals.alert_no_next_action
+    AlertType.OVERLOADED_DAYS -> R.plurals.alert_overloaded_days
+    AlertType.DELAYED_PROJECTS -> R.plurals.alert_delayed_projects
 }
 
 private fun AlertType.targetView(): TaskView = when (this) {
@@ -303,6 +305,7 @@ private fun AlertType.targetView(): TaskView = when (this) {
     AlertType.BLOCKED_TASKS -> TaskView.BLOCKED
     AlertType.PENDING_DEPENDENCIES -> TaskView.ALL
     AlertType.CRITICAL_WITHOUT_NEXT_ACTION -> TaskView.CRITICAL
+    AlertType.OVERLOADED_DAYS, AlertType.DELAYED_PROJECTS -> TaskView.ALL
 }
 
 @Composable

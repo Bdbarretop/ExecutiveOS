@@ -20,7 +20,13 @@ import com.executiveos.data.local.entity.CaptureTemplateEntity
 import com.executiveos.data.local.entity.CategoryEntity
 import com.executiveos.data.local.entity.InboxItemEntity
 import com.executiveos.data.local.entity.NoteEntity
+import com.executiveos.data.local.entity.CapacitySettingsEntity
+import com.executiveos.data.local.entity.PlanningDao
 import com.executiveos.data.local.entity.ProjectEntity
+import com.executiveos.data.local.entity.ProjectMilestoneEntity
+import com.executiveos.data.local.entity.ProjectRiskEntity
+import com.executiveos.data.local.entity.ProjectTrackingDao
+import com.executiveos.data.local.entity.TimeBlockEntity
 import com.executiveos.data.local.entity.ReminderDao
 import com.executiveos.data.local.entity.ReminderEntity
 import com.executiveos.data.local.entity.ReminderSettingsEntity
@@ -45,6 +51,10 @@ import com.executiveos.data.local.entity.UserSettingsEntity
         UserSettingsEntity::class,
         ReminderEntity::class,
         ReminderSettingsEntity::class,
+        ProjectMilestoneEntity::class,
+        ProjectRiskEntity::class,
+        TimeBlockEntity::class,
+        CapacitySettingsEntity::class,
     ],
     version = AppDatabase.SCHEMA_VERSION,
     exportSchema = true,
@@ -52,6 +62,7 @@ import com.executiveos.data.local.entity.UserSettingsEntity
         AutoMigration(from = 1, to = 2, spec = AddCaptureTablesMigration::class),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5),
     ],
 )
 @TypeConverters(Converters::class)
@@ -66,9 +77,11 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun auditLogDao(): AuditLogDao
     abstract fun userSettingsDao(): UserSettingsDao
     abstract fun reminderDao(): ReminderDao
+    abstract fun projectTrackingDao(): ProjectTrackingDao
+    abstract fun planningDao(): PlanningDao
 
     companion object {
-        const val SCHEMA_VERSION = 4
+        const val SCHEMA_VERSION = 5
         const val FILE_NAME = "executive_os.db"
     }
 }

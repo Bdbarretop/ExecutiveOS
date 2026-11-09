@@ -419,6 +419,16 @@
         <item quantity="many">%1$d tareas críticas sin siguiente acción</item>
         <item quantity="other">%1$d tareas críticas sin siguiente acción</item>
     </plurals>
+    <plurals name="alert_overloaded_days">
+        <item quantity="one">%1$d día sobrecargado esta semana</item>
+        <item quantity="many">%1$d días sobrecargados esta semana</item>
+        <item quantity="other">%1$d días sobrecargados esta semana</item>
+    </plurals>
+    <plurals name="alert_delayed_projects">
+        <item quantity="one">%1$d proyecto con retraso</item>
+        <item quantity="many">%1$d proyectos con retraso</item>
+        <item quantity="other">%1$d proyectos con retraso</item>
+    </plurals>
     <string name="home_indicators_title">Situación general</string>
     <string name="home_pending">Pendientes</string>
     <string name="home_completed_week">Completadas esta semana</string>

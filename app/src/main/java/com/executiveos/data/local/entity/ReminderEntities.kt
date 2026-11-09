@@ -7,6 +7,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Upsert
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import com.executiveos.domain.reminders.ReminderType
@@ -89,6 +90,6 @@ interface ReminderDao {
     @Query("SELECT * FROM reminder_settings WHERE id = :id")
     fun observeSettings(id: String = ReminderSettingsEntity.SINGLETON_ID): Flow<ReminderSettingsEntity?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun saveSettings(settings: ReminderSettingsEntity)
 }

@@ -8,6 +8,8 @@ import com.executiveos.data.repository.DataStoreUserPreferencesRepository
 import com.executiveos.data.repository.OfflineCategoryRepository
 import com.executiveos.data.repository.OfflineInboxRepository
 import com.executiveos.data.repository.OfflinePrioritySettingsRepository
+import com.executiveos.data.repository.OfflinePlanningRepository
+import com.executiveos.data.repository.OfflineProjectRepository
 import com.executiveos.data.repository.OfflineReminderRepository
 import com.executiveos.data.repository.OfflineTaskRepository
 import com.executiveos.data.repository.OfflineTemplateRepository
@@ -18,6 +20,8 @@ import com.executiveos.domain.repository.InboxRepository
 import com.executiveos.domain.reminders.NotificationPublisher
 import com.executiveos.domain.reminders.ReminderScheduler
 import com.executiveos.domain.repository.PrioritySettingsRepository
+import com.executiveos.domain.repository.PlanningRepository
+import com.executiveos.domain.repository.ProjectRepository
 import com.executiveos.domain.repository.ReminderRepository
 import com.executiveos.domain.repository.TaskRepository
 import com.executiveos.domain.repository.TemplateRepository
@@ -55,6 +59,12 @@ interface RepositoryModule {
 
     @Binds
     fun bindReminderRepository(impl: OfflineReminderRepository): ReminderRepository
+
+    @Binds
+    fun bindProjectRepository(impl: OfflineProjectRepository): ProjectRepository
+
+    @Binds
+    fun bindPlanningRepository(impl: OfflinePlanningRepository): PlanningRepository
 
     @Binds
     fun bindReminderScheduler(impl: WorkManagerReminderScheduler): ReminderScheduler

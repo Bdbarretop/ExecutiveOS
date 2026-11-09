@@ -10,6 +10,7 @@ import androidx.room.Relation
 import com.executiveos.domain.model.DateOption
 import com.executiveos.domain.model.InboxState
 import com.executiveos.domain.model.ProcessedAs
+import com.executiveos.domain.priority.PriorityLevel
 import java.time.Instant
 import java.time.LocalDate
 
@@ -60,6 +61,11 @@ data class ProjectEntity(
     @ColumnInfo(name = "source_inbox_item_id") val sourceInboxItemId: String?,
     @ColumnInfo(name = "created_at") val createdAt: Instant,
     @ColumnInfo(name = "updated_at") val updatedAt: Instant,
+    val owner: String? = null,
+    @ColumnInfo(name = "start_date") val startDate: LocalDate? = null,
+    @ColumnInfo(name = "target_date") val targetDate: LocalDate? = null,
+    val priority: PriorityLevel? = null,
+    val notes: String? = null,
 )
 
 @Entity(tableName = "notes")

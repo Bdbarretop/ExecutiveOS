@@ -2,12 +2,19 @@ package com.executiveos.domain.dashboard
 
 import com.executiveos.domain.model.TaskStatus
 import com.executiveos.domain.model.effectiveDate
+import com.executiveos.domain.planning.CapacitySettings
+import com.executiveos.domain.planning.CapacitySummary
+import com.executiveos.domain.planning.DateSpan
+import com.executiveos.domain.planning.PlanningRules
+import com.executiveos.domain.planning.TimeBlock
 import com.executiveos.domain.priority.DateSignal
 import com.executiveos.domain.priority.PriorityLevel
 import com.executiveos.domain.tasks.RankedTask
 import com.executiveos.domain.tasks.TaskQueries
 import com.executiveos.domain.tasks.TaskView
 import java.time.DayOfWeek
+import java.time.Duration
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.TemporalAdjusters
@@ -29,7 +36,16 @@ enum class AlertType {
     BLOCKED_TASKS,
     PENDING_DEPENDENCIES,
     CRITICAL_WITHOUT_NEXT_ACTION,
+    OVERLOADED_DAYS,
+    DELAYED_PROJECTS,
 }
+
+/** Lo que Inicio necesita saber de proyectos y planificación. */
+data class PlanningOverview(
+    val blocks: List<TimeBlock> = emptyList(),
+    val capacity: CapacitySettings = CapacitySettings(),
+    val delayedProjects: Int = 0,
+)
 
 data class DashboardAlert(val type: AlertType, val count: Int)
 
@@ -53,11 +69,15 @@ data class Dashboard(
     val alerts: List<DashboardAlert>,
     val next24Hours: List<RankedTask>,
     val focusCandidates: List<RankedTask>,
+    /** De hoy al domingo: los días ya pasados no aportan tiempo disponible. */
+    val capacityThisWeek: CapacitySummary,
+    val nextBlocks: List<TimeBlock>,
 )
 
 object DashboardCalculator {
     private const val RECOMMENDED_TASKS = 3
     private const val COMMITMENT_HORIZON_DAYS = 7L
+    private const val NEXT_BLOCKS_HOURS = 24L
 
     /** Las emergencias van primero; después pesa la prioridad, y la fecha solo desempata. */
     private val FOCUS_ORDER = compareBy<RankedTask>(
@@ -78,22 +98,46 @@ object DashboardCalculator {
         focus: DailyFocus?,
         today: LocalDate,
         zone: ZoneId,
+        planning: PlanningOverview = PlanningOverview(),
+        now: Instant = today.atStartOfDay(zone).toInstant(),
     ): Dashboard {
         val open = ranked.filter { TaskQueries.isOpen(it.item.task.status) }
         val todaysFocus = focus?.takeIf { it.date == today } ?: DailyFocus(today)
         val selected = selectFocus(open, todaysFocus)
         val selectedIds = selected.map { it.ranked.item.task.id }.toSet()
+        val restOfWeek = DateSpan(today, today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)))
+        val horizon = now.plus(Duration.ofHours(NEXT_BLOCKS_HOURS))
         return Dashboard(
             indicators = indicators(ranked, open, today, zone),
             focus = selected,
             isFocusAdjusted = todaysFocus.pinnedIds.isNotEmpty() || todaysFocus.dismissedIds.isNotEmpty(),
-            alerts = alerts(open, today),
+            alerts = alerts(
+                open = open,
+                today = today,
+                overloadedDays = PlanningRules.overloadedDays(
+                    planning.blocks,
+                    restOfWeek,
+                    planning.capacity,
+                    zone,
+                ),
+                delayedProjects = planning.delayedProjects,
+            ),
             next24Hours = open
                 .filter { it.item.task.effectiveDate.isTodayOrTomorrow(today) }
                 .sortedWith(AGENDA_ORDER),
             focusCandidates = open
                 .filter { it.item.task.id !in selectedIds }
                 .sortedBy { it.item.task.title.lowercase() },
+            capacityThisWeek = PlanningRules.capacity(
+                planning.blocks,
+                restOfWeek.from,
+                restOfWeek.to,
+                planning.capacity,
+                zone,
+            ),
+            nextBlocks = planning.blocks
+                .filter { it.endAt.isAfter(now) && it.startAt.isBefore(horizon) }
+                .sortedBy { it.startAt },
         )
     }
 
@@ -165,7 +209,12 @@ object DashboardCalculator {
     }
 
     /** Solo se generan las alertas que tienen casos: nada de avisos en cero. */
-    private fun alerts(open: List<RankedTask>, today: LocalDate): List<DashboardAlert> {
+    private fun alerts(
+        open: List<RankedTask>,
+        today: LocalDate,
+        overloadedDays: Int,
+        delayedProjects: Int,
+    ): List<DashboardAlert> {
         val horizon = today.plusDays(COMMITMENT_HORIZON_DAYS)
         val commitments = open.filter {
             it.item.task.deadlineDate != null || it.priority.obligation != null
@@ -183,6 +232,8 @@ object DashboardCalculator {
                 TaskQueries.matchesView(it, TaskView.CRITICAL, today) &&
                     it.item.task.nextAction.isNullOrBlank()
             },
+            AlertType.OVERLOADED_DAYS to overloadedDays,
+            AlertType.DELAYED_PROJECTS to delayedProjects,
         )
         return counts.filter { (_, count) -> count > 0 }.map { (type, count) -> DashboardAlert(type, count) }
     }

@@ -3,6 +3,7 @@ package com.executiveos.data.local.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Upsert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -104,7 +105,7 @@ interface UserSettingsDao {
     @Query("SELECT * FROM user_settings WHERE id = :id")
     fun observe(id: String = UserSettingsEntity.SINGLETON_ID): Flow<UserSettingsEntity?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun save(settings: UserSettingsEntity)
 }
 

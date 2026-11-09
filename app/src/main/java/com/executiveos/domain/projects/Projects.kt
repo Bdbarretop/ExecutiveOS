@@ -61,8 +61,19 @@ data class ProjectProgress(
     val isDelayed: Boolean,
 )
 
+enum class ProjectValidationError { BLANK_NAME, TARGET_BEFORE_START }
+
 object ProjectTracking {
     private val FINISHED = setOf(ProjectStatus.COMPLETED, ProjectStatus.CANCELLED)
+
+    fun isFinished(status: ProjectStatus): Boolean = status in FINISHED
+
+    fun validate(project: Project): List<ProjectValidationError> = buildList {
+        if (project.name.isBlank()) add(ProjectValidationError.BLANK_NAME)
+        if (project.startDate != null && project.targetDate?.isBefore(project.startDate) == true) {
+            add(ProjectValidationError.TARGET_BEFORE_START)
+        }
+    }
 
     fun progress(
         project: Project,

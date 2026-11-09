@@ -11,7 +11,13 @@ import com.executiveos.domain.model.Task
 import com.executiveos.domain.model.TaskHistoryEntry
 import com.executiveos.domain.model.TaskReference
 import com.executiveos.domain.model.TaskStatus
+import com.executiveos.domain.planning.CapacitySettings
+import com.executiveos.domain.planning.TimeBlock
 import com.executiveos.domain.priority.PrioritySettings
+import com.executiveos.domain.projects.MilestoneKind
+import com.executiveos.domain.projects.Project
+import com.executiveos.domain.projects.ProjectMilestone
+import com.executiveos.domain.projects.ProjectRisk
 import com.executiveos.domain.reminders.ReminderSettings
 import com.executiveos.domain.reminders.ReminderType
 import com.executiveos.domain.reminders.TaskReminder
@@ -59,7 +65,11 @@ interface TaskRepository {
     /** Guarda el contenido de la ficha. El estado solo cambia con [setStatus]. */
     suspend fun save(task: Task)
 
-    suspend fun create(title: String, parentTaskId: String? = null): String
+    suspend fun create(
+        title: String,
+        parentTaskId: String? = null,
+        projectId: String? = null,
+    ): String
 
     suspend fun setStatus(taskId: String, status: TaskStatus)
 
@@ -106,6 +116,52 @@ interface ReminderRepository {
     suspend fun registerOnce(key: String, type: ReminderType): Boolean
 
     suspend fun deleteDeliveredBefore(instant: Instant)
+}
+
+data class ProjectDetails(
+    val project: Project,
+    val milestones: List<ProjectMilestone>,
+    val risks: List<ProjectRisk>,
+    val openTasks: Int,
+)
+
+interface ProjectRepository {
+    fun observeProjects(): Flow<List<ProjectDetails>>
+
+    fun observeProject(projectId: String): Flow<ProjectDetails?>
+
+    suspend fun create(name: String): String
+
+    suspend fun save(project: Project)
+
+    suspend fun addMilestone(
+        projectId: String,
+        name: String,
+        kind: MilestoneKind,
+        weight: Int,
+        dueDate: LocalDate?,
+    )
+
+    suspend fun setMilestoneCompleted(milestoneId: String, completed: Boolean)
+
+    suspend fun deleteMilestone(milestoneId: String)
+
+    suspend fun addRisk(projectId: String, description: String, mitigation: String?, severity: Int)
+
+    suspend fun setRiskOpen(riskId: String, isOpen: Boolean)
+}
+
+interface PlanningRepository {
+    fun observeBlocks(): Flow<List<TimeBlock>>
+
+    val capacity: Flow<CapacitySettings>
+
+    /** Crea el bloque o actualiza el existente con el mismo identificador. */
+    suspend fun save(block: TimeBlock)
+
+    suspend fun delete(blockId: String)
+
+    suspend fun saveCapacity(settings: CapacitySettings)
 }
 
 interface PrioritySettingsRepository {

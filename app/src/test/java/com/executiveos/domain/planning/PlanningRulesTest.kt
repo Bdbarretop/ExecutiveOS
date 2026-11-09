@@ -1,7 +1,10 @@
 package com.executiveos.domain.planning
 
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 import java.time.ZoneOffset
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -100,5 +103,91 @@ class PlanningRulesTest {
 
         assertEquals(60, summary.plannedMinutes)
         assertEquals(75, summary.actualMinutes)
+    }
+
+    @Test
+    fun aNonWorkingDayHasNoCapacityToExceed() {
+        val sunday = monday.minusDays(1)
+
+        val summary = PlanningRules.capacity(
+            listOf(block("domingo", 9, 12, day = sunday)),
+            sunday,
+            sunday,
+            CapacitySettings(),
+            ZoneOffset.UTC,
+        )
+
+        assertEquals(0, summary.availableMinutes)
+        assertFalse(summary.isOverloaded)
+    }
+
+    @Test
+    fun spansCoverTheDayTheWeekFromMondayAndTheWholeMonth() {
+        val wednesday = monday.plusDays(2)
+
+        assertEquals(DateSpan(wednesday, wednesday), PlanningRules.span(PlanningPeriod.DAY, wednesday))
+        assertEquals(
+            DateSpan(monday, monday.plusDays(6)),
+            PlanningRules.span(PlanningPeriod.WEEK, wednesday),
+        )
+        assertEquals(
+            DateSpan(LocalDate.of(2026, 11, 1), LocalDate.of(2026, 11, 30)),
+            PlanningRules.span(PlanningPeriod.MONTH, wednesday),
+        )
+        assertEquals(7, PlanningRules.span(PlanningPeriod.WEEK, wednesday).days.size)
+    }
+
+    @Test
+    fun shiftingAdvancesByTheSizeOfThePeriod() {
+        assertEquals(monday.plusDays(1), PlanningRules.shift(PlanningPeriod.DAY, monday, 1))
+        assertEquals(monday.minusWeeks(1), PlanningRules.shift(PlanningPeriod.WEEK, monday, -1))
+        assertEquals(monday.plusMonths(1), PlanningRules.shift(PlanningPeriod.MONTH, monday, 1))
+    }
+
+    @Test
+    fun movingKeepsTheDurationAndTheLocalTimeAcrossADaylightChange() {
+        val zone = ZoneId.of("Europe/Madrid")
+        val start = LocalDate.of(2026, 3, 28).atTime(9, 0).atZone(zone).toInstant()
+        val original = TimeBlock(
+            id = "m",
+            type = BlockType.DEEP_WORK,
+            title = "m",
+            startAt = start,
+            endAt = start.plus(Duration.ofMinutes(90)),
+        )
+
+        val moved = PlanningRules.move(original, days = 1, minutes = 0, zone = zone)
+
+        assertEquals(LocalTime.of(9, 0), moved.startAt.atZone(zone).toLocalTime())
+        assertEquals(LocalDate.of(2026, 3, 29), moved.startAt.atZone(zone).toLocalDate())
+        assertEquals(90, moved.plannedMinutes)
+    }
+
+    @Test
+    fun executionComparesOnlyTheBlocksWithRecordedTime() {
+        val result = PlanningRules.execution(
+            listOf(block("a", 9, 11, actual = 150), block("b", 14, 15)),
+            DateSpan(monday, monday),
+            ZoneOffset.UTC,
+        ).single()
+
+        assertEquals(BlockType.DEEP_WORK, result.type)
+        assertEquals(180, result.plannedMinutes)
+        assertEquals(120, result.comparablePlannedMinutes)
+        assertEquals(150, result.actualMinutes)
+    }
+
+    @Test
+    fun onlyDaysOverTheirTargetCountAsOverloaded() {
+        val blocks = listOf(block("a", 8, 15), block("b", 9, 10, day = monday.plusDays(1)))
+
+        val days = PlanningRules.overloadedDays(
+            blocks,
+            DateSpan(monday, monday.plusDays(6)),
+            CapacitySettings(),
+            ZoneOffset.UTC,
+        )
+
+        assertEquals(1, days)
     }
 }

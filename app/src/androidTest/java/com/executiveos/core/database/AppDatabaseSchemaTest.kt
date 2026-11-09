@@ -97,6 +97,36 @@ class AppDatabaseSchemaTest {
         }
     }
 
+    @Test
+    fun migratingToVersionFiveKeepsProjectsAndAddsPlanningTables() {
+        helper.createDatabase(PLANNING_DATABASE, 4).use { database ->
+            database.execSQL(
+                "INSERT INTO projects (id, name, status, created_at, updated_at) " +
+                    "VALUES ('p1', 'Implantar ERP', 'PLANNED', 0, 0)",
+            )
+            database.execSQL(
+                "INSERT INTO tasks " +
+                    "(id, status, title, delegation_status, project_id, created_at, updated_at) " +
+                    "VALUES ('t1', 'PENDING', 'Informe', 'NOT_DELEGATED', 'p1', 0, 0)",
+            )
+        }
+
+        helper.runMigrationsAndValidate(
+            PLANNING_DATABASE,
+            AppDatabase.SCHEMA_VERSION,
+            validateDroppedTables = true,
+        ).use { database ->
+            assertEquals(
+                1,
+                database.count("SELECT COUNT(*) FROM projects WHERE id = 'p1' AND target_date IS NULL"),
+            )
+            assertEquals(1, database.count("SELECT COUNT(*) FROM tasks WHERE project_id = 'p1'"))
+            assertEquals(0, database.count("SELECT COUNT(*) FROM project_milestones"))
+            assertEquals(0, database.count("SELECT COUNT(*) FROM time_blocks"))
+            assertEquals(0, database.count("SELECT COUNT(*) FROM capacity_settings"))
+        }
+    }
+
     private fun SupportSQLiteDatabase.count(sql: String): Int =
         query(sql).use { cursor ->
             cursor.moveToFirst()
@@ -108,5 +138,6 @@ class AppDatabaseSchemaTest {
         const val MIGRATED_DATABASE = "schema-migration.db"
         const val UPGRADED_DATABASE = "schema-upgrade.db"
         const val REMINDERS_DATABASE = "schema-reminders.db"
+        const val PLANNING_DATABASE = "schema-planning.db"
     }
 }

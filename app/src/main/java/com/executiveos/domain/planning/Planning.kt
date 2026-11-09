@@ -5,6 +5,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.temporal.TemporalAdjusters
 
 enum class BlockType { DEEP_WORK, COORDINATION, STUDY, PERSONAL }
 
@@ -40,12 +41,85 @@ data class CapacitySummary(
     val actualMinutes: Int,
 ) {
     val remainingMinutes: Int get() = (targetMinutes - plannedMinutes).coerceAtLeast(0)
-    val isOverloaded: Boolean get() = plannedMinutes > targetMinutes
+
+    /** Un día no laborable no tiene capacidad que superar. */
+    val isOverloaded: Boolean get() = availableMinutes > 0 && plannedMinutes > targetMinutes
 }
 
 enum class BlockValidationError { BLANK_TITLE, END_NOT_AFTER_START, NEGATIVE_ACTUAL }
 
+enum class PlanningPeriod { DAY, WEEK, MONTH }
+
+data class DateSpan(val from: LocalDate, val to: LocalDate) {
+    val days: List<LocalDate>
+        get() = generateSequence(from) { it.plusDays(1) }.takeWhile { !it.isAfter(to) }.toList()
+}
+
+data class ExecutionByType(
+    val type: BlockType,
+    val plannedMinutes: Int,
+    /** Solo los bloques con tiempo real: lo que aún no se ha registrado no es una desviación. */
+    val comparablePlannedMinutes: Int,
+    val actualMinutes: Int,
+)
+
 object PlanningRules {
+    fun span(period: PlanningPeriod, anchor: LocalDate): DateSpan = when (period) {
+        PlanningPeriod.DAY -> DateSpan(anchor, anchor)
+        PlanningPeriod.WEEK -> DateSpan(
+            anchor.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
+            anchor.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)),
+        )
+        PlanningPeriod.MONTH -> DateSpan(
+            anchor.with(TemporalAdjusters.firstDayOfMonth()),
+            anchor.with(TemporalAdjusters.lastDayOfMonth()),
+        )
+    }
+
+    fun shift(period: PlanningPeriod, anchor: LocalDate, steps: Long): LocalDate = when (period) {
+        PlanningPeriod.DAY -> anchor.plusDays(steps)
+        PlanningPeriod.WEEK -> anchor.plusWeeks(steps)
+        PlanningPeriod.MONTH -> anchor.plusMonths(steps)
+    }
+
+    fun onDay(blocks: List<TimeBlock>, day: LocalDate, zone: ZoneId): List<TimeBlock> =
+        blocks.filter { it.startAt.atZone(zone).toLocalDate() == day }.sortedBy { it.startAt }
+
+    /** Conserva la duración y, al cambiar de día, también la hora local. */
+    fun move(block: TimeBlock, days: Long, minutes: Long, zone: ZoneId): TimeBlock {
+        val start = block.startAt.atZone(zone).plusDays(days).plusMinutes(minutes).toInstant()
+        return block.copy(
+            startAt = start,
+            endAt = start.plus(Duration.between(block.startAt, block.endAt)),
+        )
+    }
+
+    fun execution(blocks: List<TimeBlock>, span: DateSpan, zone: ZoneId): List<ExecutionByType> {
+        val inSpan = blocks.filter { it.startsWithin(span.from, span.to, zone) }
+        return BlockType.entries.mapNotNull { type ->
+            val ofType = inSpan.filter { it.type == type }
+            val recorded = ofType.filter { it.actualMinutes != null }
+            ExecutionByType(
+                type = type,
+                plannedMinutes = ofType.sumOf { it.plannedMinutes },
+                comparablePlannedMinutes = recorded.sumOf { it.plannedMinutes },
+                actualMinutes = recorded.sumOf { it.actualMinutes ?: 0 },
+            ).takeIf { ofType.isNotEmpty() }
+        }
+    }
+
+    fun overloadedDays(
+        blocks: List<TimeBlock>,
+        span: DateSpan,
+        settings: CapacitySettings,
+        zone: ZoneId,
+    ): Int = span.days.count { day -> capacity(blocks, day, day, settings, zone).isOverloaded }
+
+    private fun TimeBlock.startsWithin(from: LocalDate, to: LocalDate, zone: ZoneId): Boolean {
+        val day = startAt.atZone(zone).toLocalDate()
+        return !day.isBefore(from) && !day.isAfter(to)
+    }
+
     fun validate(block: TimeBlock): List<BlockValidationError> = buildList {
         if (block.title.isBlank()) add(BlockValidationError.BLANK_TITLE)
         if (!block.endAt.isAfter(block.startAt)) add(BlockValidationError.END_NOT_AFTER_START)
@@ -79,8 +153,7 @@ object PlanningRules {
             .count { it.dayOfWeek in settings.workDays }
         val available = workDays * settings.availableMinutesPerDay
         val productive = blocks.filter { block ->
-            val day = block.startAt.atZone(zone).toLocalDate()
-            block.type != BlockType.PERSONAL && !day.isBefore(from) && !day.isAfter(to)
+            block.type != BlockType.PERSONAL && block.startsWithin(from, to, zone)
         }
         return CapacitySummary(
             availableMinutes = available,

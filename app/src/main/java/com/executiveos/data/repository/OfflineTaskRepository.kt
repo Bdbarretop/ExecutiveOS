@@ -146,7 +146,7 @@ class OfflineTaskRepository @Inject constructor(
         }
     }
 
-    override suspend fun create(title: String, parentTaskId: String?): String =
+    override suspend fun create(title: String, parentTaskId: String?, projectId: String?): String =
         database.withTransaction {
             val trimmed = title.trim()
             require(trimmed.isNotEmpty()) { "La tarea necesita un título" }
@@ -158,7 +158,7 @@ class OfflineTaskRepository @Inject constructor(
                 sourceInboxItemId = null,
                 title = trimmed,
                 categoryId = parent?.categoryId,
-                projectId = parent?.projectId,
+                projectId = projectId ?: parent?.projectId,
                 parentTaskId = parentTaskId,
                 createdAt = now,
                 updatedAt = now,

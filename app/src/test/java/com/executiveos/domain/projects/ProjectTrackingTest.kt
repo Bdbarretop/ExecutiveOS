@@ -103,4 +103,15 @@ class ProjectTrackingTest {
 
         assertEquals(1, progress(risks = risks).openRisks)
     }
+
+    @Test
+    fun aProjectNeedsANameAndCoherentDates() {
+        val invalid = project(today).copy(name = "  ", startDate = today.plusDays(1))
+
+        assertEquals(
+            listOf(ProjectValidationError.BLANK_NAME, ProjectValidationError.TARGET_BEFORE_START),
+            ProjectTracking.validate(invalid),
+        )
+        assertTrue(ProjectTracking.validate(project(today).copy(startDate = today)).isEmpty())
+    }
 }

@@ -2,6 +2,8 @@ package com.executiveos.domain.dashboard
 
 import com.executiveos.domain.model.Task
 import com.executiveos.domain.model.TaskStatus
+import com.executiveos.domain.planning.BlockType
+import com.executiveos.domain.planning.TimeBlock
 import com.executiveos.domain.priority.CriticalObligation
 import com.executiveos.domain.priority.PrioritySettings
 import com.executiveos.domain.tasks.TaskListItem
@@ -243,5 +245,75 @@ class DashboardCalculatorTest {
         )
 
         assertEquals(listOf("hoy", "manana"), dashboard.next24Hours.map { it.item.task.id })
+    }
+
+    private fun block(id: String, day: LocalDate, start: Int, end: Int) = TimeBlock(
+        id = id,
+        type = BlockType.DEEP_WORK,
+        title = id,
+        startAt = day.atTime(start, 0).toInstant(ZoneOffset.UTC),
+        endAt = day.atTime(end, 0).toInstant(ZoneOffset.UTC),
+    )
+
+    private fun withPlanning(planning: PlanningOverview): Dashboard = DashboardCalculator.build(
+        emptyList(),
+        null,
+        today,
+        ZoneOffset.UTC,
+        planning,
+        now = today.atTime(12, 0).toInstant(ZoneOffset.UTC),
+    )
+
+    @Test
+    fun availableTimeCountsFromTodayToSundayAndIgnoresPastDays() {
+        val capacity = withPlanning(
+            PlanningOverview(
+                blocks = listOf(block("hoy", today, 9, 11), block("ayer", today.minusDays(1), 9, 11)),
+            ),
+        ).capacityThisWeek
+
+        // Miércoles, jueves y viernes, a 8 h diarias y con objetivo del 75 %.
+        assertEquals(1_440, capacity.availableMinutes)
+        assertEquals(1_080, capacity.targetMinutes)
+        assertEquals(120, capacity.plannedMinutes)
+        assertEquals(960, capacity.remainingMinutes)
+    }
+
+    @Test
+    fun overloadedDaysAndDelayedProjectsRaiseAlerts() {
+        val dashboard = withPlanning(
+            PlanningOverview(blocks = listOf(block("largo", today, 8, 15)), delayedProjects = 2),
+        )
+
+        assertEquals(
+            listOf(
+                DashboardAlert(AlertType.OVERLOADED_DAYS, 1),
+                DashboardAlert(AlertType.DELAYED_PROJECTS, 2),
+            ),
+            dashboard.alerts,
+        )
+    }
+
+    @Test
+    fun aCalendarWithinTheTargetRaisesNoAlerts() {
+        val dashboard = withPlanning(PlanningOverview(blocks = listOf(block("corto", today, 9, 10))))
+
+        assertTrue(dashboard.alerts.isEmpty())
+    }
+
+    @Test
+    fun nextBlocksIncludeWhatIsRunningAndTheNext24Hours() {
+        val dashboard = withPlanning(
+            PlanningOverview(
+                blocks = listOf(
+                    block("manana", today.plusDays(1), 9, 10),
+                    block("terminado", today, 8, 10),
+                    block("en-curso", today, 11, 13),
+                    block("fuera", today.plusDays(1), 13, 14),
+                ),
+            ),
+        )
+
+        assertEquals(listOf("en-curso", "manana"), dashboard.nextBlocks.map { it.id })
     }
 }
