@@ -68,6 +68,16 @@
 
 **D-043. El reloj usa la zona del dispositivo.** Con `Clock.systemUTC()`, `LocalDate.now(clock)` devolvía el día siguiente durante la noche en América. Los instantes no cambian; las fechas de «Hoy» guardadas de noche antes de esta corrección pueden tener un día de más.
 
+**D-044. Las prioridades del día ordenan por emergencia, nivel y fecha, en ese orden.** La fecha solo desempata, según 6.2. Una emergencia es una obligación con fecha vencida o en 7 días, o una tarea crítica vencida o de hoy, y se añade aunque supere las tres (7.2).
+
+**D-045. Lo bloqueado no se recomienda, salvo las obligaciones.** Una tarea bloqueada, en espera o con dependencias abiertas no se puede avanzar hoy, pero una obligación crítica no debe ocultarse.
+
+**D-046. La selección del día vive en DataStore y caduca al cambiar de fecha.** Es un ajuste diario del dispositivo y no debe viajar en las copias de seguridad.
+
+**D-047. Solo la fecha límite o una obligación cuentan como compromiso en las alertas.** Una fecha objetivo incumplida no es un compromiso vencido (4.2); sigue apareciendo en la vista Vencidas.
+
+**D-048. Sin valores simulados por falta de Planificación.** El tiempo disponible indica que llega en la Fase 4, y la sobrecarga y los retrasos de proyectos no generan alertas hasta entonces.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.

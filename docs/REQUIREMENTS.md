@@ -11,7 +11,7 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 4 | Captura inteligente | 1 | Implantada, salvo adjuntos locales y recordatorio de la ficha (D-034). Detalle en [CAPTURE_UX.md](CAPTURE_UX.md) |
 | 5 | Módulo de tareas | 2 | Implantado: acciones, 8 estados, 11 vistas, filtros y búsqueda |
 | 6 | Motor de priorización | 2 | Implantado: fórmula configurable, explicación, prioridad manual y obligaciones críticas |
-| 7 | Dashboard ejecutivo | 3 | Pendiente |
+| 7 | Dashboard ejecutivo | 3 | Implantado. Tiempo disponible, sobrecarga y retrasos de proyectos esperan a la Fase 4 |
 | 8 | Proyectos | 4 | Pendiente |
 | 9 | Planificación y tiempo | 4 | Pendiente |
 | 10 | Formación | 5 | Pendiente |
@@ -25,7 +25,7 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 
 ## Criterios de aceptación del MVP
 
-| # | Criterio | Fase | Estado tras Sprint 2 |
+| # | Criterio | Fase | Estado tras Sprint 3 |
 |---|---|---|---|
 | 1 | La aplicación compila | 0 | Cumplido |
 | 2 | Se puede instalar en Android | 0 | Cumplido en Xiaomi con Android 15 |
@@ -36,14 +36,14 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 7 | La bandeja permite procesar capturas | 1 | Cumplido |
 | 8 | Crear, modificar y completar tareas | 2 | Cumplido |
 | 9 | El motor de prioridad funciona | 2 | Cumplido |
-| 10 | El dashboard refleja información real | 3 | Pendiente |
+| 10 | El dashboard refleja información real | 3 | Cumplido |
 | 11 | Los filtros y la búsqueda funcionan | 2 | Cumplido |
 | 12 | Los proyectos permiten relacionar tareas | 4 | Pendiente |
 | 13 | Las revisiones pueden guardarse | 5 | Pendiente |
 | 14 | Los recordatorios funcionan | Sin asignar | Pendiente |
 | 15 | Exportar y restaurar los datos | 6 | Pendiente |
-| 16 | Existen pruebas automatizadas relevantes | Continuo | 140 en computador y 9 en dispositivo |
-| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar Sprint 2 |
+| 16 | Existen pruebas automatizadas relevantes | Continuo | 164 en computador y 10 en dispositivo |
+| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar Sprint 3 |
 | 18 | La aplicación funciona sin conexión | Continuo | La APK no declara permiso de internet |
 
 ## Anexo: prompt maestro literal

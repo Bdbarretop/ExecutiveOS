@@ -34,6 +34,37 @@ HyperOS añade restricciones que afectan a las pruebas, no a la app:
 3. Mantener el teléfono desbloqueado durante la ejecución.
 4. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
 
+## Resultados de Sprint 3
+
+Ejecución del 2026-11-09 sobre la rama `sprint-3/dashboard`.
+
+| Verificación | Resultado |
+|---|---|
+| `assembleDebug` | Correcto |
+| `testDebugUnitTest` | **164 de 164** |
+| `lintDebug` | **0 errores**, 2 avisos intencionados |
+| Pruebas instrumentadas en Xiaomi 23129RA5FL, Android 15 | **10 de 10**, en 35 s |
+| Revisión visual de Inicio en el teléfono, sin tareas | Correcta; fecha local correcta |
+| Fallos de la app en el registro del dispositivo | 0 |
+
+### Inventario de Sprint 3
+
+| Clase | Nivel | Pruebas | Cubre |
+|---|---|---|---|
+| `DashboardCalculatorTest` | JVM | 16 | Recomendación, emergencias, selección del día, indicadores, semana, alertas, próximas 24 horas |
+| `DatabaseModuleTest` | JVM | 1 | El reloj usa la zona horaria del dispositivo |
+| `DataStoreDailyFocusRepositoryTest` | Robolectric | 5 | Selección diaria: persistencia, caducidad y restauración |
+| `TasksViewModelTest` | JVM | +1 | Abrir la vista pedida desde Inicio |
+| `AppSmokeTest` | Robolectric | +1 | Inicio recomienda una tarea real y permite quitarla |
+| `MainActivitySmokeTest` | Instrumentada | +1 | Inicio refleja una tarea real en el teléfono |
+
+**Nota sobre Windows:** en JVM puro, DataStore usa un renombrado que en Windows no puede reemplazar un archivo existente. Las pruebas con varias escrituras seguidas deben usar Robolectric, que emplea el mismo método de escritura que un teléfono.
+
+### Limitaciones de Sprint 3
+
+- **Sin datos de Planificación.** El tiempo disponible, la sobrecarga de calendario, los proyectos con retraso y los bloques de las próximas 24 horas dependen de la Fase 4.
+- **Revisión visual parcial.** Solo se revisó Inicio sin tareas; las tarjetas con contenido están cubiertas por pruebas funcionales.
+
 ## Resultados de Sprint 2
 
 Ejecución del 2026-11-08 sobre la rama `sprint-2/tareas-prioridad`.
@@ -150,7 +181,7 @@ Ejecución del 2026-11-08 sobre la rama `sprint-0/fundacion`.
 |---|---|
 | 1 | Completada; ver los resultados de Sprint 1 |
 | 2 | Completada; ver los resultados de Sprint 2 |
-| 3 | Indicadores y alertas con datos reales, base vacía |
+| 3 | Completada; ver los resultados de Sprint 3 |
 | 4 | Progreso ponderado, solapamiento de bloques, capacidad |
 | 5 | Revisiones, métricas y definición de cada indicador |
 | 6 | 500 y 1.000 tareas, datos corruptos, almacenamiento insuficiente, cierre inesperado, exportación y restauración |

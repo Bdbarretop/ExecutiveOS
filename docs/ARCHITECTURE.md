@@ -26,6 +26,7 @@ La base local es la fuente de verdad. La interfaz observa `Flow`: cualquier escr
 | `domain/usecase` | Reglas que combinan datos. **Se crea solo cuando haya lógica real** | `domain` |
 | `domain/priority` | Motor de priorización, transparente y sin efectos secundarios | `domain/model` |
 | `domain/tasks` | Vistas, filtros, búsqueda, transiciones de estado y ciclos de dependencias | `domain/model`, `domain/priority` |
+| `domain/dashboard` | Indicadores, recomendación del día y alertas | `domain/tasks` |
 | `data/local` | Entidades y DAO de Room | `core/database` |
 | `data/repository` | Implementación de los contratos | `data/local`, `domain` |
 | `core/common` | Utilidades transversales, cuando existan | Nada de `feature` |
