@@ -3,7 +3,7 @@ package com.executiveos.di
 import android.content.Context
 import androidx.room.Room
 import com.executiveos.core.database.AppDatabase
-import com.executiveos.core.database.DefaultCategoriesSeedCallback
+import com.executiveos.core.database.DefaultDataSeedCallback
 import com.executiveos.data.local.dao.CategoryDao
 import dagger.Module
 import dagger.Provides
@@ -21,7 +21,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context, clock: Clock): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.FILE_NAME)
-            .addCallback(DefaultCategoriesSeedCallback(clock))
+            .addCallback(DefaultDataSeedCallback(clock))
             .build()
 
     @Provides

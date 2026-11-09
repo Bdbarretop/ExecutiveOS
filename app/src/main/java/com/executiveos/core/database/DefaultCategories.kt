@@ -11,11 +11,15 @@ data class DefaultCategory(val id: String, val name: String)
  * seguridad restauradas en otra instalación sigan apuntando a la misma categoría.
  */
 object DefaultCategories {
+    val WORK = DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e01", "Trabajo")
+    val STUDY = DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e02", "Estudio")
+    val PERSONAL = DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e04", "Personal")
+
     val all: List<DefaultCategory> = listOf(
-        DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e01", "Trabajo"),
-        DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e02", "Estudio"),
+        WORK,
+        STUDY,
         DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e03", "Proyecto"),
-        DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e04", "Personal"),
+        PERSONAL,
         DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e05", "Finanzas"),
         DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e06", "Salud"),
         DefaultCategory("7f3a1c52-9b1e-4d3a-8f21-0a6b3c1d2e07", "Otro"),
@@ -24,9 +28,9 @@ object DefaultCategories {
 
 /**
  * Siembra el catálogo solo al crear la base. Android ejecuta `onCreate` dentro de una
- * transacción, así que un fallo no puede dejar el catálogo a medias.
+ * transacción, así que un fallo no puede dejarlo a medias.
  */
-class DefaultCategoriesSeedCallback(private val clock: Clock) : RoomDatabase.Callback() {
+class DefaultDataSeedCallback(private val clock: Clock) : RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         val createdAt = clock.millis()
         DefaultCategories.all.forEachIndexed { index, category ->
@@ -36,5 +40,6 @@ class DefaultCategoriesSeedCallback(private val clock: Clock) : RoomDatabase.Cal
                 arrayOf<Any>(category.id, category.name, index, createdAt),
             )
         }
+        seedDefaultTemplates(db, createdAt)
     }
 }

@@ -25,12 +25,12 @@ class AppDatabaseTest {
 
     private fun openFileDatabase(): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "app-database-test.db")
-            .addCallback(DefaultCategoriesSeedCallback(clock))
+            .addCallback(DefaultDataSeedCallback(clock))
             .build()
 
     private fun openInMemoryDatabase(): AppDatabase =
         Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
-            .addCallback(DefaultCategoriesSeedCallback(clock))
+            .addCallback(DefaultDataSeedCallback(clock))
             .build()
 
     @Test
