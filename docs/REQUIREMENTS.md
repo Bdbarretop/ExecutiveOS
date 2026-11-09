@@ -19,7 +19,7 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 12 | Analítica y métricas | 5 | Implantada: 9 indicadores definidos, por semana, mes o trimestre y categoría |
 | 13 | Recordatorios y notificaciones | Tras la 3 | Implantados con WorkManager; puntualidad aproximada (D-049) |
 | 14 | Base de datos | Progresiva | Esquema 6 implantado. Ver [DATA_MODEL.md](DATA_MODEL.md) |
-| 15 | Seguridad y privacidad | 0 y 6 | Base implantada: sin internet ni copias automáticas. Exportación y restauración en Fase 6 |
+| 15 | Seguridad y privacidad | 0 y 6 | Implantada: sin internet ni copias automáticas, exportación CSV y JSON, copia cifrada y restauración validada (D-071 a D-080) |
 | 16 | Estructura del proyecto | 0 | Implantada con ajustes documentados (D-025) |
 | 17 | Calidad y pruebas | Continuo | Base implantada. Ver [TEST_PLAN.md](TEST_PLAN.md) |
 
@@ -41,9 +41,9 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 12 | Los proyectos permiten relacionar tareas | 4 | Cumplido |
 | 13 | Las revisiones pueden guardarse | 5 | Cumplido |
 | 14 | Los recordatorios funcionan | Tras la 3 | Cumplido dentro de las restricciones de Android |
-| 15 | Exportar y restaurar los datos | 6 | Pendiente |
-| 16 | Existen pruebas automatizadas relevantes | Continuo | 292 en computador y 18 en dispositivo |
-| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar la Fase 5; una prueba de dispositivo falló una vez sin repetirse |
+| 15 | Exportar y restaurar los datos | 6 | Cumplido |
+| 16 | Existen pruebas automatizadas relevantes | Continuo | 327 en computador y 20 en dispositivo |
+| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar la Fase 6 |
 | 18 | La aplicación funciona sin conexión | Continuo | La APK no declara permiso de internet |
 
 ## Anexo: prompt maestro literal

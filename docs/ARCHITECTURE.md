@@ -40,6 +40,8 @@ La base local es la fuente de verdad. La interfaz observa `Flow`: cualquier escr
 | `domain/learning` | Objetivos, sesiones y horas por tema y semana | `domain/planning` |
 | `domain/reviews` | Preguntas, resumen semanal y sugerencias heurísticas | `domain/tasks`, `domain/planning`, `domain/projects`, `domain/learning` |
 | `domain/metrics` | Cálculo de los indicadores y sus periodos | `domain/tasks`, `domain/planning`, `domain/learning` |
+| `domain/backup` | Contrato de exportación y restauración | Nada de otras capas |
+| `data/backup` | Formato de copia, cifrado, validación y restauración | `data/repository`, `core/database` |
 | `feature/*` | Pantalla + ViewModel de cada módulo | `core`, `domain` |
 | `di` | Módulos Hilt | Todas las capas |
 

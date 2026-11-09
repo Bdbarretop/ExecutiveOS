@@ -76,6 +76,14 @@ Las categorías y las plantillas se siembran en `onCreate`, que Android envuelve
 |---|---|---|
 | `TaskAttachmentEntity` | Por decidir | Adjuntos locales; requieren permisos persistentes de archivos |
 
+## Formato de las copias
+
+Documento JSON con `format`, `formatVersion`, `schemaVersion`, `createdAt` y `tables`, un mapa de cada tabla a sus filas tal como están en SQLite. Se exportan todas las tablas salvo las internas de Room.
+
+La copia protegida antepone una cabecera autenticada al JSON cifrado: 5 bytes de marca y versión, iteraciones de PBKDF2 (4), sal (16) y vector de inicialización (12). Le siguen el texto cifrado y la etiqueta GCM.
+
+**Al añadir una migración no aditiva** hay que transformar también las copias de esquemas anteriores (D-075).
+
 ## Reglas de las tareas
 
 - El estado solo cambia con `setStatus`, que valida la transición. Guardar la ficha nunca lo sobrescribe.

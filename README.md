@@ -2,7 +2,7 @@
 
 Sistema personal de dirección y ejecución para Android. Ayuda a capturar compromisos, entender qué importa y convertirlo en acciones concretas. Funciona sin conexión y los datos no salen del dispositivo.
 
-> **Estado: Fase 5.** Funcionan las revisiones diarias y semanales, la formación, las métricas, los proyectos con hitos ponderados, la planificación por bloques de tiempo, los recordatorios locales, el panel de Inicio, la captura, la bandeja, la ficha completa, las vistas de tareas con búsqueda y filtros, el motor de prioridad, las subtareas y las dependencias. **Falta la Fase 6: exportar y restaurar datos, y la APK final.** Avance en [docs/ROADMAP.md](docs/ROADMAP.md).
+> **Estado: MVP 1.0.0.** Funcionan la captura, la bandeja, las tareas con motor de prioridad, el panel de Inicio, los proyectos con hitos ponderados, la planificación por bloques de tiempo, las revisiones, la formación, las métricas, los recordatorios locales y la copia de seguridad cifrada. Avance en [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Requisitos
 
@@ -37,13 +37,23 @@ Resultado: `app/build/outputs/apk/debug/app-debug.apk`.
 
 > Mantén el proyecto en una ruta sin tildes y fuera de carpetas sincronizadas como OneDrive. AGP rechaza las rutas no ASCII en Windows.
 
-## Instalar
-
-Con un dispositivo o emulador conectado:
+Para la APK optimizada:
 
 ```powershell
-.\gradlew.bat installDebug
+.\gradlew.bat assembleRelease
 ```
+
+Resultado: `app/build/outputs/apk/release/app-release.apk`. Sin `keystore.properties` se firma con la clave de depuración local, válida para uso personal pero no para distribuirla ([D-079](docs/DECISIONS.md)). Para usar una clave propia, crea en la raíz un `keystore.properties`, que Git ignora, con `storeFile`, `storePassword`, `keyAlias` y `keyPassword`.
+
+## Instalar
+
+Copia la APK al teléfono y ábrela, o con el dispositivo conectado:
+
+```powershell
+adb install -r app\build\outputs\apk\release\app-release.apk
+```
+
+`-r` actualiza conservando los datos. **No desinstales la app sin hacer antes una copia de seguridad**: al desinstalar se borran todos los datos. El uso de la app se explica en el [manual](docs/USER_GUIDE.md).
 
 ## Pruebas
 
@@ -57,6 +67,8 @@ Con un dispositivo o emulador conectado:
 
 | Documento | Contenido |
 |---|---|
+| [USER_GUIDE](docs/USER_GUIDE.md) | Manual básico de usuario |
+| [FUNCTIONAL](docs/FUNCTIONAL.md) | Qué hace cada módulo y con qué reglas |
 | [PRODUCT_VISION](docs/PRODUCT_VISION.md) | Qué es y qué principios sigue |
 | [REQUIREMENTS](docs/REQUIREMENTS.md) | Especificación íntegra y trazabilidad |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Capas, dependencias y seguridad |
@@ -68,4 +80,4 @@ Con un dispositivo o emulador conectado:
 
 ## Privacidad
 
-Sin publicidad, seguimiento ni servidores externos. La APK no declara permiso de internet y las copias automáticas de Android están desactivadas.
+Sin publicidad, seguimiento ni servidores externos. La APK no declara permiso de internet y las copias automáticas de Android están desactivadas. Las copias de seguridad las crea la persona y pueden cifrarse con contraseña.

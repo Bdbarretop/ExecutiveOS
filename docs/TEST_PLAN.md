@@ -34,6 +34,66 @@ HyperOS añade restricciones que afectan a las pruebas, no a la app:
 3. Mantener el teléfono desbloqueado durante la ejecución.
 4. Para que los recordatorios lleguen con la app cerrada, conviene activar **Inicio automático** y quitar la restricción de batería en la información de la app.
 5. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
+6. Las pruebas instrumentadas requieren la versión de depuración. Mientras la APK final use la misma clave, `adb install -r -t` la instala encima conservando los datos.
+
+## Informe final del MVP: Fase 6
+
+Ejecución del 2026-11-09 sobre la rama `sprint-7/estabilizacion`.
+
+| Verificación | Resultado |
+|---|---|
+| `assembleDebug` y `assembleRelease` | Correctos |
+| `testDebugUnitTest` | **327 de 327** |
+| `lintDebug` | **0 errores**, 2 avisos intencionados |
+| Pruebas instrumentadas en Xiaomi 23129RA5FL, Android 15 | **20 de 20**, en 83 s |
+| APK final 1.0.0: 4,4 MB | Instalada sobre la versión anterior y abierta en el teléfono, sin fallos |
+| Permisos de la APK final | No declara `INTERNET` y no es depurable |
+
+### Rendimiento medido en el teléfono
+
+| Operación | Tiempo |
+|---|---|
+| Insertar 1.000 tareas | 916 ms |
+| Abrir Tareas con 1.000 tareas | 734 ms |
+| Abrir Inicio con 1.000 tareas | 339 ms |
+| Cifrar y guardar una copia | 4,3 s; la pantalla indica que está trabajando |
+
+### Inventario
+
+| Clase | Nivel | Pruebas | Cubre |
+|---|---|---|---|
+| `BackupEngineTest` | Robolectric | 15 | Ida y vuelta, resumen, contraseña, archivos dañados o manipulados, inyección SQL, versiones |
+| `BackupCryptoAndCodecTest` | JVM | 7 | Cifrado autenticado, formato JSON y CSV |
+| `BackupViewModelTest` | JVM | 10 | Exportar, disco lleno, contraseña, confirmación y fallos |
+| `LargeDataTest` | JVM | 2 | 500 y 1.000 tareas |
+| `AppSmokeTest` | Robolectric | +1 | Pantalla de copia y contraseña coincidente |
+| `StabilityOnDeviceTest` | Instrumentada | 2 | 1.000 tareas y copia cifrada con archivo y criptografía reales |
+
+### Casos extremos del brief
+
+| Caso | Cobertura |
+|---|---|
+| 500 y 1.000 tareas | `LargeDataTest`; 1.000 también en el teléfono |
+| Sin conexión | La APK no declara `INTERNET` |
+| Base de datos vacía | Arranque en las pruebas de interfaz; copia y restauración de una base vacía |
+| Almacenamiento insuficiente | Simulado con un fallo de escritura al exportar; no se ha llenado un disco real |
+| Cierre inesperado | Borrador persistente y autoguardado; restauración atómica. No se ha forzado un cierre durante una escritura |
+| Migración de versión | `AppDatabaseSchemaTest`, de la versión 1 a la 6, y actualización real en el teléfono |
+| Dependencias circulares | `TaskRulesTest` |
+| Fechas vencidas y tareas sin fecha | `TaskQueriesTest` |
+| Campos incompletos | Reglas de validación y prioridad «Sin evaluar» |
+| Doble pulsación | `OfflineInboxRepositoryTest` |
+| Datos corruptos | `BackupEngineTest` y recuperación de preferencias dañadas |
+| Restauración de respaldo | `BackupEngineTest` y `StabilityOnDeviceTest` |
+
+### Limitaciones del informe
+
+- **La APK optimizada solo se ha abierto en Inicio.** Las pruebas automáticas se ejecutan sobre la versión de depuración. El optimizador puede afectar a pantallas que no se han abierto, de modo que hay que recorrerlas a mano.
+- **El selector de archivos del sistema no se ha usado.** La copia se probó con archivos reales en el teléfono, pero nadie ha creado ni restaurado una desde la pantalla. La restauración con reprogramación de avisos tampoco se ha ejecutado en el teléfono, para no alterar los avisos reales.
+- **Sin revisión con TalkBack, en Android 10 ni en pantallas anchas.**
+- **Sin revisión visual a mano** de Proyectos, Planificación, Revisiones, Formación, Métricas y Copia de seguridad.
+- **Notificaciones reales:** solo se comprobó la entrega de un recordatorio de tarea; no sus botones ni los avisos de la mañana y de revisión.
+- **Prueba intermitente de la Fase 5:** no volvió a fallar en esta ejecución; su causa sigue sin identificarse.
 
 ## Resultados de la Fase 5: revisiones, formación y métricas
 

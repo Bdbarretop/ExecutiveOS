@@ -126,6 +126,28 @@
 
 **D-070. El resumen semanal de semanas pasadas muestra pendientes y vencidas de hoy.** No hay un histórico diario de esos valores; la pantalla lo indica.
 
+## Copias, seguridad y entrega
+
+**D-071. Las copias se cifran con algoritmos estándar de la plataforma.** AES-256-GCM con clave derivada por PBKDF2-HMAC-SHA256 y 600.000 iteraciones, mediante las API criptográficas de Android, sin algoritmos propios. Se descarta Android Keystore para este fin porque una clave ligada al dispositivo impediría restaurar en otro teléfono.
+
+**D-072. La contraseña de una copia no se guarda.** Tampoco pasa al estado restaurable de la pantalla. La contrapartida, advertida en la app, es que olvidarla hace irrecuperable la copia.
+
+**D-073. Una copia se ensaya antes de aplicarla.** Se carga en una base temporal en memoria y se lee con los repositorios reales. Así, un estado desconocido o una fecha rota se detectan sin mantener una lista de reglas por columna que quedaría desactualizada.
+
+**D-074. Restaurar sustituye todo en una sola transacción.** Combinar datos de dos orígenes crearía conflictos sin una respuesta correcta. Con reemplazo atómico, cualquier fallo deja los datos intactos.
+
+**D-075. Se aceptan copias de esquemas anteriores y se rechazan las más recientes.** Las migraciones han sido aditivas, de modo que una copia antigua sigue siendo válida. **Una futura migración no aditiva deberá transformar también las copias antiguas.**
+
+**D-076. El CSV es solo para consultar.** Va un archivo por tabla en un ZIP. Los textos que una hoja de cálculo ejecutaría como fórmula se neutralizan.
+
+**D-077. Los archivos llegan por el selector del sistema.** La app no pide permisos de almacenamiento.
+
+**D-078. La base no se cifra en el dispositivo.** Reside en el almacenamiento privado de la app, con copias automáticas de Android desactivadas. La app no guarda secretos, por lo que Android Keystore no es necesario hoy. El cifrado en reposo queda en el backlog.
+
+**D-079. La APK se firma con la clave de depuración local mientras no exista una propia.** Permite actualizar la instalación actual sin desinstalar, lo que borraría los datos, y evita crear secretos que el usuario deba custodiar sin haberlo decidido. Sirve para uso personal, no para distribuirla. El archivo opcional `keystore.properties`, fuera de Git, activa una clave propia. **Cambiar de clave exige desinstalar: antes hay que hacer una copia.**
+
+**D-080. Los datos recibidos por la actividad pública se validan.** `MainActivity` admite intents de otras apps; un tipo de revisión desconocido se ignora en lugar de provocar un cierre.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.
