@@ -19,9 +19,11 @@ Base local Room, archivo `executive_os.db`. Los esquemas se exportan a `app/sche
 
 **Política de migraciones:** cada cambio de esquema sube `SCHEMA_VERSION`, versiona su JSON y tiene prueba sobre SQLite real. Los cambios puramente aditivos usan `AutoMigration`, que Room verifica al compilar; los demás, una migración manual. No se usa `fallbackToDestructiveMigration`: si falta una migración, la app falla de forma visible en lugar de borrar datos.
 
-## Esquema actual: versión 5
+## Esquema actual: versión 6
 
-La versión 5 es aditiva: amplía `projects` con columnas opcionales y crea cuatro tablas. `capacity_settings` usa una sola fila; si no existe, se aplican 8 horas diarias, objetivo del 75 % y lunes a viernes.
+La versión 6 es aditiva y crea las tablas de revisiones y formación. `reviews` admite una sola fila por tipo y periodo; las respuestas se guardan juntas en JSON.
+
+La versión 5, también aditiva, amplió `projects` con columnas opcionales y creó cuatro tablas. `capacity_settings` usa una sola fila; si no existe, se aplican 8 horas diarias, objetivo del 75 % y lunes a viernes.
 
 `reminders` guarda los recordatorios de tareas y las claves de los avisos ya enviados: `dedupe_key` es única, de modo que un aviso no se repite. `reminder_settings` guarda la configuración de avisos en una sola fila; si no existe, se usan los valores iniciales.
 
@@ -37,6 +39,9 @@ La versión 5 es aditiva: amplía `projects` con columnas opcionales y crea cuat
 | `project_risks` | Riesgos con mitigación, severidad de 1 a 5 y si siguen abiertos | `project_id` → `projects` (CASCADE) |
 | `time_blocks` | Bloques planificados: tipo, inicio, fin y tiempo real | `task_id` → `tasks` (SET NULL) |
 | `capacity_settings` | Minutos por día, porcentaje objetivo y días laborables | |
+| `reviews` | Revisión diaria, cierre o semanal, con sus respuestas | Índice único en `type` y `period_date` |
+| `learning_goals` | Objetivo, tema, curso, materiales, evidencias, dominio y fecha objetivo | |
+| `learning_sessions` | Fecha, minutos, notas y evaluación de cada sesión | `goal_id` → `learning_goals` (CASCADE) |
 | `notes` | Capturas convertidas en nota | `source_inbox_item_id`, sin clave foránea |
 | `capture_templates` | Plantillas editables, con las 10 del brief | `category_id` → `categories` (SET NULL) |
 | `tags`, `task_tags` | Etiquetas, relación muchos a muchos | CASCADE en `task_tags` |
@@ -70,8 +75,6 @@ Las categorías y las plantillas se siembran en `onCreate`, que Android envuelve
 | Entidad | Fase | Notas |
 |---|---|---|
 | `TaskAttachmentEntity` | Por decidir | Adjuntos locales; requieren permisos persistentes de archivos |
-| `ReviewEntity` | 5 | Respuestas de revisiones diarias y semanales |
-| `LearningGoalEntity`, `LearningSessionEntity` | 5 | Horas por semana y tema |
 
 ## Reglas de las tareas
 

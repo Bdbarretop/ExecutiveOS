@@ -37,6 +37,9 @@ La base local es la fuente de verdad. La interfaz observa `Flow`: cualquier escr
 | `domain/reminders` | Horario silencioso, próximas ejecuciones y decisión de qué se notifica | `domain/tasks` |
 | `domain/projects` | Avance ponderado, previsión, desviación y retrasos | `domain/priority` |
 | `domain/planning` | Bloques, solapamientos, capacidad y plan frente a ejecución | Nada de otras capas |
+| `domain/learning` | Objetivos, sesiones y horas por tema y semana | `domain/planning` |
+| `domain/reviews` | Preguntas, resumen semanal y sugerencias heurísticas | `domain/tasks`, `domain/planning`, `domain/projects`, `domain/learning` |
+| `domain/metrics` | Cálculo de los indicadores y sus periodos | `domain/tasks`, `domain/planning`, `domain/learning` |
 | `feature/*` | Pantalla + ViewModel de cada módulo | `core`, `domain` |
 | `di` | Módulos Hilt | Todas las capas |
 
@@ -63,7 +66,7 @@ Hilt, con tres módulos en `di/`:
 Navigation Compose con rutas tipadas mediante `@Serializable`.
 
 - `ExecutiveOsShell` contiene `NavigationSuiteScaffold` (barra inferior en móvil, riel en pantallas anchas) y el botón **CAPTURAR**.
-- Barra: Inicio, Bandeja, Tareas, Proyectos, Más. «Más» abre Planificación, Formación, Revisiones y Configuración dentro de un grafo anidado, de modo que la pestaña sigue marcada al entrar en ellas.
+- Barra: Inicio, Bandeja, Tareas, Proyectos, Más. «Más» abre Planificación, Formación, Revisiones, Métricas y Configuración dentro de un grafo anidado, de modo que la pestaña sigue marcada al entrar en ellas.
 - La captura y los editores ocultan la navegación y el botón flotante: son tareas a pantalla completa.
 
 ## Persistencia

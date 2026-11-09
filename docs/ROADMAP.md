@@ -9,8 +9,8 @@ Se avanza por fases con aprobación entre ellas. Una fase no se considera termin
 | **2. Tareas y prioridad** | CRUD, estados, fechas, prioridad, búsqueda, filtros, subtareas, dependencias | **Completada y aprobada** |
 | **3. Dashboard** | Indicadores, tres prioridades, alertas, próximas 24 horas | **Completada y aprobada** |
 | **Recordatorios** | Recordatorios locales, horario silencioso, acciones desde la notificación | **Completada y aprobada** |
-| **4. Proyectos y planificación** | Proyectos, hitos, riesgos, bloques de tiempo, vistas diaria, semanal y mensual, capacidad | **Completada**, pendiente de aprobación. Resultados en [TEST_PLAN.md](TEST_PLAN.md) |
-| **5. Revisión y formación** | Revisiones diarias y semanales, formación, métricas | Pendiente |
+| **4. Proyectos y planificación** | Proyectos, hitos, riesgos, bloques de tiempo, vistas diaria, semanal y mensual, capacidad | **Completada y aprobada** |
+| **5. Revisión y formación** | Revisiones diarias y semanales, formación, métricas | **Completada**, pendiente de aprobación. Resultados en [TEST_PLAN.md](TEST_PLAN.md) |
 | **6. Estabilización** | QA, rendimiento, seguridad, copias de respaldo, APK, documentación | Pendiente |
 | **Futura. Integraciones** | Gmail, Calendar, Outlook, sincronización, funciones inteligentes | Sin planificar |
 

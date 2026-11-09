@@ -35,6 +35,37 @@ HyperOS añade restricciones que afectan a las pruebas, no a la app:
 4. Para que los recordatorios lleguen con la app cerrada, conviene activar **Inicio automático** y quitar la restricción de batería en la información de la app.
 5. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
 
+## Resultados de la Fase 5: revisiones, formación y métricas
+
+Ejecución del 2026-11-09 sobre la rama `sprint-6/revision-formacion`.
+
+| Verificación | Resultado |
+|---|---|
+| `assembleDebug` | Correcto |
+| `testDebugUnitTest` | **292 de 292** |
+| `lintDebug` | **0 errores**, 2 avisos intencionados |
+| Pruebas instrumentadas en Xiaomi 23129RA5FL, Android 15 | **18 de 18** en la segunda ejecución; ver limitaciones |
+| Migración 5 a 6 sobre SQLite real | Correcta en prueba instrumentada |
+| Permisos de la APK | No declara `INTERNET` |
+
+### Inventario
+
+| Clase | Nivel | Pruebas | Cubre |
+|---|---|---|---|
+| `ReviewAndMetricsTest` | JVM | 15 | Preguntas, resumen semanal, sugerencias, horas de formación, periodos e indicadores |
+| `ReviewsViewModelsTest` | JVM | 7 | Estado de las revisiones, autoguardado y resumen |
+| `LearningAndMetricsViewModelsTest` | JVM | 9 | Horas, objetivos, sesiones, periodos y filtro de categoría |
+| `OfflineReviewLearningRepositoriesTest` | Robolectric | 10 | Una revisión por periodo, respuestas, objetivos y sesiones |
+| `AppSmokeTest` | Robolectric | +4 | Revisión diaria y semanal, formación y métricas |
+| `AppDatabaseSchemaTest` | Instrumentada | +1 | Migración a la versión 6 |
+| `MainActivitySmokeTest` | Instrumentada | +3 | Revisión diaria, formación y métricas en el teléfono |
+
+### Limitaciones
+
+- **Un fallo intermitente sin causa identificada.** `aPlannedBlockAppearsInThePlanAndCountsOnHome` falló una vez en la primera ejecución completa en el teléfono, con 17 de 18. Pasó después sola y en una segunda ejecución completa. El detalle del fallo no se conservó. Si se repite, hay que capturar su traza antes de tocar nada.
+- **El enlace del recordatorio de revisión no se ha probado con una notificación real.** Estos avisos están desactivados por defecto y dependen de la hora programada.
+- **Sin revisión visual a mano** de las pantallas de Revisiones, Formación y Métricas; se recorrieron con pruebas automáticas.
+
 ## Resultados de la Fase 4: proyectos y planificación
 
 Ejecución del 2026-11-09 sobre la rama `sprint-5/proyectos-planificacion`.

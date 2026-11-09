@@ -106,6 +106,26 @@
 
 **D-061. Los ajustes de una sola fila usan `@Upsert`.** Sustituye a `REPLACE`, que las reglas del proyecto prohíben sobre datos del usuario. No cambia el esquema. D-048 queda resuelta con esta fase.
 
+## Revisiones, formación y métricas
+
+**D-062. Los recordatorios de revisión abren su guía.** Sustituye a D-052, ahora que la pantalla existe.
+
+**D-063. Las respuestas de una revisión se guardan juntas en JSON.** Se escriben de una vez con el autoguardado, y una pregunta retirada en el futuro no rompe las revisiones antiguas.
+
+**D-064. Hay una revisión por tipo y periodo.** La semanal se identifica por su lunes, de modo que abrirla cualquier día de la semana edita la misma. Abrir una revisión y salir sin escribir no la crea.
+
+**D-065. Los temas de formación son texto libre.** Se ofrecen las 12 categorías iniciales del brief como sugerencias, y escribir otra ya la amplía, sin necesidad de un catálogo aparte.
+
+**D-066. Las sugerencias semanales solo aparecen con datos que las respalden.** Se evitan umbrales inventados: por ejemplo, se sugiere proteger trabajo profundo solo si no hay ninguno registrado. La pantalla indica que son reglas de la app y no conclusiones demostradas.
+
+**D-067. Las métricas no tienen puntuación global.** Cada indicador muestra sus dos términos y su definición. El cumplimiento excluye subtareas y prioridad baja para no premiar trocear el trabajo, y sin datos se dice «Sin datos», nunca 0 %.
+
+**D-068. Métricas es una entrada más en «Más».** El brief pide el módulo pero no le asigna sitio en la navegación; va antes de Configuración y respeta el orden de las demás secciones.
+
+**D-069. La distribución del tiempo usa las tareas completadas con tiempo real.** Es el único dato que tiene categoría; los bloques de tiempo no la tienen, y asignársela por la tarea vinculada dejaría fuera a los que no tienen tarea.
+
+**D-070. El resumen semanal de semanas pasadas muestra pendientes y vencidas de hoy.** No hay un histórico diario de esos valores; la pantalla lo indica.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.
