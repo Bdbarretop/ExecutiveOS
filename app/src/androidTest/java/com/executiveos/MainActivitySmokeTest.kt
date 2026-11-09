@@ -13,12 +13,16 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.executiveos.core.database.DefaultCategories
 import com.executiveos.core.designsystem.component.SCREEN_TITLE_TAG
 import com.executiveos.core.navigation.MoreDestination
 import com.executiveos.core.navigation.NavigationTags
 import com.executiveos.core.navigation.TopLevelDestination
+import com.executiveos.feature.capture.CAPTURE_SAVE_TAG
+import com.executiveos.feature.capture.CAPTURE_TITLE_TAG
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -42,7 +46,25 @@ class MainActivitySmokeTest {
     }
 
     private fun openTopLevel(destination: TopLevelDestination) {
-        composeRule.onNodeWithTag(NavigationTags.topLevel(destination)).performClick()
+        val tag = NavigationTags.topLevel(destination)
+        // Al salir de una pantalla completa, la barra reaparece tras guardar el borrador.
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithTag(tag).performClick()
+    }
+
+    private fun waitForText(value: String) {
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            composeRule.onAllNodesWithText(value).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    private fun openCapture() {
+        composeRule.onNodeWithTag(NavigationTags.CAPTURE_BUTTON).performClick()
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            composeRule.onAllNodesWithTag(CAPTURE_TITLE_TAG).fetchSemanticsNodes().isNotEmpty()
+        }
     }
 
     @Before
@@ -77,29 +99,48 @@ class MainActivitySmokeTest {
     }
 
     @Test
-    fun captureOpensFullScreenAndStatesItIsNotBuiltYet() {
-        composeRule.onNodeWithTag(NavigationTags.CAPTURE_BUTTON).performClick()
+    fun captureTravelsFromTheFormToTheInbox() {
+        openCapture()
+        composeRule.onNodeWithTag(CAPTURE_TITLE_TAG).performTextInput("Preparar informe de riesgos")
+        composeRule.onNodeWithTag(CAPTURE_SAVE_TAG).performScrollTo().performClick()
+        waitForText(text(R.string.capture_saved))
 
-        assertScreenTitle(R.string.capture_title)
-        composeRule.onNodeWithText(text(R.string.placeholder_title)).assertIsDisplayed()
-        composeRule.onNodeWithTag(NavigationTags.CAPTURE_BUTTON).assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+        waitForFirstScreen()
+        openTopLevel(TopLevelDestination.INBOX)
+
+        waitForText("Preparar informe de riesgos")
     }
 
-    /** Deja guardado el tema claro para comprobar después que sobrevive al cierre de la app. */
+    @Test
+    fun addingContextOpensTheFullRecord() {
+        openCapture()
+        composeRule.onNodeWithTag(CAPTURE_TITLE_TAG).performTextInput("Revisar propuesta")
+
+        composeRule.onNodeWithText(text(R.string.capture_add_context))
+            .performScrollTo()
+            .performClick()
+
+        waitForText(text(R.string.field_what_to_do))
+        assertScreenTitle(R.string.task_title)
+    }
+
+    /** Vuelve a «Según el sistema» para no alterar las preferencias reales del teléfono. */
     @Test
     fun settingsReadsTheRoomCatalogAndSavesTheTheme() {
         openTopLevel(TopLevelDestination.MORE)
         composeRule.onNodeWithTag(NavigationTags.more(MoreDestination.SETTINGS)).performClick()
+        waitForText(DefaultCategories.all.size.toString())
 
-        val expectedCount = DefaultCategories.all.size.toString()
-        composeRule.waitUntil(TIMEOUT_MILLIS) {
-            composeRule.onAllNodesWithText(expectedCount).fetchSemanticsNodes().isNotEmpty()
-        }
+        selectTheme(R.string.settings_theme_light)
+        selectTheme(R.string.settings_theme_system)
+    }
 
-        val lightOption = hasText(text(R.string.settings_theme_light))
-        composeRule.onNode(lightOption).performClick()
+    private fun selectTheme(@StringRes option: Int) {
+        val matcher = hasText(text(option))
+        composeRule.onNode(matcher).performClick()
         composeRule.waitUntil(TIMEOUT_MILLIS) {
-            composeRule.onAllNodes(lightOption and isSelected()).fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodes(matcher and isSelected()).fetchSemanticsNodes().isNotEmpty()
         }
     }
 
