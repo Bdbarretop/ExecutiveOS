@@ -19,7 +19,9 @@ Base local Room, archivo `executive_os.db`. Los esquemas se exportan a `app/sche
 
 **Política de migraciones:** cada cambio de esquema sube `SCHEMA_VERSION`, versiona su JSON y tiene prueba sobre SQLite real. Los cambios puramente aditivos usan `AutoMigration`, que Room verifica al compilar; los demás, una migración manual. No se usa `fallbackToDestructiveMigration`: si falta una migración, la app falla de forma visible en lugar de borrar datos.
 
-## Esquema actual: versión 3
+## Esquema actual: versión 4
+
+`reminders` guarda los recordatorios de tareas y las claves de los avisos ya enviados: `dedupe_key` es única, de modo que un aviso no se repite. `reminder_settings` guarda la configuración de avisos en una sola fila; si no existe, se usan los valores iniciales.
 
 | Tabla | Propósito | Relaciones |
 |---|---|---|
@@ -62,7 +64,6 @@ Las categorías y las plantillas se siembran en `onCreate`, que Android envuelve
 | Entidad | Fase | Notas |
 |---|---|---|
 | `TaskAttachmentEntity` | Por decidir | Adjuntos locales; requieren permisos persistentes de archivos |
-| `ReminderEntity` | Tras la Fase 3 | Ver [ROADMAP.md](ROADMAP.md) |
 | `ProjectMilestoneEntity` | 4 | El progreso usa hitos y entregables ponderados |
 | `TimeBlockEntity` | 4 | Detección de solapamientos |
 | `ReviewEntity` | 5 | Respuestas de revisiones diarias y semanales |

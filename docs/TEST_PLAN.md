@@ -32,7 +32,36 @@ HyperOS añade restricciones que afectan a las pruebas, no a la app:
 1. En Opciones de desarrollador, activar **Depuración USB** e **Instalar vía USB**. Esta última exige haber iniciado sesión en la cuenta Mi.
 2. En la información de la app, dentro de **Otros permisos**, permitir **Abrir nuevas ventanas mientras se ejecuta en segundo plano**. Sin este permiso cada prueba queda bloqueada al abrir la actividad; en el registro aparece `MIUILOG- Permission Denied Activity`.
 3. Mantener el teléfono desbloqueado durante la ejecución.
-4. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
+4. Para que los recordatorios lleguen con la app cerrada, conviene activar **Inicio automático** y quitar la restricción de batería en la información de la app.
+5. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
+
+## Resultados del sprint de recordatorios
+
+Ejecución del 2026-11-09 sobre la rama `sprint-4/recordatorios`.
+
+| Verificación | Resultado |
+|---|---|
+| `assembleDebug` | Correcto |
+| `testDebugUnitTest` | **184 de 184** |
+| `lintDebug` | **0 errores**, 2 avisos intencionados |
+| Pruebas instrumentadas en Xiaomi 23129RA5FL, Android 15 | **11 de 11**, en 33 s |
+| Migración real de la versión 3 a la 4 en el teléfono | Sin fallos |
+| Trabajos de WorkManager registrados en el teléfono | Sí |
+| Notificación real de un recordatorio de tarea, con la app en segundo plano | Entregada en el teléfono |
+| Permisos de la APK | No declara `INTERNET` |
+
+### Inventario
+
+| Clase | Nivel | Pruebas | Cubre |
+|---|---|---|---|
+| `ReminderRulesTest` | JVM | 11 | Horario silencioso, próximas ejecuciones y aviso de compromisos |
+| `ReminderProcessorTest` | Robolectric | 9 | Entrega única, tareas terminadas, sustitución, cancelación, aplazamiento, un aviso por día |
+| `AppDatabaseSchemaTest` | Instrumentada | +1 | Migración a la versión 4 |
+
+### Limitaciones
+
+- **Puntualidad aproximada.** WorkManager puede retrasar los avisos; HyperOS puede hacerlo más si la app no tiene inicio automático o el ahorro de batería la restringe.
+- **Las pruebas automáticas usan un publicador simulado.** La notificación real y sus botones se comprueban a mano en el teléfono.
 
 ## Resultados de Sprint 3
 

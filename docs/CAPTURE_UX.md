@@ -80,4 +80,4 @@ Las 10 iniciales del brief se editan en **Más → Configuración → Plantillas
 ## Pendiente
 
 - Medir los tiempos objetivo con pruebas de usabilidad.
-- Adjuntos locales y campo de recordatorio (D-034).
+- Adjuntos locales (D-034).

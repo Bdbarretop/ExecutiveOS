@@ -7,7 +7,8 @@ Se avanza por fases con aprobación entre ellas. Una fase no se considera termin
 | **0. Fundación** | Configuración Android, arquitectura, navegación, tema, Room, Hilt, pruebas básicas | **Completada y aprobada** |
 | **1. Captura e Inbox** | Captura rápida, ficha completa, bandeja, procesamiento, plantillas, autoguardado | **Completada y aprobada** |
 | **2. Tareas y prioridad** | CRUD, estados, fechas, prioridad, búsqueda, filtros, subtareas, dependencias | **Completada y aprobada** |
-| **3. Dashboard** | Indicadores, tres prioridades, alertas, próximas 24 horas | **Completada**, pendiente de aprobación. Resultados en [TEST_PLAN.md](TEST_PLAN.md) |
+| **3. Dashboard** | Indicadores, tres prioridades, alertas, próximas 24 horas | **Completada y aprobada** |
+| **Recordatorios** | Recordatorios locales, horario silencioso, acciones desde la notificación | **Completada**, pendiente de aprobación. Resultados en [TEST_PLAN.md](TEST_PLAN.md) |
 | **4. Proyectos y planificación** | Proyectos, hitos, bloques de tiempo, planificación semanal | Pendiente |
 | **5. Revisión y formación** | Revisiones diarias y semanales, formación, métricas | Pendiente |
 | **6. Estabilización** | QA, rendimiento, seguridad, copias de respaldo, APK, documentación | Pendiente |
@@ -15,7 +16,7 @@ Se avanza por fases con aprobación entre ellas. Una fase no se considera termin
 
 ## Decisiones sobre vacíos del brief
 
-**Recordatorios.** La sección 13 y el criterio 14 del MVP los exigen, pero la sección 19 no los asigna a ninguna fase. Se añadirán tras la Fase 3, porque solo dependen de tareas y fechas; es también el momento de integrar WorkManager.
+**Recordatorios.** La sección 13 y el criterio 14 del MVP los exigen, pero la sección 19 no los asigna a ninguna fase. Se implementaron tras la Fase 3, porque solo dependen de tareas y fechas.
 
 ## Backlog técnico
 

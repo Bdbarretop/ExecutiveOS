@@ -78,6 +78,16 @@
 
 **D-048. Sin valores simulados por falta de Planificación.** El tiempo disponible indica que llega en la Fase 4, y la sobrecarga y los retrasos de proyectos no generan alertas hasta entonces.
 
+**D-049. WorkManager sin alarmas exactas.** El permiso de alarmas exactas no se justifica en una app de tareas, y la sección 13 pide respetar esas restricciones. A cambio, los avisos pueden retrasarse unos minutos, y la interfaz lo indica.
+
+**D-050. Un único aviso diario de compromisos.** Varias fechas límite y tareas críticas se resumen en una notificación, para no generar alertas innecesarias.
+
+**D-051. Permisos añadidos.** `POST_NOTIFICATIONS` se pide solo al crear o activar un aviso. WorkManager añade `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED`, `ACCESS_NETWORK_STATE` y `FOREGROUND_SERVICE`, que no requieren aprobación del usuario y no dan acceso a internet.
+
+**D-052. Los recordatorios de revisión abren Inicio.** La pantalla de Revisiones llega en la Fase 5; están desactivados por defecto.
+
+**D-053. El recordatorio de la ficha ya existe.** Resuelve la parte de recordatorios de D-034; los adjuntos locales siguen pendientes.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.

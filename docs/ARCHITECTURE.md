@@ -33,7 +33,8 @@ La base local es la fuente de verdad. La interfaz observa `Flow`: cualquier escr
 | `core/database` | `AppDatabase`, convertidores, siembra, migraciones | `data/local` |
 | `core/designsystem` | Tema, tokens y componentes reutilizables | `domain/model` (solo `ThemeMode`) |
 | `core/navigation` | Rutas, destinos, `NavHost` y shell | `core/designsystem`, `feature` |
-| `core/notifications` | Canales y recordatorios (pendiente) | |
+| `core/notifications` | Canales, publicación de avisos, workers y acciones de la notificación | `domain` |
+| `domain/reminders` | Horario silencioso, próximas ejecuciones y decisión de qué se notifica | `domain/tasks` |
 | `feature/*` | Pantalla + ViewModel de cada módulo | `core`, `domain` |
 | `di` | Módulos Hilt | Todas las capas |
 
