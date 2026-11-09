@@ -13,8 +13,13 @@ import androidx.navigation.compose.navigation
 import com.executiveos.R
 import com.executiveos.core.designsystem.component.ExecutiveTopBar
 import com.executiveos.core.designsystem.component.SectionPlaceholder
+import com.executiveos.feature.capture.QuickCaptureScreen
+import com.executiveos.feature.inbox.InboxScreen
 import com.executiveos.feature.more.MoreScreen
 import com.executiveos.feature.settings.SettingsScreen
+import com.executiveos.feature.task.TaskEditorScreen
+import com.executiveos.feature.templates.TemplateEditorScreen
+import com.executiveos.feature.templates.TemplatesScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -26,7 +31,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         modifier = modifier,
     ) {
         composable<HomeRoute> { PendingSection(R.string.section_home, phase = 3) }
-        composable<InboxRoute> { PendingSection(R.string.section_inbox, phase = 1) }
+        composable<InboxRoute> {
+            InboxScreen(onOpenTask = { navController.navigate(TaskEditorRoute(it)) })
+        }
         composable<TasksRoute> { PendingSection(R.string.section_tasks, phase = 2) }
         composable<ProjectsRoute> { PendingSection(R.string.section_projects, phase = 4) }
 
@@ -43,12 +50,33 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             composable<ReviewsRoute> {
                 PendingSection(R.string.section_reviews, phase = 5, onNavigateUp = navigateUp)
             }
-            composable<SettingsRoute> { SettingsScreen(onNavigateUp = navigateUp) }
+            composable<SettingsRoute> {
+                SettingsScreen(
+                    onNavigateUp = navigateUp,
+                    onOpenTemplates = { navController.navigate(TemplatesRoute) },
+                )
+            }
         }
 
         composable<CaptureRoute> {
-            PendingSection(R.string.capture_title, phase = 1, onNavigateUp = navigateUp)
+            QuickCaptureScreen(
+                onClose = navigateUp,
+                onOpenTask = { taskId, section ->
+                    navController.navigate(TaskEditorRoute(taskId, section?.name)) {
+                        if (section != null) popUpTo<CaptureRoute> { inclusive = true }
+                    }
+                },
+                onManageTemplates = { navController.navigate(TemplatesRoute) },
+            )
         }
+        composable<TaskEditorRoute> { TaskEditorScreen(onClose = navigateUp) }
+        composable<TemplatesRoute> {
+            TemplatesScreen(
+                onNavigateUp = navigateUp,
+                onOpenTemplate = { navController.navigate(TemplateEditorRoute(it)) },
+            )
+        }
+        composable<TemplateEditorRoute> { TemplateEditorScreen(onClose = navigateUp) }
     }
 }
 

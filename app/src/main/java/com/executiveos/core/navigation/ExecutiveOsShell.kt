@@ -32,7 +32,7 @@ import com.executiveos.R
 fun ExecutiveOsShell(navController: NavHostController = rememberNavController()) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
-    val isCapturing = currentDestination?.hasRoute(CaptureRoute::class) == true
+    val isFullScreen = currentDestination.isFullScreen()
     val adaptiveType =
         NavigationSuiteScaffoldDefaults.navigationSuiteType(currentWindowAdaptiveInfoV2())
 
@@ -50,12 +50,12 @@ fun ExecutiveOsShell(navController: NavHostController = rememberNavController())
                 )
             }
         },
-        layoutType = if (isCapturing) NavigationSuiteType.None else adaptiveType,
+        layoutType = if (isFullScreen) NavigationSuiteType.None else adaptiveType,
     ) {
         Scaffold(
             contentWindowInsets = WindowInsets(0.dp),
             floatingActionButton = {
-                if (!isCapturing) {
+                if (!isFullScreen) {
                     CaptureButton(onClick = { navController.navigateToCapture() })
                 }
             },
@@ -81,6 +81,13 @@ private fun CaptureButton(onClick: () -> Unit) {
             .semantics { contentDescription = label },
     )
 }
+
+/** Capturar y editar son tareas a pantalla completa, sin navegación que distraiga. */
+private fun NavDestination?.isFullScreen(): Boolean = this != null && (
+    hasRoute(CaptureRoute::class) ||
+        hasRoute(TaskEditorRoute::class) ||
+        hasRoute(TemplateEditorRoute::class)
+    )
 
 private fun NavDestination?.isIn(destination: TopLevelDestination): Boolean =
     this?.hierarchy?.any { it.hasRoute(destination.route::class) } == true

@@ -16,6 +16,12 @@ import kotlinx.serialization.Serializable
 @Serializable data object ReviewsRoute
 @Serializable data object SettingsRoute
 @Serializable data object CaptureRoute
+@Serializable data class TaskEditorRoute(val taskId: String, val section: String? = null)
+@Serializable data object TemplatesRoute
+@Serializable data class TemplateEditorRoute(val templateId: String)
+
+/** Secciones de la ficha a las que se puede saltar desde la captura rápida. */
+enum class TaskSection { CONTEXT, IMPORTANCE, NEXT_ACTION, MORE }
 
 /** Espacios de la barra inferior. Material recomienda un máximo de cinco. */
 enum class TopLevelDestination(

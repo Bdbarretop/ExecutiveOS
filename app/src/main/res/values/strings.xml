@@ -14,12 +14,18 @@
     <string name="section_reviews">Revisiones</string>
     <string name="section_reviews_description">Revisión diaria, cierre y revisión semanal</string>
     <string name="section_settings">Configuración</string>
-    <string name="section_settings_description">Apariencia y estado del sistema</string>
+    <string name="section_settings_description">Apariencia, plantillas y estado del sistema</string>
 
     <string name="action_capture">CAPTURAR</string>
     <string name="action_back">Volver</string>
+    <string name="action_close">Cerrar</string>
     <string name="action_retry">Reintentar</string>
-    <string name="capture_title">Captura rápida</string>
+    <string name="action_accept">Aceptar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_clear">Quitar</string>
+    <string name="action_choose">Elegir</string>
+    <string name="action_more_options">Más acciones</string>
 
     <string name="loading_default">Cargando…</string>
     <string name="placeholder_title">Aún no disponible</string>
@@ -29,9 +35,193 @@
     <string name="settings_theme_system">Según el sistema</string>
     <string name="settings_theme_light">Claro</string>
     <string name="settings_theme_dark">Oscuro</string>
+    <string name="settings_capture">Captura</string>
+    <string name="settings_templates">Plantillas de captura</string>
+    <string name="settings_templates_description">Edita las plantillas que aparecen al capturar</string>
     <string name="settings_system_status">Estado del sistema</string>
     <string name="settings_database">Base de datos local</string>
     <string name="settings_database_active">Activa</string>
     <string name="settings_categories">Categorías registradas</string>
     <string name="settings_database_unavailable">No se pudo leer la base de datos local. Tus datos no se han modificado.</string>
+
+    <!-- Captura rápida -->
+    <string name="capture_title">Captura rápida</string>
+    <string name="capture_field_title">¿Qué necesitas recordar o hacer?</string>
+    <string name="capture_title_required">Escribe un título para guardar la captura.</string>
+    <string name="capture_category">Categoría</string>
+    <string name="capture_date">Fecha</string>
+    <string name="capture_date_today">Hoy</string>
+    <string name="capture_date_tomorrow">Mañana</string>
+    <string name="capture_date_this_week">Esta semana</string>
+    <string name="capture_date_custom">Elegir fecha</string>
+    <string name="capture_date_none">Sin fecha definida</string>
+    <string name="capture_is_deadline">Es una fecha límite obligatoria</string>
+    <string name="capture_is_deadline_hint">Si no la marcas, se guarda como fecha objetivo.</string>
+    <string name="capture_add_details">Añadir detalles</string>
+    <string name="capture_field_details">Detalles (opcional)</string>
+    <string name="capture_templates">Plantillas</string>
+    <string name="capture_manage_templates">Gestionar</string>
+    <string name="capture_possible_duplicate">Posible duplicado de:</string>
+    <string name="capture_complete_now">Completar ahora (guarda la captura)</string>
+    <string name="capture_add_context">Añadir contexto</string>
+    <string name="capture_evaluate_importance">Evaluar importancia</string>
+    <string name="capture_define_next_action">Definir siguiente acción</string>
+    <string name="capture_more_options">Más opciones</string>
+    <string name="capture_save">GUARDAR CAPTURA</string>
+    <string name="capture_saved">Captura guardada en la Bandeja</string>
+    <string name="capture_save_failed">No se pudo guardar. Tu texto sigue aquí; inténtalo de nuevo.</string>
+
+    <!-- Bandeja -->
+    <string name="inbox_tab_pending">Pendientes (%1$d)</string>
+    <string name="inbox_tab_postponed">Pospuestas (%1$d)</string>
+    <string name="inbox_tab_processed">Procesadas (%1$d)</string>
+    <string name="inbox_empty_pending_title">Bandeja al día</string>
+    <string name="inbox_empty_pending_message">Lo que captures aparecerá aquí para que lo proceses cuando puedas.</string>
+    <string name="inbox_empty_postponed_title">Nada pospuesto</string>
+    <string name="inbox_empty_postponed_message">Las capturas que pospongas volverán a Pendientes en la fecha elegida.</string>
+    <string name="inbox_empty_processed_title">Nada procesado todavía</string>
+    <string name="inbox_empty_processed_message">Aquí conservarás cada captura original, aunque la conviertas o archives.</string>
+    <plurals name="inbox_selected_count">
+        <item quantity="one">%1$d seleccionada</item>
+        <item quantity="many">%1$d seleccionadas</item>
+        <item quantity="other">%1$d seleccionadas</item>
+    </plurals>
+    <string name="inbox_action_open">Abrir ficha</string>
+    <string name="inbox_action_to_task">Convertir en tarea</string>
+    <string name="inbox_action_to_project">Convertir en proyecto</string>
+    <string name="inbox_action_to_note">Convertir en nota</string>
+    <string name="inbox_action_delegate">Delegar</string>
+    <string name="inbox_action_postpone">Posponer</string>
+    <string name="inbox_action_archive">Archivar</string>
+    <string name="inbox_action_delete">Eliminar</string>
+    <string name="inbox_batch_to_task">Tareas</string>
+    <string name="inbox_status_task">Convertida en tarea</string>
+    <string name="inbox_status_project">Convertida en proyecto</string>
+    <string name="inbox_status_note">Convertida en nota</string>
+    <string name="inbox_status_archived">Archivada</string>
+    <string name="inbox_postponed_until">Hasta %1$s</string>
+    <string name="inbox_deadline_label">Límite %1$s</string>
+    <string name="inbox_target_label">Objetivo %1$s</string>
+    <string name="inbox_done_to_task">Convertida en tarea</string>
+    <string name="inbox_done_to_project">Convertida en proyecto</string>
+    <string name="inbox_done_to_note">Convertida en nota</string>
+    <string name="inbox_done_delegated">Tarea delegada</string>
+    <string name="inbox_done_postponed">Procesamiento pospuesto</string>
+    <string name="inbox_done_archived">Archivada; el contenido se conserva</string>
+    <string name="inbox_done_deleted">Eliminada</string>
+    <string name="inbox_action_failed">No se pudo completar la acción. No se ha modificado nada.</string>
+    <string name="inbox_delegate_title">Delegar tarea</string>
+    <string name="inbox_delegate_field">¿A quién se la delegas?</string>
+    <string name="inbox_postpone_title">¿Hasta cuándo?</string>
+    <string name="inbox_postpone_tomorrow">Mañana</string>
+    <string name="inbox_postpone_three_days">En 3 días</string>
+    <string name="inbox_postpone_next_week">En una semana</string>
+    <string name="inbox_delete_title">¿Eliminar definitivamente?</string>
+    <string name="inbox_delete_message">Se borrará el contenido y no se podrá recuperar. Si solo quieres sacarlo de la bandeja, archívalo.</string>
+    <string name="inbox_original_title">Captura original</string>
+    <string name="inbox_original_no_details">Sin detalles.</string>
+
+    <!-- Ficha completa -->
+    <string name="task_title">Ficha de la tarea</string>
+    <string name="task_not_found">Esta tarea ya no existe.</string>
+    <string name="task_saved">Guardado</string>
+    <string name="task_invalid">Revisa los datos marcados; aún no se han guardado.</string>
+    <string name="task_save_failed">No se pudo guardar. Tus cambios siguen en pantalla.</string>
+    <string name="task_missing_prefix">Falta definir: %1$s</string>
+    <string name="task_suggest_split">Es una tarea larga: considera dividirla en subtareas. Las subtareas llegan en la Fase 2.</string>
+    <string name="task_convert_project_title">¿Convertir en proyecto?</string>
+    <string name="task_convert_project_message">Se creará un proyecto con este contenido y la tarea se archivará. La captura original se conserva.</string>
+
+    <string name="missing_what_to_do">qué hacer</string>
+    <string name="missing_importance">importancia</string>
+    <string name="missing_outcome">resultado esperado</string>
+    <string name="missing_next_action">siguiente acción</string>
+    <string name="missing_priority">priorización</string>
+
+    <string name="error_blank_title">El título no puede quedar vacío.</string>
+    <string name="error_negative_time">El tiempo no puede ser negativo.</string>
+    <string name="error_target_before_start">La fecha objetivo no puede ser anterior a la de inicio.</string>
+    <string name="error_deadline_before_start">La fecha límite no puede ser anterior a la de inicio.</string>
+    <string name="error_target_after_deadline">La fecha objetivo no puede ser posterior a la fecha límite.</string>
+
+    <string name="section_a">Identificación</string>
+    <string name="section_b">Contexto</string>
+    <string name="section_c">Importancia</string>
+    <string name="section_d">Resultado esperado</string>
+    <string name="section_e">Siguiente acción</string>
+    <string name="section_f">Priorización</string>
+    <string name="section_g">Fechas y tiempo</string>
+    <string name="section_h">Responsables</string>
+    <string name="section_i">Documentación</string>
+
+    <string name="field_title">Título</string>
+    <string name="field_description">Descripción</string>
+    <string name="field_category">Categoría</string>
+    <string name="field_project">Proyecto relacionado</string>
+    <string name="field_project_none">Sin proyecto</string>
+    <string name="field_project_last">Usar el último: %1$s</string>
+    <string name="field_tags">Etiquetas, separadas por comas</string>
+    <string name="field_what_to_do">¿Qué necesito hacer?</string>
+    <string name="field_why_needed">¿Por qué necesito hacerlo?</string>
+    <string name="field_requested_by">¿Quién solicitó esta tarea?</string>
+    <string name="field_origin">¿De dónde proviene?</string>
+    <string name="field_context">¿Qué contexto debo recordar?</string>
+    <string name="field_documents">¿Qué información o documentos necesito?</string>
+    <string name="field_impact_text">Impacto esperado</string>
+    <string name="field_consequence_not_done">Consecuencia de no realizarla</string>
+    <string name="field_consequence_late">Consecuencia de realizarla tarde</string>
+    <string name="field_affected">Personas o áreas afectadas</string>
+    <string name="field_risk">Riesgo relacionado</string>
+    <string name="field_outcome">¿Cómo sabré que esta tarea está terminada?</string>
+    <string name="field_next_action">¿Cuál es el siguiente paso concreto?</string>
+    <string name="field_impact_scale">Impacto</string>
+    <string name="field_urgency_scale">Urgencia</string>
+    <string name="field_delay_scale">Riesgo de retraso</string>
+    <string name="field_created">Fecha de creación: %1$s</string>
+    <string name="field_start_date">Fecha de inicio</string>
+    <string name="field_target_date">Fecha objetivo</string>
+    <string name="field_deadline_date">Fecha límite</string>
+    <string name="field_no_date">Sin definir</string>
+    <string name="field_estimated">Duración estimada (minutos)</string>
+    <string name="field_actual">Duración real (minutos)</string>
+    <string name="field_owner">Responsable principal</string>
+    <string name="field_involved">Personas involucradas</string>
+    <string name="field_dependencies">Dependencias</string>
+    <string name="field_delegation">Estado de delegación</string>
+    <string name="delegation_none">No delegada</string>
+    <string name="delegation_delegated">Delegada</string>
+    <string name="delegation_following">En seguimiento</string>
+    <string name="field_notes">Notas</string>
+    <string name="field_links">Enlaces</string>
+    <string name="field_references">Referencias</string>
+
+    <string-array name="impact_levels">
+        <item>Insignificante</item>
+        <item>Bajo</item>
+        <item>Moderado</item>
+        <item>Alto</item>
+        <item>Crítico</item>
+    </string-array>
+    <string-array name="urgency_levels">
+        <item>Puede esperar</item>
+        <item>No requiere atención inmediata</item>
+        <item>Requiere planificación próxima</item>
+        <item>Requiere atención prioritaria</item>
+        <item>Requiere actuación inmediata</item>
+    </string-array>
+    <string-array name="delay_levels">
+        <item>Consecuencias mínimas</item>
+        <item>Consecuencias bajas</item>
+        <item>Consecuencias moderadas</item>
+        <item>Consecuencias importantes</item>
+        <item>Consecuencias críticas</item>
+    </string-array>
+
+    <!-- Plantillas -->
+    <string name="templates_title">Plantillas de captura</string>
+    <string name="template_edit_title">Editar plantilla</string>
+    <string name="template_name">Nombre</string>
+    <string name="template_prefix">Inicio del título</string>
+    <string name="template_estimated">Duración estimada (minutos)</string>
+    <string name="template_name_required">La plantilla necesita un nombre.</string>
 </resources>

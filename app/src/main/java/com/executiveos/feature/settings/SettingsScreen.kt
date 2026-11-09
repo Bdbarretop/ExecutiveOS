@@ -1,6 +1,7 @@
 package com.executiveos.feature.settings
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import com.executiveos.domain.model.ThemeMode
 @Composable
 fun SettingsScreen(
     onNavigateUp: () -> Unit,
+    onOpenTemplates: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -39,6 +41,7 @@ fun SettingsScreen(
         uiState = uiState,
         onThemeSelected = viewModel::onThemeSelected,
         onNavigateUp = onNavigateUp,
+        onOpenTemplates = onOpenTemplates,
     )
 }
 
@@ -47,6 +50,7 @@ private fun SettingsContent(
     uiState: SettingsUiState,
     onThemeSelected: (ThemeMode) -> Unit,
     onNavigateUp: () -> Unit,
+    onOpenTemplates: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         ExecutiveTopBar(
@@ -62,6 +66,7 @@ private fun SettingsContent(
             verticalArrangement = Arrangement.spacedBy(Spacing.lg),
         ) {
             AppearanceSection(uiState.themeMode, onThemeSelected)
+            CaptureSection(onOpenTemplates)
             SystemStatusSection(uiState.databaseStatus)
         }
     }
@@ -101,6 +106,26 @@ private fun ThemeMode.labelRes(): Int = when (this) {
     ThemeMode.SYSTEM -> R.string.settings_theme_system
     ThemeMode.LIGHT -> R.string.settings_theme_light
     ThemeMode.DARK -> R.string.settings_theme_dark
+}
+
+@Composable
+private fun CaptureSection(onOpenTemplates: () -> Unit) {
+    Column {
+        SectionTitle(R.string.settings_capture)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onOpenTemplates)
+                .padding(vertical = Spacing.sm),
+        ) {
+            Text(stringResource(R.string.settings_templates))
+            Text(
+                text = stringResource(R.string.settings_templates_description),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
 }
 
 @Composable
