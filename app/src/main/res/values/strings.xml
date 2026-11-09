@@ -1,4 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">EXECUTIVE OS</string>
+
+    <string name="section_home">Inicio</string>
+    <string name="section_inbox">Bandeja</string>
+    <string name="section_tasks">Tareas</string>
+    <string name="section_projects">Proyectos</string>
+    <string name="section_more">Más</string>
+    <string name="section_planning">Planificación</string>
+    <string name="section_planning_description">Bloques de tiempo y capacidad</string>
+    <string name="section_learning">Formación</string>
+    <string name="section_learning_description">Objetivos, sesiones y horas de estudio</string>
+    <string name="section_reviews">Revisiones</string>
+    <string name="section_reviews_description">Revisión diaria, cierre y revisión semanal</string>
+    <string name="section_settings">Configuración</string>
+    <string name="section_settings_description">Apariencia y estado del sistema</string>
+
+    <string name="action_capture">CAPTURAR</string>
+    <string name="action_back">Volver</string>
+    <string name="action_retry">Reintentar</string>
+    <string name="capture_title">Captura rápida</string>
+
+    <string name="loading_default">Cargando…</string>
+    <string name="placeholder_title">Aún no disponible</string>
+    <string name="placeholder_message" tools:ignore="PluralsCandidate">Esta sección todavía no está construida. Llegará en la Fase %1$d del plan de desarrollo.</string>
+
+    <string name="settings_appearance">Apariencia</string>
+    <string name="settings_theme_system">Según el sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Oscuro</string>
+    <string name="settings_system_status">Estado del sistema</string>
+    <string name="settings_database">Base de datos local</string>
+    <string name="settings_database_active">Activa</string>
+    <string name="settings_categories">Categorías registradas</string>
+    <string name="settings_database_unavailable">No se pudo leer la base de datos local. Tus datos no se han modificado.</string>
 </resources>
