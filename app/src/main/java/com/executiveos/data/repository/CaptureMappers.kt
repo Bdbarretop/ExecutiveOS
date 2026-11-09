@@ -85,6 +85,11 @@ internal fun TaskEntity.toDomain(tags: List<String>) = Task(
     notes = notes,
     links = links,
     references = references,
+    parentTaskId = parentTaskId,
+    manualPriority = manualPriority,
+    manualPriorityReason = manualPriorityReason,
+    obligation = obligation,
+    completedAt = completedAt,
     createdAt = createdAt,
     updatedAt = updatedAt,
 )
@@ -125,6 +130,11 @@ internal fun Task.toEntity() = TaskEntity(
     notes = notes,
     links = links,
     references = references,
+    parentTaskId = parentTaskId,
+    manualPriority = manualPriority,
+    manualPriorityReason = manualPriorityReason,
+    obligation = obligation,
+    completedAt = completedAt,
     createdAt = createdAt,
     updatedAt = updatedAt,
 )

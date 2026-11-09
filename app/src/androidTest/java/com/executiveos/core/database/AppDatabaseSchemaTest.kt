@@ -51,6 +51,33 @@ class AppDatabaseSchemaTest {
         }
     }
 
+    @Test
+    fun migratingToVersionThreeKeepsTasksTagsAndHistory() {
+        helper.createDatabase(UPGRADED_DATABASE, 2).use { database ->
+            database.execSQL(
+                "INSERT INTO tasks (id, status, title, delegation_status, created_at, updated_at) " +
+                    "VALUES ('t1', 'PENDING', 'Informe', 'NOT_DELEGATED', 0, 0)",
+            )
+            database.execSQL("INSERT INTO tags (id, name) VALUES ('g1', 'comité')")
+            database.execSQL("INSERT INTO task_tags (task_id, tag_id) VALUES ('t1', 'g1')")
+            database.execSQL(
+                "INSERT INTO audit_log (id, entity_type, entity_id, action, created_at) " +
+                    "VALUES ('a1', 'TASK', 't1', 'CREATED', 0)",
+            )
+        }
+
+        helper.runMigrationsAndValidate(
+            UPGRADED_DATABASE,
+            AppDatabase.SCHEMA_VERSION,
+            validateDroppedTables = true,
+        ).use { database ->
+            assertEquals(1, database.count("SELECT COUNT(*) FROM tasks WHERE title = 'Informe'"))
+            assertEquals(1, database.count("SELECT COUNT(*) FROM task_tags WHERE task_id = 't1'"))
+            assertEquals(1, database.count("SELECT COUNT(*) FROM audit_log"))
+            assertEquals(1, database.count("SELECT COUNT(*) FROM tasks WHERE manual_priority IS NULL"))
+        }
+    }
+
     private fun SupportSQLiteDatabase.count(sql: String): Int =
         query(sql).use { cursor ->
             cursor.moveToFirst()
@@ -60,5 +87,6 @@ class AppDatabaseSchemaTest {
     private companion object {
         const val CURRENT_DATABASE = "schema-validation.db"
         const val MIGRATED_DATABASE = "schema-migration.db"
+        const val UPGRADED_DATABASE = "schema-upgrade.db"
     }
 }

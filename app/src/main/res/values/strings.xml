@@ -143,6 +143,7 @@
     <string name="error_target_before_start">La fecha objetivo no puede ser anterior a la de inicio.</string>
     <string name="error_deadline_before_start">La fecha límite no puede ser anterior a la de inicio.</string>
     <string name="error_target_after_deadline">La fecha objetivo no puede ser posterior a la fecha límite.</string>
+    <string name="error_manual_priority_reason">Justifica la prioridad manual para poder guardarla.</string>
 
     <string name="section_a">Identificación</string>
     <string name="section_b">Contexto</string>

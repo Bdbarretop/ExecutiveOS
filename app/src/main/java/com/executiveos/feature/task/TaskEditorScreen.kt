@@ -289,6 +289,7 @@ private fun TaskValidationError.messageRes(): Int = when (this) {
     TaskValidationError.TARGET_BEFORE_START -> R.string.error_target_before_start
     TaskValidationError.DEADLINE_BEFORE_START -> R.string.error_deadline_before_start
     TaskValidationError.TARGET_AFTER_DEADLINE -> R.string.error_target_after_deadline
+    TaskValidationError.MANUAL_PRIORITY_WITHOUT_REASON -> R.string.error_manual_priority_reason
 }
 
 @Composable

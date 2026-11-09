@@ -90,11 +90,15 @@ enum class TaskValidationError {
     TARGET_BEFORE_START,
     DEADLINE_BEFORE_START,
     TARGET_AFTER_DEADLINE,
+    MANUAL_PRIORITY_WITHOUT_REASON,
 }
 
 object TaskValidator {
     fun validate(task: Task): List<TaskValidationError> = buildList {
         if (task.title.isBlank()) add(TaskValidationError.BLANK_TITLE)
+        if (task.manualPriority != null && task.manualPriorityReason.isNullOrBlank()) {
+            add(TaskValidationError.MANUAL_PRIORITY_WITHOUT_REASON)
+        }
         if ((task.estimatedMinutes ?: 0) < 0 || (task.actualMinutes ?: 0) < 0) {
             add(TaskValidationError.NEGATIVE_TIME)
         }

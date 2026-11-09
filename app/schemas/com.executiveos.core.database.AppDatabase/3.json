@@ -1,0 +1,971 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "173e56bb16e58286613b97ad4976d725",
+    "entities": [
+      {
+        "tableName": "categories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `sort_order` INTEGER NOT NULL, `is_system` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sortOrder",
+            "columnName": "sort_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSystem",
+            "columnName": "is_system",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_categories_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_categories_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ]
+      },
+      {
+        "tableName": "inbox_items",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `original_title` TEXT NOT NULL, `original_details` TEXT, `category_id` TEXT, `date_option` TEXT NOT NULL, `captured_date` TEXT, `date_is_deadline` INTEGER NOT NULL, `state` TEXT NOT NULL, `postponed_until` TEXT, `processed_as` TEXT, `processed_target_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalTitle",
+            "columnName": "original_title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalDetails",
+            "columnName": "original_details",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dateOption",
+            "columnName": "date_option",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capturedDate",
+            "columnName": "captured_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dateIsDeadline",
+            "columnName": "date_is_deadline",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postponedUntil",
+            "columnName": "postponed_until",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "processedAs",
+            "columnName": "processed_as",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "processedTargetId",
+            "columnName": "processed_target_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_inbox_items_category_id",
+            "unique": false,
+            "columnNames": [
+              "category_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_inbox_items_category_id` ON `${TABLE_NAME}` (`category_id`)"
+          },
+          {
+            "name": "index_inbox_items_state",
+            "unique": false,
+            "columnNames": [
+              "state"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_inbox_items_state` ON `${TABLE_NAME}` (`state`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "categories",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "category_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "tasks",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `status` TEXT NOT NULL, `source_inbox_item_id` TEXT, `title` TEXT NOT NULL, `description` TEXT, `category_id` TEXT, `project_id` TEXT, `what_to_do` TEXT, `why_needed` TEXT, `requested_by` TEXT, `origin` TEXT, `context_to_remember` TEXT, `required_documents` TEXT, `expected_impact` TEXT, `consequence_if_not_done` TEXT, `consequence_if_late` TEXT, `affected_parties` TEXT, `related_risk` TEXT, `expected_outcome` TEXT, `next_action` TEXT, `impact` INTEGER, `urgency` INTEGER, `delay_risk` INTEGER, `start_date` TEXT, `target_date` TEXT, `deadline_date` TEXT, `estimated_minutes` INTEGER, `actual_minutes` INTEGER, `owner` TEXT, `involved_people` TEXT, `dependencies_note` TEXT, `delegation_status` TEXT NOT NULL, `notes` TEXT, `links` TEXT, `references` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `parent_task_id` TEXT, `manual_priority` TEXT, `manual_priority_reason` TEXT, `obligation` TEXT, `completed_at` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`project_id`) REFERENCES `projects`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`source_inbox_item_id`) REFERENCES `inbox_items`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`parent_task_id`) REFERENCES `tasks`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceInboxItemId",
+            "columnName": "source_inbox_item_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "projectId",
+            "columnName": "project_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "whatToDo",
+            "columnName": "what_to_do",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "whyNeeded",
+            "columnName": "why_needed",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "requestedBy",
+            "columnName": "requested_by",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "contextToRemember",
+            "columnName": "context_to_remember",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "requiredDocuments",
+            "columnName": "required_documents",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "expectedImpact",
+            "columnName": "expected_impact",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "consequenceIfNotDone",
+            "columnName": "consequence_if_not_done",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "consequenceIfLate",
+            "columnName": "consequence_if_late",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "affectedParties",
+            "columnName": "affected_parties",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "relatedRisk",
+            "columnName": "related_risk",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "expectedOutcome",
+            "columnName": "expected_outcome",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nextAction",
+            "columnName": "next_action",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "impact",
+            "columnName": "impact",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "urgency",
+            "columnName": "urgency",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "delayRisk",
+            "columnName": "delay_risk",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "start_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "targetDate",
+            "columnName": "target_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "deadlineDate",
+            "columnName": "deadline_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "estimatedMinutes",
+            "columnName": "estimated_minutes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "actualMinutes",
+            "columnName": "actual_minutes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "owner",
+            "columnName": "owner",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "involvedPeople",
+            "columnName": "involved_people",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dependenciesNote",
+            "columnName": "dependencies_note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "delegationStatus",
+            "columnName": "delegation_status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "links",
+            "columnName": "links",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "references",
+            "columnName": "references",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentTaskId",
+            "columnName": "parent_task_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "manualPriority",
+            "columnName": "manual_priority",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "manualPriorityReason",
+            "columnName": "manual_priority_reason",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "obligation",
+            "columnName": "obligation",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completed_at",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_tasks_category_id",
+            "unique": false,
+            "columnNames": [
+              "category_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tasks_category_id` ON `${TABLE_NAME}` (`category_id`)"
+          },
+          {
+            "name": "index_tasks_project_id",
+            "unique": false,
+            "columnNames": [
+              "project_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tasks_project_id` ON `${TABLE_NAME}` (`project_id`)"
+          },
+          {
+            "name": "index_tasks_source_inbox_item_id",
+            "unique": false,
+            "columnNames": [
+              "source_inbox_item_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tasks_source_inbox_item_id` ON `${TABLE_NAME}` (`source_inbox_item_id`)"
+          },
+          {
+            "name": "index_tasks_status",
+            "unique": false,
+            "columnNames": [
+              "status"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tasks_status` ON `${TABLE_NAME}` (`status`)"
+          },
+          {
+            "name": "index_tasks_parent_task_id",
+            "unique": false,
+            "columnNames": [
+              "parent_task_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tasks_parent_task_id` ON `${TABLE_NAME}` (`parent_task_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "categories",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "category_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "projects",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "project_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "inbox_items",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "source_inbox_item_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "tasks",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "parent_task_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "projects",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `description` TEXT, `objective` TEXT, `justification` TEXT, `status` TEXT NOT NULL, `source_inbox_item_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "objective",
+            "columnName": "objective",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "justification",
+            "columnName": "justification",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceInboxItemId",
+            "columnName": "source_inbox_item_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "notes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT, `source_inbox_item_id` TEXT, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sourceInboxItemId",
+            "columnName": "source_inbox_item_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "capture_templates",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `title_prefix` TEXT NOT NULL, `category_id` TEXT, `what_to_do` TEXT, `expected_outcome` TEXT, `next_action` TEXT, `estimated_minutes` INTEGER, `sort_order` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "titlePrefix",
+            "columnName": "title_prefix",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "whatToDo",
+            "columnName": "what_to_do",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "expectedOutcome",
+            "columnName": "expected_outcome",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nextAction",
+            "columnName": "next_action",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "estimatedMinutes",
+            "columnName": "estimated_minutes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "sortOrder",
+            "columnName": "sort_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_capture_templates_category_id",
+            "unique": false,
+            "columnNames": [
+              "category_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_capture_templates_category_id` ON `${TABLE_NAME}` (`category_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "categories",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "category_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "tags",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_tags_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_tags_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ]
+      },
+      {
+        "tableName": "task_tags",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`task_id` TEXT NOT NULL, `tag_id` TEXT NOT NULL, PRIMARY KEY(`task_id`, `tag_id`), FOREIGN KEY(`task_id`) REFERENCES `tasks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`tag_id`) REFERENCES `tags`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "taskId",
+            "columnName": "task_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tagId",
+            "columnName": "tag_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "task_id",
+            "tag_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_task_tags_tag_id",
+            "unique": false,
+            "columnNames": [
+              "tag_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_task_tags_tag_id` ON `${TABLE_NAME}` (`tag_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "tasks",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "task_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "tags",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "tag_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "audit_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `entity_type` TEXT NOT NULL, `entity_id` TEXT NOT NULL, `action` TEXT NOT NULL, `created_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "entityType",
+            "columnName": "entity_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "entityId",
+            "columnName": "entity_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "action",
+            "columnName": "action",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_audit_log_entity_id",
+            "unique": false,
+            "columnNames": [
+              "entity_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audit_log_entity_id` ON `${TABLE_NAME}` (`entity_id`)"
+          }
+        ]
+      },
+      {
+        "tableName": "task_dependencies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`task_id` TEXT NOT NULL, `depends_on_task_id` TEXT NOT NULL, PRIMARY KEY(`task_id`, `depends_on_task_id`), FOREIGN KEY(`task_id`) REFERENCES `tasks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`depends_on_task_id`) REFERENCES `tasks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "taskId",
+            "columnName": "task_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dependsOnTaskId",
+            "columnName": "depends_on_task_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "task_id",
+            "depends_on_task_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_task_dependencies_depends_on_task_id",
+            "unique": false,
+            "columnNames": [
+              "depends_on_task_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_task_dependencies_depends_on_task_id` ON `${TABLE_NAME}` (`depends_on_task_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "tasks",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "task_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "tasks",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "depends_on_task_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "user_settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `impact_weight` INTEGER NOT NULL, `urgency_weight` INTEGER NOT NULL, `delay_risk_weight` INTEGER NOT NULL, `critical_threshold` INTEGER NOT NULL, `high_threshold` INTEGER NOT NULL, `medium_threshold` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "impactWeight",
+            "columnName": "impact_weight",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "urgencyWeight",
+            "columnName": "urgency_weight",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "delayRiskWeight",
+            "columnName": "delay_risk_weight",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "criticalThreshold",
+            "columnName": "critical_threshold",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "highThreshold",
+            "columnName": "high_threshold",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediumThreshold",
+            "columnName": "medium_threshold",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '173e56bb16e58286613b97ad4976d725')"
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 package com.executiveos.domain.model
 
+import com.executiveos.domain.priority.CriticalObligation
+import com.executiveos.domain.priority.PriorityLevel
 import java.time.Instant
 import java.time.LocalDate
 
@@ -54,6 +56,40 @@ data class Task(
     val notes: String? = null,
     val links: String? = null,
     val references: String? = null,
+    val parentTaskId: String? = null,
+    val manualPriority: PriorityLevel? = null,
+    val manualPriorityReason: String? = null,
+    val obligation: CriticalObligation? = null,
+    val completedAt: Instant? = null,
     val createdAt: Instant,
     val updatedAt: Instant,
 )
+
+/** La fecha límite manda; si no existe, se usa la fecha objetivo. */
+val Task.effectiveDate: LocalDate? get() = deadlineDate ?: targetDate
+
+data class TaskReference(val id: String, val title: String, val status: TaskStatus)
+
+enum class TaskHistoryAction {
+    CAPTURED,
+    CREATED,
+    DUPLICATED,
+    CONVERTED_TO_TASK,
+    CONVERTED_TO_PROJECT,
+    CONVERTED_TO_NOTE,
+    DELEGATED,
+    POSTPONED,
+    ARCHIVED,
+    STATUS_CHANGED,
+    PRIORITY_CHANGED,
+    MANUAL_PRIORITY_CHANGED,
+    OBLIGATION_CHANGED,
+    DATE_CHANGED,
+    SUBTASK_ADDED,
+    DEPENDENCY_ADDED,
+    DEPENDENCY_REMOVED,
+}
+
+data class TaskHistoryEntry(val action: TaskHistoryAction, val createdAt: Instant)
+
+enum class AddDependencyResult { ADDED, ALREADY_EXISTS, WOULD_CREATE_CYCLE }
