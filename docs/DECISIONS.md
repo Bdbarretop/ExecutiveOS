@@ -66,6 +66,8 @@
 
 **D-042. Paquete `feature/tasks`, en plural.** Se renombró para coincidir con la estructura de la sección 16.
 
+**D-043. El reloj usa la zona del dispositivo.** Con `Clock.systemUTC()`, `LocalDate.now(clock)` devolvía el día siguiente durante la noche en América. Los instantes no cambian; las fechas de «Hoy» guardadas de noche antes de esta corrección pueden tener un día de más.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.

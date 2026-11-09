@@ -20,7 +20,7 @@ import javax.inject.Singleton
 object TestDatabaseModule {
     @Provides
     @Singleton
-    fun provideClock(): Clock = Clock.systemUTC()
+    fun provideClock(): Clock = Clock.systemDefaultZone()
 
     @Provides
     @Singleton

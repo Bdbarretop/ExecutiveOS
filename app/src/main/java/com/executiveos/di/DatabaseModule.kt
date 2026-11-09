@@ -27,7 +27,8 @@ object DatabaseModule {
     @Provides
     fun provideCategoryDao(database: AppDatabase): CategoryDao = database.categoryDao()
 
+    /** Zona del dispositivo: con UTC, por la noche «hoy» sería el día siguiente en América. */
     @Provides
     @Singleton
-    fun provideClock(): Clock = Clock.systemUTC()
+    fun provideClock(): Clock = Clock.systemDefaultZone()
 }
