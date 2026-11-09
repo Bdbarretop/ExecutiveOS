@@ -35,6 +35,7 @@ fun SettingsScreen(
     onNavigateUp: () -> Unit,
     onOpenTemplates: () -> Unit,
     onOpenPrioritySettings: () -> Unit,
+    onOpenReminderSettings: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -44,6 +45,7 @@ fun SettingsScreen(
         onNavigateUp = onNavigateUp,
         onOpenTemplates = onOpenTemplates,
         onOpenPrioritySettings = onOpenPrioritySettings,
+        onOpenReminderSettings = onOpenReminderSettings,
     )
 }
 
@@ -54,6 +56,7 @@ private fun SettingsContent(
     onNavigateUp: () -> Unit,
     onOpenTemplates: () -> Unit,
     onOpenPrioritySettings: () -> Unit,
+    onOpenReminderSettings: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         ExecutiveTopBar(
@@ -69,7 +72,7 @@ private fun SettingsContent(
             verticalArrangement = Arrangement.spacedBy(Spacing.lg),
         ) {
             AppearanceSection(uiState.themeMode, onThemeSelected)
-            CaptureSection(onOpenTemplates, onOpenPrioritySettings)
+            CaptureSection(onOpenTemplates, onOpenPrioritySettings, onOpenReminderSettings)
             SystemStatusSection(uiState.databaseStatus)
         }
     }
@@ -112,7 +115,11 @@ private fun ThemeMode.labelRes(): Int = when (this) {
 }
 
 @Composable
-private fun CaptureSection(onOpenTemplates: () -> Unit, onOpenPrioritySettings: () -> Unit) {
+private fun CaptureSection(
+    onOpenTemplates: () -> Unit,
+    onOpenPrioritySettings: () -> Unit,
+    onOpenReminderSettings: () -> Unit,
+) {
     Column {
         SectionTitle(R.string.settings_capture)
         SettingsLink(
@@ -124,6 +131,11 @@ private fun CaptureSection(onOpenTemplates: () -> Unit, onOpenPrioritySettings: 
             R.string.settings_priority,
             R.string.settings_priority_description,
             onOpenPrioritySettings,
+        )
+        SettingsLink(
+            R.string.settings_reminders,
+            R.string.settings_reminders_description,
+            onOpenReminderSettings,
         )
     }
 }

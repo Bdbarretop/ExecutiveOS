@@ -432,6 +432,46 @@
     <string name="duration_hours">%1$d h</string>
     <string name="duration_hours_minutes">%1$d h %2$d min</string>
 
+    <!-- Recordatorios -->
+    <string name="settings_reminders">Recordatorios</string>
+    <string name="settings_reminders_description">Avisos, revisiones y horario silencioso</string>
+    <string name="field_reminder">Recordatorio</string>
+    <string name="reminder_in_past">Elige una fecha y hora futuras para el recordatorio.</string>
+    <string name="reminders_commitments">Compromisos</string>
+    <string name="reminders_deadlines">Avisar de fechas límite</string>
+    <string name="reminders_days_before">Días de antelación</string>
+    <string name="reminders_critical">Avisar de tareas críticas</string>
+    <string name="reminders_morning_time">Hora del aviso diario</string>
+    <string name="reminders_reviews">Revisiones</string>
+    <string name="reminders_daily_review">Recordar la revisión diaria</string>
+    <string name="reminders_weekly_review">Recordar la revisión semanal</string>
+    <string name="reminders_time">Hora</string>
+    <string name="reminders_quiet">Horario silencioso</string>
+    <string name="reminders_quiet_enable">Silenciar avisos en un horario</string>
+    <string name="reminders_quiet_start">Desde</string>
+    <string name="reminders_quiet_end">Hasta</string>
+    <string name="reminders_approximate_note">Android puede retrasar los avisos unos minutos para ahorrar batería. En algunos teléfonos conviene permitir el inicio automático de la app.</string>
+    <string name="reminders_permission_needed">Las notificaciones están desactivadas. Toca aquí para permitirlas.</string>
+    <string name="channel_tasks">Recordatorios de tareas</string>
+    <string name="channel_commitments">Compromisos y tareas críticas</string>
+    <string name="notification_complete">Completar</string>
+    <string name="notification_snooze">Posponer 1 hora</string>
+    <string name="notification_notice_title">Compromisos de hoy</string>
+    <string name="notification_daily_title">Revisión diaria</string>
+    <string name="notification_daily_text">Repasa tus prioridades de hoy.</string>
+    <string name="notification_weekly_title">Revisión semanal</string>
+    <string name="notification_weekly_text">Repasa cómo fue la semana y lo que viene.</string>
+    <plurals name="notice_due">
+        <item quantity="one">%1$d con fecha límite próxima</item>
+        <item quantity="many">%1$d con fecha límite próxima</item>
+        <item quantity="other">%1$d con fecha límite próxima</item>
+    </plurals>
+    <plurals name="notice_critical">
+        <item quantity="one">%1$d tarea crítica abierta</item>
+        <item quantity="many">%1$d tareas críticas abiertas</item>
+        <item quantity="other">%1$d tareas críticas abiertas</item>
+    </plurals>
+
     <!-- Plantillas -->
     <string name="templates_title">Plantillas de captura</string>
     <string name="template_edit_title">Editar plantilla</string>

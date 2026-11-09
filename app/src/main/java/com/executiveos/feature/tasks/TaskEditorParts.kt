@@ -32,8 +32,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.executiveos.R
+import com.executiveos.core.designsystem.component.ExecutiveDatePickerDialog
+import com.executiveos.core.designsystem.component.ExecutiveTimePickerDialog
 import com.executiveos.core.designsystem.theme.Spacing
+import com.executiveos.core.notifications.rememberNotificationPermissionRequest
 import com.executiveos.domain.model.Task
 import com.executiveos.domain.model.TaskHistoryEntry
 import com.executiveos.domain.model.TaskReference
@@ -42,6 +46,8 @@ import com.executiveos.domain.priority.CriticalObligation
 import com.executiveos.domain.priority.PriorityAssessment
 import com.executiveos.domain.priority.PriorityLevel
 import com.executiveos.domain.tasks.TaskStatusRules
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -371,6 +377,56 @@ fun HistorySection(history: List<TaskHistoryEntry>) {
         }
     }
 }
+
+@Composable
+fun ReminderField(viewModel: TaskEditorViewModel) {
+    val reminder by viewModel.reminder.collectAsStateWithLifecycle()
+    val requestPermission = rememberNotificationPermissionRequest()
+    var showDate by rememberSaveable { mutableStateOf(false) }
+    var pickedDate by rememberSaveable { mutableStateOf<LocalDate?>(null) }
+    val zone = ZoneId.systemDefault()
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(stringResource(R.string.field_reminder), style = MaterialTheme.typography.labelLarge)
+            Text(
+                reminder?.let { HISTORY_FORMAT.format(it.triggerAt.atZone(zone)) }
+                    ?: stringResource(R.string.field_no_date),
+            )
+        }
+        if (reminder != null) {
+            TextButton(onClick = viewModel::clearReminder) {
+                Text(stringResource(R.string.action_clear))
+            }
+        }
+        TextButton(onClick = { showDate = true }) { Text(stringResource(R.string.action_choose)) }
+    }
+    if (showDate) {
+        ExecutiveDatePickerDialog(
+            initialDate = reminder?.triggerAt?.atZone(zone)?.toLocalDate(),
+            onDismiss = { showDate = false },
+            onDateSelected = {
+                pickedDate = it
+                showDate = false
+            },
+        )
+    }
+    pickedDate?.let { date ->
+        ExecutiveTimePickerDialog(
+            initialTime = LocalTime.of(DEFAULT_REMINDER_HOUR, 0),
+            onDismiss = { pickedDate = null },
+            onTimeSelected = { time ->
+                viewModel.setReminder(date.atTime(time).atZone(zone).toInstant())
+                pickedDate = null
+                requestPermission()
+            },
+        )
+    }
+}
+
+private const val DEFAULT_REMINDER_HOUR = 9
 
 @Composable
 fun DelegateTaskDialog(onDismiss: () -> Unit, onConfirm: (String) -> Unit) {

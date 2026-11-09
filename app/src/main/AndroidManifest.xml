@@ -7,6 +7,9 @@
         android:name="android.permission.INTERNET"
         tools:node="remove" />
 
+    <!-- Se pide solo cuando el usuario activa un recordatorio. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".ExecutiveOSApp"
         android:allowBackup="false"
@@ -20,11 +23,28 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".core.notifications.ReminderActionReceiver"
+            android:exported="false" />
+
+        <!-- WorkManager se inicia con la configuración de Hilt de ExecutiveOSApp. -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
     </application>
 </manifest>

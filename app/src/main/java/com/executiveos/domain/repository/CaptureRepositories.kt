@@ -12,7 +12,11 @@ import com.executiveos.domain.model.TaskHistoryEntry
 import com.executiveos.domain.model.TaskReference
 import com.executiveos.domain.model.TaskStatus
 import com.executiveos.domain.priority.PrioritySettings
+import com.executiveos.domain.reminders.ReminderSettings
+import com.executiveos.domain.reminders.ReminderType
+import com.executiveos.domain.reminders.TaskReminder
 import com.executiveos.domain.tasks.TaskListItem
+import java.time.Instant
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 
@@ -79,6 +83,29 @@ interface DailyFocusRepository {
     suspend fun dismiss(taskId: String, today: LocalDate)
 
     suspend fun reset(today: LocalDate)
+}
+
+interface ReminderRepository {
+    val settings: Flow<ReminderSettings>
+
+    suspend fun saveSettings(settings: ReminderSettings)
+
+    fun observeTaskReminder(taskId: String): Flow<TaskReminder?>
+
+    /** Una tarea tiene un solo recordatorio activo: el nuevo sustituye al anterior. */
+    suspend fun setTaskReminder(taskId: String, at: Instant): String
+
+    /** Devuelve el identificador cancelado, si había alguno. */
+    suspend fun clearTaskReminder(taskId: String): String?
+
+    suspend fun findScheduled(reminderId: String): TaskReminder?
+
+    suspend fun markDelivered(reminderId: String)
+
+    /** Devuelve `false` si esa clave ya se notificó: así no hay avisos duplicados. */
+    suspend fun registerOnce(key: String, type: ReminderType): Boolean
+
+    suspend fun deleteDeliveredBefore(instant: Instant)
 }
 
 interface PrioritySettingsRepository {

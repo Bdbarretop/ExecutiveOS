@@ -78,6 +78,25 @@ class AppDatabaseSchemaTest {
         }
     }
 
+    @Test
+    fun migratingToVersionFourKeepsTasksAndAddsReminderTables() {
+        helper.createDatabase(REMINDERS_DATABASE, 3).use { database ->
+            database.execSQL(
+                "INSERT INTO tasks (id, status, title, delegation_status, created_at, updated_at) " +
+                    "VALUES ('t1', 'PENDING', 'Informe', 'NOT_DELEGATED', 0, 0)",
+            )
+        }
+
+        helper.runMigrationsAndValidate(
+            REMINDERS_DATABASE,
+            AppDatabase.SCHEMA_VERSION,
+            validateDroppedTables = true,
+        ).use { database ->
+            assertEquals(1, database.count("SELECT COUNT(*) FROM tasks WHERE id = 't1'"))
+            assertEquals(0, database.count("SELECT COUNT(*) FROM reminders"))
+        }
+    }
+
     private fun SupportSQLiteDatabase.count(sql: String): Int =
         query(sql).use { cursor ->
             cursor.moveToFirst()
@@ -88,5 +107,6 @@ class AppDatabaseSchemaTest {
         const val CURRENT_DATABASE = "schema-validation.db"
         const val MIGRATED_DATABASE = "schema-migration.db"
         const val UPGRADED_DATABASE = "schema-upgrade.db"
+        const val REMINDERS_DATABASE = "schema-reminders.db"
     }
 }

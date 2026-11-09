@@ -437,7 +437,10 @@ private fun SectionBody(
             ObligationFields(task, edit)
             ManualPriorityFields(task, edit)
         }
-        EditorSection.DATES -> DateFields(task, edit)
+        EditorSection.DATES -> {
+            DateFields(task, edit)
+            ReminderField(viewModel)
+        }
         EditorSection.PEOPLE -> PeopleFields(task, edit)
         EditorSection.DOCUMENTATION -> {
             TaskField(R.string.field_notes, task.notes) { edit { copy(notes = it) } }

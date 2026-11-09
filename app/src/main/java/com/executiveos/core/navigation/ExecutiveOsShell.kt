@@ -11,6 +11,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -29,7 +30,18 @@ import androidx.navigation.compose.rememberNavController
 import com.executiveos.R
 
 @Composable
-fun ExecutiveOsShell(navController: NavHostController = rememberNavController()) {
+fun ExecutiveOsShell(
+    pendingTaskId: String? = null,
+    onPendingTaskHandled: () -> Unit = {},
+    navController: NavHostController = rememberNavController(),
+) {
+    // Una notificación puede pedir abrir directamente una tarea.
+    LaunchedEffect(pendingTaskId) {
+        if (pendingTaskId != null) {
+            navController.navigate(TaskEditorRoute(pendingTaskId))
+            onPendingTaskHandled()
+        }
+    }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
     val isFullScreen = currentDestination.isFullScreen()
@@ -87,7 +99,8 @@ private fun NavDestination?.isFullScreen(): Boolean = this != null && (
     hasRoute(CaptureRoute::class) ||
         hasRoute(TaskEditorRoute::class) ||
         hasRoute(TemplateEditorRoute::class) ||
-        hasRoute(PrioritySettingsRoute::class)
+        hasRoute(PrioritySettingsRoute::class) ||
+        hasRoute(ReminderSettingsRoute::class)
     )
 
 private fun NavDestination?.isIn(destination: TopLevelDestination): Boolean =

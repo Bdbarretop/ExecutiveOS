@@ -21,14 +21,18 @@ import com.executiveos.domain.model.TaskReference
 import com.executiveos.domain.model.TaskStatus
 import com.executiveos.domain.priority.PriorityAssessment
 import com.executiveos.domain.priority.PriorityEngine
+import com.executiveos.domain.reminders.ReminderScheduler
+import com.executiveos.domain.reminders.TaskReminder
 import com.executiveos.domain.repository.CaptureDraftRepository
 import com.executiveos.domain.repository.CategoryRepository
 import com.executiveos.domain.repository.InboxRepository
 import com.executiveos.domain.repository.PrioritySettingsRepository
+import com.executiveos.domain.repository.ReminderRepository
 import com.executiveos.domain.repository.TaskRepository
 import com.executiveos.domain.tasks.TaskQueries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Clock
+import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
@@ -87,6 +91,8 @@ class TaskEditorViewModel @Inject constructor(
     private val draftRepository: CaptureDraftRepository,
     categoryRepository: CategoryRepository,
     prioritySettingsRepository: PrioritySettingsRepository,
+    private val reminderRepository: ReminderRepository,
+    private val reminderScheduler: ReminderScheduler,
     private val clock: Clock,
 ) : ViewModel() {
     private val route = savedStateHandle.toRoute<TaskEditorRoute>()
@@ -228,6 +234,25 @@ class TaskEditorViewModel @Inject constructor(
         persistCurrent()
         taskRepository.postpone(route.taskId, until)
         onEdit { copy(targetDate = until) }
+    }
+
+    val reminder: StateFlow<TaskReminder?> = reminderRepository.observeTaskReminder(route.taskId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), null)
+
+    fun setReminder(at: Instant) = perform {
+        if (at.isAfter(clock.instant())) {
+            reminderScheduler.scheduleTaskReminder(
+                reminderRepository.setTaskReminder(route.taskId, at),
+                at,
+            )
+        } else {
+            eventChannel.send(TaskEditorEvent.Message(R.string.reminder_in_past))
+        }
+    }
+
+    fun clearReminder() = perform {
+        reminderRepository.clearTaskReminder(route.taskId)
+            ?.let(reminderScheduler::cancelTaskReminder)
     }
 
     fun addSubtask(title: String) = perform { taskRepository.create(title, route.taskId) }

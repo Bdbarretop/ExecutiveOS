@@ -21,6 +21,9 @@ import com.executiveos.data.local.entity.CategoryEntity
 import com.executiveos.data.local.entity.InboxItemEntity
 import com.executiveos.data.local.entity.NoteEntity
 import com.executiveos.data.local.entity.ProjectEntity
+import com.executiveos.data.local.entity.ReminderDao
+import com.executiveos.data.local.entity.ReminderEntity
+import com.executiveos.data.local.entity.ReminderSettingsEntity
 import com.executiveos.data.local.entity.TagEntity
 import com.executiveos.data.local.entity.TaskDependencyEntity
 import com.executiveos.data.local.entity.TaskEntity
@@ -40,12 +43,15 @@ import com.executiveos.data.local.entity.UserSettingsEntity
         AuditLogEntity::class,
         TaskDependencyEntity::class,
         UserSettingsEntity::class,
+        ReminderEntity::class,
+        ReminderSettingsEntity::class,
     ],
     version = AppDatabase.SCHEMA_VERSION,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = AddCaptureTablesMigration::class),
         AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
     ],
 )
 @TypeConverters(Converters::class)
@@ -59,9 +65,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun tagDao(): TagDao
     abstract fun auditLogDao(): AuditLogDao
     abstract fun userSettingsDao(): UserSettingsDao
+    abstract fun reminderDao(): ReminderDao
 
     companion object {
-        const val SCHEMA_VERSION = 3
+        const val SCHEMA_VERSION = 4
         const val FILE_NAME = "executive_os.db"
     }
 }

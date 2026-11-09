@@ -18,6 +18,7 @@ import com.executiveos.feature.dashboard.DashboardScreen
 import com.executiveos.feature.inbox.InboxScreen
 import com.executiveos.feature.more.MoreScreen
 import com.executiveos.feature.settings.PrioritySettingsScreen
+import com.executiveos.feature.settings.ReminderSettingsScreen
 import com.executiveos.feature.settings.SettingsScreen
 import com.executiveos.feature.tasks.TaskEditorScreen
 import com.executiveos.feature.tasks.TasksScreen
@@ -65,6 +66,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                     onNavigateUp = navigateUp,
                     onOpenTemplates = { navController.navigate(TemplatesRoute) },
                     onOpenPrioritySettings = { navController.navigate(PrioritySettingsRoute) },
+                    onOpenReminderSettings = { navController.navigate(ReminderSettingsRoute) },
                 )
             }
         }
@@ -87,6 +89,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             )
         }
         composable<PrioritySettingsRoute> { PrioritySettingsScreen(onClose = navigateUp) }
+        composable<ReminderSettingsRoute> { ReminderSettingsScreen(onClose = navigateUp) }
         composable<TemplatesRoute> {
             TemplatesScreen(
                 onNavigateUp = navigateUp,

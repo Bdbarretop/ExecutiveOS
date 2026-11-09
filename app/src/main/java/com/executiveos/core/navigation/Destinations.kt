@@ -20,6 +20,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object TemplatesRoute
 @Serializable data class TemplateEditorRoute(val templateId: String)
 @Serializable data object PrioritySettingsRoute
+@Serializable data object ReminderSettingsRoute
 
 /** Secciones de la ficha a las que se puede saltar desde la captura rápida. */
 enum class TaskSection { CONTEXT, IMPORTANCE, NEXT_ACTION, MORE }
