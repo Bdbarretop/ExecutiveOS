@@ -1,10 +1,11 @@
 package com.executiveos.data.repository
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.executiveos.di.createPreferencesDataStore
+import com.executiveos.di.preferencesCorruptionHandler
 import com.executiveos.domain.model.ThemeMode
 import java.io.File
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +29,8 @@ class DataStoreUserPreferencesRepositoryTest {
     /** Cierra el almacén al terminar: simula que la app se cierra y vuelve a abrirse. */
     private fun withDataStore(block: suspend (DataStore<Preferences>) -> Unit) = runBlocking {
         val job = Job()
-        val dataStore = createPreferencesDataStore(
+        val dataStore = PreferenceDataStoreFactory.create(
+            corruptionHandler = preferencesCorruptionHandler(),
             scope = CoroutineScope(Dispatchers.IO + job),
             produceFile = { preferencesFile },
         )
