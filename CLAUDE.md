@@ -41,7 +41,7 @@ Módulo único `:app`, paquete raíz `com.executiveos`. Detalle en `docs/ARCHITE
 
 ## Base de datos
 
-- Todo cambio de esquema sube `AppDatabase.SCHEMA_VERSION`, añade migración explícita con prueba y versiona el JSON de `app/schemas/`.
+- Todo cambio de esquema sube `AppDatabase.SCHEMA_VERSION`, declara su migración con prueba (`AutoMigration` si es aditiva) y versiona el JSON de `app/schemas/`.
 - Nunca uses `fallbackToDestructiveMigration` ni `OnConflictStrategy.REPLACE` sobre datos del usuario.
 - UUID como clave, sin valores inventados para campos vacíos. Convenciones en `docs/DATA_MODEL.md`.
 

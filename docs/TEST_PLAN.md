@@ -34,6 +34,40 @@ HyperOS añade restricciones que afectan a las pruebas, no a la app:
 3. Mantener el teléfono desbloqueado durante la ejecución.
 4. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
 
+## Resultados de Sprint 1
+
+Ejecución del 2026-11-08 sobre la rama `sprint-1/captura-bandeja`.
+
+| Verificación | Resultado |
+|---|---|
+| `assembleDebug` | Correcto |
+| `testDebugUnitTest` | **72 de 72** |
+| `lintDebug` | **0 errores**, 2 avisos intencionados |
+| Pruebas instrumentadas en Xiaomi 23129RA5FL, Android 15 | **7 de 7**, en 24 s |
+| Migración real de la versión 1 a la 2 en el teléfono | Sin fallos |
+| Permisos de la APK | No declara `INTERNET` |
+
+Las pruebas en dispositivo usan una base en memoria (D-035), de modo que no dejan datos en la app real.
+
+### Inventario de Sprint 1
+
+| Clase | Nivel | Pruebas | Cubre |
+|---|---|---|---|
+| `CaptureRulesTest` | JVM | 11 | Fechas, duplicados, campos vacíos, división de tareas, validación |
+| `QuickCaptureViewModelTest` | JVM | 8 | Restauración de borrador, título obligatorio, doble pulsación, autoguardado, fallo al guardar, plantillas |
+| `InboxViewModelTest` | JVM | 5 | Agrupación, retorno de pospuestas, selección, errores |
+| `DataStoreCaptureDraftRepositoryTest` | JVM | 4 | Borrador tras cierre, última categoría, fecha corrupta |
+| `OfflineInboxRepositoryTest` | Robolectric | 13 | Captura, doble guardado, fecha objetivo o límite, todas las conversiones, lotes, historial |
+| `AppSmokeTest` | Robolectric | 10 | Captura hasta la bandeja, ficha, conversión, plantillas, navegación |
+| `MainActivitySmokeTest` | Instrumentada | 5 | Las rutas principales en un teléfono real |
+| `AppDatabaseSchemaTest` | Instrumentada | 2 | Esquema y migración 1 a 2 en SQLite real |
+
+### Limitaciones de Sprint 1
+
+- **Tiempos de captura sin medir.** Los objetivos de 15 a 30 segundos requieren pruebas de usabilidad.
+- **Rendimiento con 500 o 1.000 tareas sin medir.** Previsto en la Fase 6.
+- **Pantallas anchas y Android 10** siguen sin probarse.
+
 ## Resultados de Sprint 0
 
 Ejecución del 2026-11-08 sobre la rama `sprint-0/fundacion`.
@@ -81,7 +115,7 @@ Ejecución del 2026-11-08 sobre la rama `sprint-0/fundacion`.
 
 | Fase | Pruebas previstas |
 |---|---|
-| 1 | Captura, autoguardado, doble pulsación, conversión de capturas sin pérdida, migración 1 a 2 |
+| 1 | Completada; ver los resultados de Sprint 1 |
 | 2 | Cálculo de prioridad, estados, fechas, filtros, búsqueda, dependencias circulares |
 | 3 | Indicadores y alertas con datos reales, base vacía |
 | 4 | Progreso ponderado, solapamiento de bloques, capacidad |

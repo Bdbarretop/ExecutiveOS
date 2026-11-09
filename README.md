@@ -2,7 +2,7 @@
 
 Sistema personal de dirección y ejecución para Android. Ayuda a capturar compromisos, entender qué importa y convertirlo en acciones concretas. Funciona sin conexión y los datos no salen del dispositivo.
 
-> **Estado: Sprint 0 (Fundación).** Existe la base técnica: arquitectura, tema, navegación, persistencia y pruebas. **La captura, las tareas, los proyectos y el dashboard aún no están construidos**; sus secciones lo indican en pantalla y dicen en qué fase llegan. Avance en [docs/ROADMAP.md](docs/ROADMAP.md).
+> **Estado: Sprint 1 (Captura y bandeja).** Funcionan la captura rápida, la ficha completa, la bandeja con su procesamiento y las plantillas. **Las vistas de tareas, la prioridad calculada, el dashboard y los proyectos aún no están construidos**; sus secciones lo indican en pantalla y dicen en qué fase llegan. Avance en [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Requisitos
 

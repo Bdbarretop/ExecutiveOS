@@ -9,65 +9,77 @@ Base local Room, archivo `executive_os.db`. Los esquemas se exportan a `app/sche
 | Identificador | UUID como `TEXT PRIMARY KEY` |
 | Instantes | `java.time.Instant`, guardado como milisegundos UTC (`INTEGER`) |
 | Fechas sin hora | `java.time.LocalDate`, guardado como texto ISO (`AAAA-MM-DD`) |
+| Enumeraciones | Texto con el nombre del valor |
 | Columnas | `snake_case` |
 | Fechas ausentes | `NULL`. **Nunca se inventa un valor** |
 | Puntuaciones ausentes | `NULL`. Un campo vacío no se interpreta como un valor |
 | Conflictos | `ABORT` por defecto. No se usa `REPLACE` sobre datos del usuario |
 | Eliminación | Se prefiere archivar. El borrado físico requiere confirmación |
-| Tiempos | Sin valores negativos: validación en dominio y restricción `CHECK` cuando Room lo permita |
+| Tiempos | Sin valores negativos: el formulario solo admite dígitos y `TaskValidator` lo comprueba |
 
-**Política de migraciones:** cada cambio de esquema sube `SCHEMA_VERSION` y añade una migración explícita con su prueba. No se usa `fallbackToDestructiveMigration`: si falta una migración, la app falla de forma visible en lugar de borrar datos.
+**Política de migraciones:** cada cambio de esquema sube `SCHEMA_VERSION`, versiona su JSON y tiene prueba sobre SQLite real. Los cambios puramente aditivos usan `AutoMigration`, que Room verifica al compilar; los demás, una migración manual. No se usa `fallbackToDestructiveMigration`: si falta una migración, la app falla de forma visible en lugar de borrar datos.
 
-## Esquema actual: versión 1
+## Esquema actual: versión 2
 
-### `categories`
-
-| Columna | Tipo | Restricciones |
+| Tabla | Propósito | Relaciones |
 |---|---|---|
-| `id` | `TEXT` | Clave primaria (UUID) |
-| `name` | `TEXT` | No nulo, **único** |
-| `sort_order` | `INTEGER` | No nulo |
-| `is_system` | `INTEGER` | No nulo, booleano |
-| `created_at` | `INTEGER` | No nulo, milisegundos UTC |
+| `categories` | Catálogo, con las 7 del brief | |
+| `inbox_items` | Captura original e inmutable y su estado de procesamiento | `category_id` → `categories` (SET NULL) |
+| `tasks` | Ficha completa, secciones A a I | `category_id`, `project_id`, `source_inbox_item_id` (SET NULL) |
+| `projects` | Datos mínimos para convertir capturas; se amplía en Fase 4 | `source_inbox_item_id`, sin clave foránea |
+| `notes` | Capturas convertidas en nota | `source_inbox_item_id`, sin clave foránea |
+| `capture_templates` | Plantillas editables, con las 10 del brief | `category_id` → `categories` (SET NULL) |
+| `tags`, `task_tags` | Etiquetas, relación muchos a muchos | CASCADE en `task_tags` |
+| `audit_log` | Historial de acciones sobre capturas | Sin claves foráneas, para sobrevivir a lo que registra |
 
-Índice único: `index_categories_name`.
+### Ciclo de una captura
 
-Se siembran las siete categorías del brief (Trabajo, Estudio, Proyecto, Personal, Finanzas, Salud, Otro) al crear la base, con UUID fijos. La siembra se ejecuta en `onCreate`, que Android envuelve en una transacción, y no se repite al reabrir. Los UUID fijos permiten que una copia restaurada en otra instalación apunte a la misma categoría.
+Cada captura crea, en una misma transacción, una fila en `inbox_items` con el contenido original y otra en `tasks` en estado `INBOX`. Editar la ficha modifica solo `tasks`, de modo que el original nunca se pierde.
 
-## Entidades planificadas
+| Acción | `inbox_items.state` | `tasks.status` | Efecto adicional |
+|---|---|---|---|
+| Capturar | `PENDING` | `INBOX` | |
+| Convertir en tarea | `PROCESSED` | `PENDING` | |
+| Delegar | `PROCESSED` | `WAITING` | Asigna responsable y marca `DELEGATED` |
+| Convertir en proyecto | `PROCESSED` | `ARCHIVED` | Crea `projects` con referencia a la captura |
+| Convertir en nota | `PROCESSED` | `ARCHIVED` | Crea `notes` con referencia a la captura |
+| Posponer | `POSTPONED` | Sin cambio | Vuelve a Pendientes al llegar `postponed_until` |
+| Archivar | `ARCHIVED` | `ARCHIVED` | Se conserva todo el contenido |
+| Eliminar | Se borra | Se borra | Requiere confirmación; queda el registro en `audit_log` |
 
-Se añaden junto con el módulo que las usa, cada una con su migración.
+**Doble pulsación:** el identificador de la captura se genera con el borrador, y `inbox_items` ignora un identificador repetido. Un segundo envío no puede crear otra fila.
+
+**Fechas de la captura:** se guardan como `target_date` salvo que el usuario confirme que son una fecha límite, en cuyo caso van a `deadline_date`. «Esta semana» corresponde al domingo de la semana en curso.
+
+### Datos iniciales
+
+Las categorías y las plantillas se siembran en `onCreate`, que Android envuelve en una transacción. Usan UUID fijos para que una copia restaurada en otra instalación siga apuntando a la misma fila. Quien ya tenía la versión 1 recibe las plantillas durante la migración.
+
+## Entidades pendientes
 
 | Entidad | Fase | Notas |
 |---|---|---|
-| `CategoryEntity` | 0 | **Implementada** |
-| `InboxItemEntity` | 1 | Conserva el contenido original tras la conversión |
-| `TaskEntity` | 1 | Campos de la ficha completa; referencia opcional a la captura de origen |
-| `TaskAttachmentEntity` | 1 | Adjuntos locales |
-| `TagEntity`, `TaskTagCrossRef` | 1 | Relación muchos a muchos |
-| `AuditLogEntity` | 1 | Historial. Sin clave foránea para sobrevivir a la entidad auditada |
+| `TaskAttachmentEntity` | Por decidir | Adjuntos locales; requieren permisos persistentes de archivos |
 | `UserSettingsEntity` | 2 | Pesos, umbrales y capacidad |
 | `TaskDependencyEntity` | 2 | Impide dependencias circulares desde dominio |
 | `ReminderEntity` | Por asignar | Ver [ROADMAP.md](ROADMAP.md) |
-| `ProjectEntity`, `ProjectMilestoneEntity` | 4 | El progreso usa hitos y entregables ponderados |
+| `ProjectMilestoneEntity` | 4 | El progreso usa hitos y entregables ponderados |
 | `TimeBlockEntity` | 4 | Detección de solapamientos |
 | `ReviewEntity` | 5 | Respuestas de revisiones diarias y semanales |
 | `LearningGoalEntity`, `LearningSessionEntity` | 5 | Horas por semana y tema |
 
-## Relaciones objetivo
+## Relaciones objetivo pendientes
 
-- Un proyecto tiene muchas tareas.
-- Una tarea puede tener subtareas, mediante referencia a su tarea padre.
-- Una tarea puede depender de otras tareas, sin ciclos.
-- Una tarea puede tener varias etiquetas.
-- Una captura puede convertirse en tarea o proyecto; el destino conserva la referencia a la captura original.
+- Una tarea puede tener subtareas, mediante referencia a su tarea padre (Fase 2).
+- Una tarea puede depender de otras tareas, sin ciclos (Fase 2).
 
-## Vacíos del brief por resolver
+## Ampliaciones al brief
 
-La lista de la sección 14 no cubre tres funciones exigidas en otras secciones. Hay que decidirlas antes de cerrar el esquema de Sprint 1:
+La sección 14 no incluía tablas para dos funciones exigidas en otras secciones. Se añadieron en Sprint 1 (D-029):
 
-| Función exigida | Problema | Propuesta |
-|---|---|---|
-| Convertir una captura en nota (4.6, 4.8) | Ninguna entidad guarda notas independientes | Añadir `NoteEntity`, enlazable a tarea o proyecto |
-| Plantillas editables (4.7) | Ninguna entidad las guarda | Añadir `CaptureTemplateEntity`, sembrada con las 10 iniciales |
-| Riesgos y entregables de proyecto (8) | Solo existe `ProjectMilestoneEntity` | Añadir tipo y peso al hito para entregables; decidir en Fase 4 si los riesgos requieren entidad propia |
+| Función exigida | Tabla añadida |
+|---|---|
+| Convertir una captura en nota (4.6, 4.8) | `notes` |
+| Plantillas editables (4.7) | `capture_templates` |
+
+Sigue abierto para la Fase 4 si los riesgos y entregables de proyecto requieren tabla propia o si basta con ampliar los hitos con tipo y peso.

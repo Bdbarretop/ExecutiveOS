@@ -36,6 +36,22 @@
 
 **D-014. Catálogo sembrado en `onCreate` con UUID fijos.** `onCreate` se ejecuta en transacción, y los UUID fijos mantienen las referencias al restaurar copias.
 
+**D-027. Una captura crea siempre una tarea en estado `INBOX`.** Así existe una sola ficha, y los accesos «Añadir contexto» o «Evaluar importancia» guardan primero y completan después. El original se conserva aparte en `inbox_items`.
+
+**D-028. `AutoMigration` para cambios aditivos.** Room verifica la migración al compilar y evita SQL escrito a mano. Se usa una migración manual cuando el cambio no sea aditivo.
+
+**D-029. Tablas `notes` y `capture_templates`, no previstas en la sección 14.** Sin ellas no se podían cumplir «convertir en nota» ni las plantillas editables. *Propuesta aceptada por el usuario al aprobar Sprint 1.*
+
+**D-030. Proyecto mínimo en Sprint 1.** «Convertir en proyecto» exige una tabla de destino. Contiene solo lo que la conversión puede rellenar; la Fase 4 la amplía.
+
+**D-031. Borradores de captura en DataStore.** Son estado del dispositivo y no deben viajar en las copias de seguridad.
+
+**D-032. La ficha se guarda sola, sin botón.** Cada edición válida se persiste tras una pausa breve; así no hay cambios que perder. Si los datos no son válidos, la ficha avisa y no guarda.
+
+**D-033. «Esta semana» es el domingo de la semana en curso, y se guarda como fecha objetivo.** Solo es vencimiento si el usuario lo confirma, como exige la sección 4.2.
+
+**D-034. Campo de recordatorio y adjuntos pospuestos.** La ficha no muestra «Recordatorio» porque aún no hay recordatorios que lo atiendan, ni adjuntos locales, que requieren permisos de archivos. Enlaces, notas y referencias sí están disponibles. Mostrar campos sin función contradiría la sección 20.3.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.
@@ -60,6 +76,8 @@
 
 **D-023. Pruebas de interfaz en JVM con Robolectric.** Con 8 GB de RAM, el emulador no es viable de forma habitual junto a Gradle. Robolectric permite ejecutar el arranque real con Hilt, Room y DataStore sin dispositivo. Se mantiene una prueba instrumentada para dispositivo real.
 
-**D-024. Una rama por sprint.** Sprint 0 vive en `sprint-0/fundacion`; la fusión a `main` queda sujeta a aprobación.
+**D-024. Una rama por sprint.** Cada sprint vive en su rama; la fusión a `main` queda sujeta a aprobación. El código se aloja en el repositorio privado `Bdbarretop/ExecutiveOS`.
+
+**D-035. Base en memoria para las pruebas en dispositivo.** Se ejecutan en el teléfono real del usuario y no deben dejar datos de prueba en su app.
 
 **D-025. Ajustes a la estructura de referencia del brief.** Se añade `feature/more` para el menú secundario. Los paquetes `core/common`, `core/notifications`, `domain/usecase`, `domain/priority` y los demás `feature/*` se crearán cuando tengan código.

@@ -22,6 +22,7 @@ La base local es la fuente de verdad. La interfaz observa `Flow`: cualquier escr
 |---|---|---|
 | `domain/model` | Modelos de negocio en Kotlin puro | Nada de Android |
 | `domain/repository` | Contratos de datos | `domain/model` |
+| `domain/capture` | Reglas puras de fechas, duplicados, campos vacíos y validación | `domain/model` |
 | `domain/usecase` | Reglas que combinan datos. **Se crea solo cuando haya lógica real** | `domain` |
 | `domain/priority` | Motor de priorización (Fase 2) | `domain/model` |
 | `data/local` | Entidades y DAO de Room | `core/database` |
@@ -58,14 +59,14 @@ Navigation Compose con rutas tipadas mediante `@Serializable`.
 
 - `ExecutiveOsShell` contiene `NavigationSuiteScaffold` (barra inferior en móvil, riel en pantallas anchas) y el botón **CAPTURAR**.
 - Barra: Inicio, Bandeja, Tareas, Proyectos, Más. «Más» abre Planificación, Formación, Revisiones y Configuración dentro de un grafo anidado, de modo que la pestaña sigue marcada al entrar en ellas.
-- `CaptureRoute` oculta la navegación y el botón flotante: capturar es una tarea a pantalla completa.
+- La captura y los editores ocultan la navegación y el botón flotante: son tareas a pantalla completa.
 
 ## Persistencia
 
 | Almacén | Contenido | ¿Viaja en copias de seguridad? |
 |---|---|---|
 | Room | Datos de negocio | Sí, mediante la exportación propia (Fase 6) |
-| DataStore | Preferencias del dispositivo: tema y, en Fase 1, última categoría y borradores | No |
+| DataStore | Preferencias del dispositivo: tema, última categoría y proyecto, borrador de captura | No |
 | `UserSettingsEntity` (futura) | Pesos, umbrales y capacidad | Sí |
 
 Detalle del esquema en [DATA_MODEL.md](DATA_MODEL.md).
@@ -88,7 +89,7 @@ Gmail, Calendar, Outlook y la sincronización llegarán como nuevas implementaci
 ## Cómo añadir un módulo
 
 1. Modelo y contrato en `domain`.
-2. Entidad, DAO e implementación en `data`; registrar la entidad en `AppDatabase`, subir `SCHEMA_VERSION` y escribir su **migración explícita con prueba**.
+2. Entidad, DAO e implementación en `data`; registrar la entidad en `AppDatabase`, subir `SCHEMA_VERSION` y declarar su **migración con prueba** (`AutoMigration` si es aditiva).
 3. Enlace en `RepositoryModule`.
 4. `feature/<modulo>` con pantalla, ViewModel y `UiState`.
 5. Sustituir su `PendingSection` en `AppNavHost` por la pantalla real.
