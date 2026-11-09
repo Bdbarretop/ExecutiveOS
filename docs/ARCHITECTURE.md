@@ -24,7 +24,8 @@ La base local es la fuente de verdad. La interfaz observa `Flow`: cualquier escr
 | `domain/repository` | Contratos de datos | `domain/model` |
 | `domain/capture` | Reglas puras de fechas, duplicados, campos vacíos y validación | `domain/model` |
 | `domain/usecase` | Reglas que combinan datos. **Se crea solo cuando haya lógica real** | `domain` |
-| `domain/priority` | Motor de priorización (Fase 2) | `domain/model` |
+| `domain/priority` | Motor de priorización, transparente y sin efectos secundarios | `domain/model` |
+| `domain/tasks` | Vistas, filtros, búsqueda, transiciones de estado y ciclos de dependencias | `domain/model`, `domain/priority` |
 | `data/local` | Entidades y DAO de Room | `core/database` |
 | `data/repository` | Implementación de los contratos | `data/local`, `domain` |
 | `core/common` | Utilidades transversales, cuando existan | Nada de `feature` |
@@ -67,7 +68,7 @@ Navigation Compose con rutas tipadas mediante `@Serializable`.
 |---|---|---|
 | Room | Datos de negocio | Sí, mediante la exportación propia (Fase 6) |
 | DataStore | Preferencias del dispositivo: tema, última categoría y proyecto, borrador de captura | No |
-| `UserSettingsEntity` (futura) | Pesos, umbrales y capacidad | Sí |
+| `user_settings` en Room | Pesos y umbrales de prioridad; más adelante, capacidad | Sí |
 
 Detalle del esquema en [DATA_MODEL.md](DATA_MODEL.md).
 

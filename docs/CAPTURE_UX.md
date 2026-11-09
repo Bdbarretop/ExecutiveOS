@@ -63,7 +63,7 @@ Nueve secciones plegables. Ningún campo salvo el título es obligatorio, y la f
 | H. Responsables | Responsable, involucrados, dependencias, delegación |
 | I. Documentación | Notas, enlaces, referencias |
 
-La ficha señala qué campos clave faltan, valida el orden de las fechas y sugiere dividir las tareas de más de 4 horas. El cálculo de prioridad llega en la Fase 2.
+La ficha señala qué campos clave faltan, valida el orden de las fechas y sugiere dividir las tareas de más de 4 horas. Además muestra su estado, la prioridad con su explicación, las subtareas, las dependencias y el historial.
 
 ## Bandeja
 
@@ -81,4 +81,3 @@ Las 10 iniciales del brief se editan en **Más → Configuración → Plantillas
 
 - Medir los tiempos objetivo con pruebas de usabilidad.
 - Adjuntos locales y campo de recordatorio (D-034).
-- La vista **Tareas** llega en la Fase 2; hasta entonces, las tareas convertidas se consultan desde Bandeja → Procesadas.

@@ -9,8 +9,8 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 2 | Decisiones técnicas y restricciones | 0 | Implantado. Ajustes en [DECISIONS.md](DECISIONS.md) |
 | 3 | Diseño UX/UI | 0 y continuo | Base implantada: tema claro y oscuro, navegación, estados vacío, carga y error, botón CAPTURAR |
 | 4 | Captura inteligente | 1 | Implantada, salvo adjuntos locales y recordatorio de la ficha (D-034). Detalle en [CAPTURE_UX.md](CAPTURE_UX.md) |
-| 5 | Módulo de tareas | 2 | Pendiente |
-| 6 | Motor de priorización | 2 | Pendiente |
+| 5 | Módulo de tareas | 2 | Implantado: acciones, 8 estados, 11 vistas, filtros y búsqueda |
+| 6 | Motor de priorización | 2 | Implantado: fórmula configurable, explicación, prioridad manual y obligaciones críticas |
 | 7 | Dashboard ejecutivo | 3 | Pendiente |
 | 8 | Proyectos | 4 | Pendiente |
 | 9 | Planificación y tiempo | 4 | Pendiente |
@@ -18,14 +18,14 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 11 | Revisiones | 5 | Pendiente |
 | 12 | Analítica y métricas | 5 | Pendiente |
 | 13 | Recordatorios y notificaciones | **Sin asignar** | Pendiente. Ver [ROADMAP.md](ROADMAP.md) |
-| 14 | Base de datos | Progresiva | Esquema 2 implantado; el resto llega con su módulo. Ver [DATA_MODEL.md](DATA_MODEL.md) |
+| 14 | Base de datos | Progresiva | Esquema 3 implantado; el resto llega con su módulo. Ver [DATA_MODEL.md](DATA_MODEL.md) |
 | 15 | Seguridad y privacidad | 0 y 6 | Base implantada: sin internet ni copias automáticas. Exportación y restauración en Fase 6 |
 | 16 | Estructura del proyecto | 0 | Implantada con ajustes documentados (D-025) |
 | 17 | Calidad y pruebas | Continuo | Base implantada. Ver [TEST_PLAN.md](TEST_PLAN.md) |
 
 ## Criterios de aceptación del MVP
 
-| # | Criterio | Fase | Estado tras Sprint 1 |
+| # | Criterio | Fase | Estado tras Sprint 2 |
 |---|---|---|---|
 | 1 | La aplicación compila | 0 | Cumplido |
 | 2 | Se puede instalar en Android | 0 | Cumplido en Xiaomi con Android 15 |
@@ -34,16 +34,16 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 5 | Los datos se guardan en Room | 0 y 1 | Cumplido |
 | 6 | La información persiste tras cerrar la app | 0 y 1 | Cumplido |
 | 7 | La bandeja permite procesar capturas | 1 | Cumplido |
-| 8 | Crear, modificar y completar tareas | 2 | Parcial: crear y editar disponibles; completar en Fase 2 |
-| 9 | El motor de prioridad funciona | 2 | Pendiente |
+| 8 | Crear, modificar y completar tareas | 2 | Cumplido |
+| 9 | El motor de prioridad funciona | 2 | Cumplido |
 | 10 | El dashboard refleja información real | 3 | Pendiente |
-| 11 | Los filtros y la búsqueda funcionan | 2 | Pendiente |
+| 11 | Los filtros y la búsqueda funcionan | 2 | Cumplido |
 | 12 | Los proyectos permiten relacionar tareas | 4 | Pendiente |
 | 13 | Las revisiones pueden guardarse | 5 | Pendiente |
 | 14 | Los recordatorios funcionan | Sin asignar | Pendiente |
 | 15 | Exportar y restaurar los datos | 6 | Pendiente |
-| 16 | Existen pruebas automatizadas relevantes | Continuo | 72 en computador y 7 en dispositivo |
-| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar Sprint 1 |
+| 16 | Existen pruebas automatizadas relevantes | Continuo | 140 en computador y 9 en dispositivo |
+| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar Sprint 2 |
 | 18 | La aplicación funciona sin conexión | Continuo | La APK no declara permiso de internet |
 
 ## Anexo: prompt maestro literal

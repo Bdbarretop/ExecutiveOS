@@ -34,6 +34,39 @@ HyperOS añade restricciones que afectan a las pruebas, no a la app:
 3. Mantener el teléfono desbloqueado durante la ejecución.
 4. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
 
+## Resultados de Sprint 2
+
+Ejecución del 2026-11-08 sobre la rama `sprint-2/tareas-prioridad`.
+
+| Verificación | Resultado |
+|---|---|
+| `assembleDebug` | Correcto |
+| `testDebugUnitTest` | **140 de 140** |
+| `lintDebug` | **0 errores**, 2 avisos intencionados |
+| Pruebas instrumentadas en Xiaomi 23129RA5FL, Android 15 | **9 de 9**, en 32 s |
+| Migración real de la versión 2 a la 3 en el teléfono | Sin fallos |
+| Selección y búsqueda entre 1.000 tareas en la JVM | 68 ms |
+| Permisos de la APK | No declara `INTERNET` |
+
+### Inventario de Sprint 2
+
+| Clase | Nivel | Pruebas | Cubre |
+|---|---|---|---|
+| `PriorityEngineTest` | JVM | 13 | Fórmula, límites exactos, datos faltantes, manual, obligaciones, fechas, configuración |
+| `TaskQueriesTest` | JVM | 15 | Las 11 vistas, los filtros, la búsqueda, el orden y 1.000 tareas |
+| `TaskRulesTest` | JVM | 8 | Transiciones de estado y ciclos de dependencias |
+| `TasksViewModelTest` | JVM | 8 | Vistas, búsqueda, filtros, creación, acciones y errores |
+| `PrioritySettingsViewModelTest` | JVM | 6 | Formulario, validación y confirmación cuando cambian niveles |
+| `OfflineTaskRepositoryTest` | Robolectric | 16 | Estados, duplicado, subtareas, dependencias, posposición, delegación, historial, configuración |
+| `AppSmokeTest` | Robolectric | 12 | Se añaden creación, búsqueda, completado y prioridad sin evaluar |
+| `MainActivitySmokeTest` | Instrumentada | 6 | Se añade crear y completar una tarea en teléfono real |
+| `AppDatabaseSchemaTest` | Instrumentada | 3 | Se añade la migración a la versión 3, conservando tareas, etiquetas e historial |
+
+### Limitaciones de Sprint 2
+
+- **Rendimiento en teléfono sin medir.** Los 68 ms son de la JVM del computador; las pruebas con 500 y 1.000 tareas en dispositivo están previstas en la Fase 6.
+- **Revisión visual pendiente.** Las pruebas confirman el funcionamiento, no la disposición de cada pantalla.
+
 ## Resultados de Sprint 1
 
 Ejecución del 2026-11-08 sobre la rama `sprint-1/captura-bandeja`.
@@ -116,7 +149,7 @@ Ejecución del 2026-11-08 sobre la rama `sprint-0/fundacion`.
 | Fase | Pruebas previstas |
 |---|---|
 | 1 | Completada; ver los resultados de Sprint 1 |
-| 2 | Cálculo de prioridad, estados, fechas, filtros, búsqueda, dependencias circulares |
+| 2 | Completada; ver los resultados de Sprint 2 |
 | 3 | Indicadores y alertas con datos reales, base vacía |
 | 4 | Progreso ponderado, solapamiento de bloques, capacidad |
 | 5 | Revisiones, métricas y definición de cada indicador |

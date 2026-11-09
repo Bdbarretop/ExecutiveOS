@@ -19,13 +19,15 @@ Base local Room, archivo `executive_os.db`. Los esquemas se exportan a `app/sche
 
 **Política de migraciones:** cada cambio de esquema sube `SCHEMA_VERSION`, versiona su JSON y tiene prueba sobre SQLite real. Los cambios puramente aditivos usan `AutoMigration`, que Room verifica al compilar; los demás, una migración manual. No se usa `fallbackToDestructiveMigration`: si falta una migración, la app falla de forma visible en lugar de borrar datos.
 
-## Esquema actual: versión 2
+## Esquema actual: versión 3
 
 | Tabla | Propósito | Relaciones |
 |---|---|---|
 | `categories` | Catálogo, con las 7 del brief | |
 | `inbox_items` | Captura original e inmutable y su estado de procesamiento | `category_id` → `categories` (SET NULL) |
-| `tasks` | Ficha completa, secciones A a I | `category_id`, `project_id`, `source_inbox_item_id` (SET NULL) |
+| `tasks` | Ficha completa, secciones A a I, prioridad manual y obligación crítica | `category_id`, `project_id`, `source_inbox_item_id`, `parent_task_id` (SET NULL) |
+| `task_dependencies` | Qué tarea depende de cuál; `DependencyRules` impide los ciclos | CASCADE en ambas columnas |
+| `user_settings` | Pesos y umbrales de prioridad, en una sola fila. Si no existe, se usan los del brief | |
 | `projects` | Datos mínimos para convertir capturas; se amplía en Fase 4 | `source_inbox_item_id`, sin clave foránea |
 | `notes` | Capturas convertidas en nota | `source_inbox_item_id`, sin clave foránea |
 | `capture_templates` | Plantillas editables, con las 10 del brief | `category_id` → `categories` (SET NULL) |
@@ -60,18 +62,19 @@ Las categorías y las plantillas se siembran en `onCreate`, que Android envuelve
 | Entidad | Fase | Notas |
 |---|---|---|
 | `TaskAttachmentEntity` | Por decidir | Adjuntos locales; requieren permisos persistentes de archivos |
-| `UserSettingsEntity` | 2 | Pesos, umbrales y capacidad |
-| `TaskDependencyEntity` | 2 | Impide dependencias circulares desde dominio |
-| `ReminderEntity` | Por asignar | Ver [ROADMAP.md](ROADMAP.md) |
+| `ReminderEntity` | Tras la Fase 3 | Ver [ROADMAP.md](ROADMAP.md) |
 | `ProjectMilestoneEntity` | 4 | El progreso usa hitos y entregables ponderados |
 | `TimeBlockEntity` | 4 | Detección de solapamientos |
 | `ReviewEntity` | 5 | Respuestas de revisiones diarias y semanales |
 | `LearningGoalEntity`, `LearningSessionEntity` | 5 | Horas por semana y tema |
 
-## Relaciones objetivo pendientes
+## Reglas de las tareas
 
-- Una tarea puede tener subtareas, mediante referencia a su tarea padre (Fase 2).
-- Una tarea puede depender de otras tareas, sin ciclos (Fase 2).
+- El estado solo cambia con `setStatus`, que valida la transición. Guardar la ficha nunca lo sobrescribe.
+- Lo terminado solo se reabre o se archiva. Nada vuelve a la bandeja.
+- Duplicar copia contenido y etiquetas, pero no las fechas: serían compromisos que nadie ha adquirido.
+- Posponer mueve la fecha objetivo; una fecha límite no se pospone sola.
+- Los cambios de estado, escalas, prioridad manual, obligación y fechas quedan en `audit_log`.
 
 ## Ampliaciones al brief
 

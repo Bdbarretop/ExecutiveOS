@@ -52,6 +52,20 @@
 
 **D-034. Campo de recordatorio y adjuntos pospuestos.** La ficha no muestra «Recordatorio» porque aún no hay recordatorios que lo atiendan, ni adjuntos locales, que requieren permisos de archivos. Enlaces, notas y referencias sí están disponibles. Mostrar campos sin función contradiría la sección 20.3.
 
+**D-036. Motor de prioridad con aritmética entera.** Pesos en porcentaje y umbrales en centésimas. Con decimales de punto flotante, un 4,00 exacto podría clasificarse como 3,99.
+
+**D-037. Las fechas y las dependencias no alteran la puntuación.** Explican y avisan, pero el brief prohíbe confundir una fecha próxima con importancia estratégica (6.2).
+
+**D-038. Sin las tres escalas no hay puntuación.** El brief prohíbe asumir valores (6.1), así que se muestra «Sin evaluar» e indica qué falta, en lugar de calcular con datos parciales.
+
+**D-039. Las obligaciones críticas aparecen en la vista Críticas y primero en cualquier lista.** No modifican la puntuación, pero ninguna puntuación las oculta (6.3).
+
+**D-040. Cambiar pesos o umbrales pide confirmación si alguna tarea cambia de nivel.** Es la forma de cumplir «no cambiar prioridades silenciosamente» cuando el cambio es global.
+
+**D-041. Las vistas y filtros se resuelven en memoria.** Evita decenas de consultas específicas. Con 1.000 tareas, la selección tardó 68 ms en la JVM del computador; el rendimiento en teléfono se medirá en la Fase 6.
+
+**D-042. Paquete `feature/tasks`, en plural.** Se renombró para coincidir con la estructura de la sección 16.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.
