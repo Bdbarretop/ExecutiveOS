@@ -43,6 +43,11 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            all { test ->
+                // Robolectric usa SharedSecrets para crear FileDescriptor; JDK 17+ exige abrirlo.
+                test.jvmArgs("--add-opens=java.base/jdk.internal.access=ALL-UNNAMED")
+                test.maxHeapSize = "1536m"
+            }
         }
     }
 }
@@ -92,6 +97,7 @@ dependencies {
 
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.room.testing)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.hilt.android.testing)
