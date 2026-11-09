@@ -178,6 +178,14 @@ class PlanningRulesTest {
     }
 
     @Test
+    fun conflictsIgnoreTheBlockItselfAndConsecutiveBlocks() {
+        val candidate = block("x", 10, 12)
+        val others = listOf(block("x", 10, 12), block("antes", 9, 10), block("cruza", 11, 13))
+
+        assertEquals(listOf("cruza"), PlanningRules.conflicts(candidate, others).map { it.id })
+    }
+
+    @Test
     fun onlyDaysOverTheirTargetCountAsOverloaded() {
         val blocks = listOf(block("a", 8, 15), block("b", 9, 10, day = monday.plusDays(1)))
 
