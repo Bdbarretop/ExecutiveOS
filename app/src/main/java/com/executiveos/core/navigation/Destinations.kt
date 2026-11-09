@@ -21,6 +21,10 @@ import kotlinx.serialization.Serializable
 @Serializable data class TemplateEditorRoute(val templateId: String)
 @Serializable data object PrioritySettingsRoute
 @Serializable data object ReminderSettingsRoute
+@Serializable data class ProjectEditorRoute(val projectId: String)
+
+/** Sin [blockId] se crea un bloque nuevo; [date] es su día en formato ISO. */
+@Serializable data class BlockEditorRoute(val blockId: String? = null, val date: String? = null)
 
 /** Secciones de la ficha a las que se puede saltar desde la captura rápida. */
 enum class TaskSection { CONTEXT, IMPORTANCE, NEXT_ACTION, MORE }

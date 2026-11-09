@@ -100,7 +100,9 @@ private fun NavDestination?.isFullScreen(): Boolean = this != null && (
         hasRoute(TaskEditorRoute::class) ||
         hasRoute(TemplateEditorRoute::class) ||
         hasRoute(PrioritySettingsRoute::class) ||
-        hasRoute(ReminderSettingsRoute::class)
+        hasRoute(ReminderSettingsRoute::class) ||
+        hasRoute(ProjectEditorRoute::class) ||
+        hasRoute(BlockEditorRoute::class)
     )
 
 private fun NavDestination?.isIn(destination: TopLevelDestination): Boolean =

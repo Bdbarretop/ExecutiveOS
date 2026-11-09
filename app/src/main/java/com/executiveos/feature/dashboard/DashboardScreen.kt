@@ -44,6 +44,7 @@ import com.executiveos.R
 import com.executiveos.core.designsystem.component.EmptyState
 import com.executiveos.core.designsystem.component.ExecutiveTopBar
 import com.executiveos.core.designsystem.component.LoadingState
+import com.executiveos.core.designsystem.component.formatDuration
 import com.executiveos.core.designsystem.component.toDisplayText
 import com.executiveos.core.designsystem.theme.Spacing
 import com.executiveos.domain.dashboard.AlertType
@@ -53,18 +54,47 @@ import com.executiveos.domain.dashboard.DashboardIndicators
 import com.executiveos.domain.dashboard.FocusTask
 import com.executiveos.domain.model.Task
 import com.executiveos.domain.model.effectiveDate
+import com.executiveos.domain.planning.CapacitySummary
 import com.executiveos.domain.tasks.RankedTask
 import com.executiveos.domain.tasks.TaskView
 import com.executiveos.feature.tasks.ObligationBadge
 import com.executiveos.feature.tasks.PriorityBadge
 import com.executiveos.feature.tasks.priorityExplanation
 
+private class DashboardNavigation(
+    val onOpenTask: (String) -> Unit,
+    val onOpenView: (TaskView) -> Unit,
+    val onOpenProjects: () -> Unit,
+    val onOpenPlanning: () -> Unit,
+    val onOpenBlock: (String) -> Unit,
+) {
+    fun open(alert: AlertType) = when (alert) {
+        AlertType.OVERDUE_COMMITMENTS -> onOpenView(TaskView.OVERDUE)
+        AlertType.UPCOMING_COMMITMENTS -> onOpenView(TaskView.UPCOMING)
+        AlertType.BLOCKED_TASKS -> onOpenView(TaskView.BLOCKED)
+        AlertType.PENDING_DEPENDENCIES -> onOpenView(TaskView.ALL)
+        AlertType.CRITICAL_WITHOUT_NEXT_ACTION -> onOpenView(TaskView.CRITICAL)
+        AlertType.OVERLOADED_DAYS -> onOpenPlanning()
+        AlertType.DELAYED_PROJECTS -> onOpenProjects()
+    }
+}
+
 @Composable
 fun DashboardScreen(
     onOpenTask: (String) -> Unit,
     onOpenView: (TaskView) -> Unit,
+    onOpenProjects: () -> Unit,
+    onOpenPlanning: () -> Unit,
+    onOpenBlock: (String) -> Unit,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
+    val navigation = DashboardNavigation(
+        onOpenTask,
+        onOpenView,
+        onOpenProjects,
+        onOpenPlanning,
+        onOpenBlock,
+    )
     val dashboard by viewModel.dashboard.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val resources = LocalResources.current
@@ -87,8 +117,7 @@ fun DashboardScreen(
                 DashboardContent(
                     dashboard = current,
                     viewModel = viewModel,
-                    onOpenTask = onOpenTask,
-                    onOpenView = onOpenView,
+                    navigation = navigation,
                     onChoose = { showPicker = true },
                 )
             }
@@ -115,8 +144,7 @@ fun DashboardScreen(
 private fun DashboardContent(
     dashboard: Dashboard,
     viewModel: DashboardViewModel,
-    onOpenTask: (String) -> Unit,
-    onOpenView: (TaskView) -> Unit,
+    navigation: DashboardNavigation,
     onChoose: () -> Unit,
 ) {
     Column(
@@ -132,10 +160,10 @@ private fun DashboardContent(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        FocusSection(dashboard, viewModel, onOpenTask, onChoose)
-        if (dashboard.alerts.isNotEmpty()) AlertsSection(dashboard.alerts, onOpenView)
-        IndicatorsSection(dashboard.indicators, onOpenView)
-        NextHoursSection(dashboard.next24Hours, viewModel, onOpenTask)
+        FocusSection(dashboard, viewModel, navigation.onOpenTask, onChoose)
+        if (dashboard.alerts.isNotEmpty()) AlertsSection(dashboard.alerts, navigation)
+        IndicatorsSection(dashboard.indicators, dashboard.capacityThisWeek, navigation.onOpenView)
+        NextHoursSection(dashboard, viewModel, navigation)
     }
 }
 
@@ -275,19 +303,6 @@ private fun taskDetails(task: Task, projectName: String?): String {
     return parts.joinToString(" · ")
 }
 
-@Composable
-private fun formatDuration(minutes: Int): String {
-    val hours = minutes / MINUTES_PER_HOUR
-    val remainder = minutes % MINUTES_PER_HOUR
-    return when {
-        hours == 0 -> stringResource(R.string.tasks_minutes, minutes)
-        remainder == 0 -> stringResource(R.string.duration_hours, hours)
-        else -> stringResource(R.string.duration_hours_minutes, hours, remainder)
-    }
-}
-
-private const val MINUTES_PER_HOUR = 60
-
 @PluralsRes
 private fun AlertType.labelRes(): Int = when (this) {
     AlertType.OVERDUE_COMMITMENTS -> R.plurals.alert_overdue
@@ -299,17 +314,8 @@ private fun AlertType.labelRes(): Int = when (this) {
     AlertType.DELAYED_PROJECTS -> R.plurals.alert_delayed_projects
 }
 
-private fun AlertType.targetView(): TaskView = when (this) {
-    AlertType.OVERDUE_COMMITMENTS -> TaskView.OVERDUE
-    AlertType.UPCOMING_COMMITMENTS -> TaskView.UPCOMING
-    AlertType.BLOCKED_TASKS -> TaskView.BLOCKED
-    AlertType.PENDING_DEPENDENCIES -> TaskView.ALL
-    AlertType.CRITICAL_WITHOUT_NEXT_ACTION -> TaskView.CRITICAL
-    AlertType.OVERLOADED_DAYS, AlertType.DELAYED_PROJECTS -> TaskView.ALL
-}
-
 @Composable
-private fun AlertsSection(alerts: List<DashboardAlert>, onOpenView: (TaskView) -> Unit) {
+private fun AlertsSection(alerts: List<DashboardAlert>, navigation: DashboardNavigation) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
         SectionTitle(R.string.home_alerts_title)
         alerts.forEach { alert ->
@@ -319,7 +325,7 @@ private fun AlertsSection(alerts: List<DashboardAlert>, onOpenView: (TaskView) -
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onOpenView(alert.type.targetView()) },
+                    .clickable { navigation.open(alert.type) },
             ) {
                 Text(
                     text = pluralStringResource(alert.type.labelRes(), alert.count, alert.count),
@@ -335,6 +341,7 @@ private fun AlertsSection(alerts: List<DashboardAlert>, onOpenView: (TaskView) -
 @Composable
 private fun IndicatorsSection(
     indicators: DashboardIndicators,
+    capacity: CapacitySummary,
     onOpenView: (TaskView) -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
@@ -356,7 +363,8 @@ private fun IndicatorsSection(
             tile(R.string.home_completed_week, indicators.completedThisWeek, TaskView.COMPLETED)
         }
         TimeRow(R.string.home_time_estimated, formatDuration(indicators.estimatedMinutesThisWeek))
-        TimeRow(R.string.home_time_available, stringResource(R.string.home_time_available_pending))
+        TimeRow(R.string.home_time_planned, formatDuration(capacity.plannedMinutes))
+        TimeRow(R.string.home_time_available, formatDuration(capacity.remainingMinutes))
     }
 }
 
@@ -400,44 +408,57 @@ private fun TimeRow(@StringRes label: Int, value: String) {
 
 @Composable
 private fun NextHoursSection(
-    tasks: List<RankedTask>,
+    dashboard: Dashboard,
     viewModel: DashboardViewModel,
-    onOpenTask: (String) -> Unit,
+    navigation: DashboardNavigation,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
         SectionTitle(R.string.home_next_title)
-        if (tasks.isEmpty()) {
+        if (dashboard.next24Hours.isEmpty() && dashboard.nextBlocks.isEmpty()) {
             Text(stringResource(R.string.home_next_empty), style = MaterialTheme.typography.bodyMedium)
         }
         val today = viewModel.today()
-        tasks.forEach { ranked ->
-            val task = ranked.item.task
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onOpenTask(task.id) }
-                    .padding(vertical = Spacing.xs),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
-            ) {
-                Text(
-                    text = stringResource(
-                        if (task.effectiveDate == today) {
-                            R.string.home_day_today
-                        } else {
-                            R.string.home_day_tomorrow
-                        },
-                    ),
-                    style = MaterialTheme.typography.labelLarge,
-                )
-                Text(
-                    text = task.title,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f),
-                )
-            }
+        dashboard.nextBlocks.forEach { block ->
+            val start = block.startAt.atZone(viewModel.zone)
+            AgendaRow(
+                label = stringResource(dayLabel(start.toLocalDate() == today)) + " " +
+                    start.toLocalTime().toDisplayText(),
+                title = block.title,
+                onClick = { navigation.onOpenBlock(block.id) },
+            )
         }
+        dashboard.next24Hours.forEach { ranked ->
+            val task = ranked.item.task
+            AgendaRow(
+                label = stringResource(dayLabel(task.effectiveDate == today)),
+                title = task.title,
+                onClick = { navigation.onOpenTask(task.id) },
+            )
+        }
+    }
+}
+
+@StringRes
+private fun dayLabel(isToday: Boolean): Int =
+    if (isToday) R.string.home_day_today else R.string.home_day_tomorrow
+
+@Composable
+private fun AgendaRow(label: String, title: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = Spacing.xs),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+    ) {
+        Text(text = label, style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
     }
 }
 

@@ -82,6 +82,11 @@ object PlanningRules {
         PlanningPeriod.MONTH -> anchor.plusMonths(steps)
     }
 
+    /** Otros bloques que coinciden con [block]; dos consecutivos que solo se tocan no chocan. */
+    fun conflicts(block: TimeBlock, others: List<TimeBlock>): List<TimeBlock> = others
+        .filter { it.id != block.id && it.startAt.isBefore(block.endAt) && block.startAt.isBefore(it.endAt) }
+        .sortedBy { it.startAt }
+
     fun onDay(blocks: List<TimeBlock>, day: LocalDate, zone: ZoneId): List<TimeBlock> =
         blocks.filter { it.startAt.atZone(zone).toLocalDate() == day }.sortedBy { it.startAt }
 

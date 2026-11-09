@@ -17,6 +17,10 @@ import com.executiveos.feature.capture.QuickCaptureScreen
 import com.executiveos.feature.dashboard.DashboardScreen
 import com.executiveos.feature.inbox.InboxScreen
 import com.executiveos.feature.more.MoreScreen
+import com.executiveos.feature.planning.BlockEditorScreen
+import com.executiveos.feature.planning.PlanningScreen
+import com.executiveos.feature.projects.ProjectEditorScreen
+import com.executiveos.feature.projects.ProjectsScreen
 import com.executiveos.feature.settings.PrioritySettingsScreen
 import com.executiveos.feature.settings.ReminderSettingsScreen
 import com.executiveos.feature.settings.SettingsScreen
@@ -38,6 +42,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
             DashboardScreen(
                 onOpenTask = { navController.navigate(TaskEditorRoute(it)) },
                 onOpenView = { navController.navigate(TasksRoute(it.name)) },
+                onOpenProjects = { navController.navigate(ProjectsRoute) },
+                onOpenPlanning = { navController.navigate(PlanningRoute) },
+                onOpenBlock = { navController.navigate(BlockEditorRoute(blockId = it)) },
             )
         }
         composable<InboxRoute> {
@@ -46,14 +53,20 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         composable<TasksRoute> {
             TasksScreen(onOpenTask = { navController.navigate(TaskEditorRoute(it)) })
         }
-        composable<ProjectsRoute> { PendingSection(R.string.section_projects, phase = 4) }
+        composable<ProjectsRoute> {
+            ProjectsScreen(onOpenProject = { navController.navigate(ProjectEditorRoute(it)) })
+        }
 
         navigation<MoreGraph>(startDestination = MoreRoute) {
             composable<MoreRoute> {
                 MoreScreen(onDestinationSelected = { navController.navigate(it.route) })
             }
             composable<PlanningRoute> {
-                PendingSection(R.string.section_planning, phase = 4, onNavigateUp = navigateUp)
+                PlanningScreen(
+                    onNavigateUp = navigateUp,
+                    onOpenBlock = { navController.navigate(BlockEditorRoute(blockId = it)) },
+                    onNewBlock = { navController.navigate(BlockEditorRoute(date = it.toString())) },
+                )
             }
             composable<LearningRoute> {
                 PendingSection(R.string.section_learning, phase = 5, onNavigateUp = navigateUp)
@@ -88,6 +101,13 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
                 onOpenTask = { navController.navigate(TaskEditorRoute(it)) },
             )
         }
+        composable<ProjectEditorRoute> {
+            ProjectEditorScreen(
+                onClose = navigateUp,
+                onOpenTask = { navController.navigate(TaskEditorRoute(it)) },
+            )
+        }
+        composable<BlockEditorRoute> { BlockEditorScreen(onClose = navigateUp) }
         composable<PrioritySettingsRoute> { PrioritySettingsScreen(onClose = navigateUp) }
         composable<ReminderSettingsRoute> { ReminderSettingsScreen(onClose = navigateUp) }
         composable<TemplatesRoute> {

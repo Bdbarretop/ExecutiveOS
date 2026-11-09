@@ -433,8 +433,8 @@
     <string name="home_pending">Pendientes</string>
     <string name="home_completed_week">Completadas esta semana</string>
     <string name="home_time_estimated">Tiempo estimado esta semana</string>
-    <string name="home_time_available">Tiempo disponible</string>
-    <string name="home_time_available_pending">Llega en la Fase 4</string>
+    <string name="home_time_planned">Tiempo planificado esta semana</string>
+    <string name="home_time_available">Disponible para planificar esta semana</string>
     <string name="home_next_title">Próximas 24 horas</string>
     <string name="home_next_empty">Sin compromisos para hoy ni mañana.</string>
     <string name="home_day_today">Hoy</string>
@@ -481,6 +481,149 @@
         <item quantity="many">%1$d tareas críticas abiertas</item>
         <item quantity="other">%1$d tareas críticas abiertas</item>
     </plurals>
+
+    <!-- Proyectos -->
+    <string name="projects_new">Nuevo proyecto</string>
+    <string name="projects_new_field">Nombre del proyecto</string>
+    <string name="projects_empty_title">Sin proyectos todavía</string>
+    <string name="projects_empty_message">Crea uno con el botón superior o convierte una captura desde la Bandeja.</string>
+    <string name="projects_delayed">Con retraso</string>
+    <string name="projects_no_milestones">Sin hitos: añade hitos o entregables para medir el avance.</string>
+    <string name="projects_progress" tools:ignore="PluralsCandidate">%1$d %% · %2$d de %3$d completados</string>
+    <string name="project_status_planned">Planificado</string>
+    <string name="project_status_active">Activo</string>
+    <string name="project_status_on_hold">En pausa</string>
+    <string name="project_status_at_risk">En riesgo</string>
+    <string name="project_status_completed">Completado</string>
+    <string name="project_status_cancelled">Cancelado</string>
+    <string name="project_title">Ficha del proyecto</string>
+    <string name="project_not_found">Este proyecto ya no existe.</string>
+    <string name="project_name">Nombre</string>
+    <string name="project_name_required">El proyecto necesita un nombre.</string>
+    <string name="project_objective">Objetivo</string>
+    <string name="project_justification">Justificación</string>
+    <string name="project_owner">Responsable</string>
+    <string name="project_priority_none">Sin definir</string>
+    <string name="project_tracking">Seguimiento</string>
+    <string name="project_next_milestone">Próximo hito: %1$s</string>
+    <string name="project_next_milestone_date">Próximo hito: %1$s (%2$s)</string>
+    <plurals name="project_overdue_milestones">
+        <item quantity="one">%1$d hito vencido</item>
+        <item quantity="many">%1$d hitos vencidos</item>
+        <item quantity="other">%1$d hitos vencidos</item>
+    </plurals>
+    <plurals name="project_open_tasks">
+        <item quantity="one">%1$d tarea pendiente</item>
+        <item quantity="many">%1$d tareas pendientes</item>
+        <item quantity="other">%1$d tareas pendientes</item>
+    </plurals>
+    <plurals name="project_open_risks">
+        <item quantity="one">%1$d riesgo abierto</item>
+        <item quantity="many">%1$d riesgos abiertos</item>
+        <item quantity="other">%1$d riesgos abiertos</item>
+    </plurals>
+    <string name="project_forecast">Finalización prevista: %1$s</string>
+    <string name="project_forecast_none">Sin fecha prevista de finalización</string>
+    <plurals name="project_deviation_late">
+        <item quantity="one">%1$d día de retraso sobre el objetivo</item>
+        <item quantity="many">%1$d días de retraso sobre el objetivo</item>
+        <item quantity="other">%1$d días de retraso sobre el objetivo</item>
+    </plurals>
+    <plurals name="project_deviation_early">
+        <item quantity="one">%1$d día antes del objetivo</item>
+        <item quantity="many">%1$d días antes del objetivo</item>
+        <item quantity="other">%1$d días antes del objetivo</item>
+    </plurals>
+    <string name="project_deviation_none">Sin desviación respecto al objetivo</string>
+    <string name="project_milestones">Hitos y entregables</string>
+    <string name="project_milestones_hint">El avance se calcula con el peso de cada hito o entregable, no contando tareas.</string>
+    <string name="project_milestones_empty">Aún no hay hitos ni entregables.</string>
+    <string name="milestone_kind_milestone">Hito</string>
+    <string name="milestone_kind_deliverable">Entregable</string>
+    <string name="milestone_add_title">Añadir hito o entregable</string>
+    <string name="milestone_weight">Peso relativo</string>
+    <string name="milestone_due">Fecha prevista</string>
+    <string name="milestone_details" tools:ignore="PluralsCandidate">%1$s · Peso %2$d</string>
+    <string name="milestone_remove">Quitar %1$s</string>
+    <string name="milestone_delete_title">¿Quitar este elemento?</string>
+    <string name="milestone_delete_message">Se eliminará y el avance del proyecto se recalculará.</string>
+    <string name="project_risks">Riesgos</string>
+    <string name="project_risks_empty">Sin riesgos registrados.</string>
+    <string name="risk_add_title">Añadir riesgo</string>
+    <string name="risk_description">Descripción del riesgo</string>
+    <string name="risk_mitigation">Mitigación (opcional)</string>
+    <string name="risk_severity">Severidad (1 a 5)</string>
+    <string name="risk_severity_value" tools:ignore="PluralsCandidate">Severidad %1$d de 5</string>
+    <string name="risk_mitigation_value">Mitigación: %1$s</string>
+    <string name="risk_closed">Cerrado</string>
+    <string name="risk_close">Cerrar</string>
+    <string name="risk_reopen">Reabrir</string>
+    <string name="project_tasks">Tareas asociadas</string>
+    <string name="project_tasks_empty">Ninguna tarea asociada. Puedes añadirla aquí o elegir el proyecto en la ficha de la tarea.</string>
+
+    <!-- Planificación -->
+    <string name="planning_view_day">Día</string>
+    <string name="planning_view_week">Semana</string>
+    <string name="planning_view_month">Mes</string>
+    <string name="planning_previous">Periodo anterior</string>
+    <string name="planning_next">Periodo siguiente</string>
+    <string name="planning_today">Hoy</string>
+    <string name="planning_week_range">%1$s – %2$s</string>
+    <string name="planning_add_block">Añadir bloque</string>
+    <string name="planning_adjust">Ajustar capacidad</string>
+    <string name="planning_capacity_title">Capacidad y disponibilidad</string>
+    <string name="planning_available">Tiempo disponible</string>
+    <string name="planning_target" tools:ignore="PluralsCandidate">Objetivo (%1$d %%)</string>
+    <string name="planning_planned">Planificado</string>
+    <string name="planning_remaining">Margen por planificar</string>
+    <string name="planning_actual">Tiempo real registrado</string>
+    <string name="planning_overloaded">Superas tu objetivo en %1$s. Deja margen para imprevistos.</string>
+    <string name="planning_no_capacity">Este periodo no tiene días laborables configurados.</string>
+    <string name="planning_day_empty">Sin bloques este día.</string>
+    <string name="planning_overloaded_short">Sobrecarga</string>
+    <string name="planning_overlaps_short">Con solapamientos</string>
+    <string name="planning_execution_title">Plan y ejecución</string>
+    <string name="planning_execution_empty">Aún no hay bloques en este periodo.</string>
+    <string name="planning_execution_no_actual">Planificado %1$s. Sin tiempo real registrado.</string>
+    <string name="planning_execution_compared">Planificado %1$s. Con tiempo registrado: %2$s previstos y %3$s reales.</string>
+    <string name="block_type_deep">Trabajo profundo</string>
+    <string name="block_type_coordination">Coordinación y reuniones</string>
+    <string name="block_type_study">Estudio y desarrollo profesional</string>
+    <string name="block_type_personal">Actividades personales y recuperación</string>
+    <string name="block_overlaps">Se solapa con otro bloque</string>
+    <string name="block_task">Tarea: %1$s</string>
+    <string name="block_plan_only">Planificado %1$s · Sin tiempo real</string>
+    <string name="block_plan_actual">Planificado %1$s · Real %2$s</string>
+    <string name="block_move_earlier">Mover 30 min antes</string>
+    <string name="block_move_later">Mover 30 min después</string>
+    <string name="block_move_next_day">Mover al día siguiente</string>
+    <string name="block_log_actual">Registrar tiempo real</string>
+    <string name="block_delete">Eliminar bloque</string>
+    <string name="block_moved">Bloque movido</string>
+    <string name="block_deleted">Bloque eliminado</string>
+    <string name="block_delete_title">¿Eliminar este bloque?</string>
+    <string name="block_delete_message">Se borrará de tu planificación y no se podrá recuperar.</string>
+    <string name="block_new_title">Nuevo bloque</string>
+    <string name="block_edit_title">Editar bloque</string>
+    <string name="block_not_found">Este bloque ya no existe.</string>
+    <string name="block_field_title">Título del bloque</string>
+    <string name="block_title_required">Escribe un título para el bloque.</string>
+    <string name="block_field_type">Tipo de bloque</string>
+    <string name="block_field_date">Fecha</string>
+    <string name="block_field_start">Inicio</string>
+    <string name="block_field_end">Fin</string>
+    <string name="block_end_error">La hora de fin debe ser posterior a la de inicio.</string>
+    <string name="block_field_task">Tarea relacionada</string>
+    <string name="block_task_none">Sin tarea relacionada</string>
+    <string name="block_task_pick">Elige una tarea</string>
+    <string name="block_task_pick_empty">No hay tareas abiertas.</string>
+    <string name="block_field_actual">Tiempo real (minutos)</string>
+    <string name="block_warning_overlap">Coincide con: %1$s. Puedes guardarlo, pero revisa si es lo que quieres.</string>
+    <string name="block_warning_target">Con este bloque superas tu objetivo del día.</string>
+    <string name="capacity_minutes">Minutos disponibles por día</string>
+    <string name="capacity_percent">Porcentaje objetivo</string>
+    <string name="capacity_days">Días laborables</string>
+    <string name="capacity_hint">Planifica por debajo del 100 %: no todo el tiempo libre es productivo y siempre surgen imprevistos.</string>
 
     <!-- Plantillas -->
     <string name="templates_title">Plantillas de captura</string>

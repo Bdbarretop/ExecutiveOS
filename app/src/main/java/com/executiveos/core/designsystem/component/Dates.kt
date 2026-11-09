@@ -20,11 +20,39 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
+private val SPANISH: Locale = Locale.forLanguageTag("es")
+
 private val DISPLAY_FORMAT: DateTimeFormatter = DateTimeFormatter
     .ofLocalizedDate(FormatStyle.MEDIUM)
-    .withLocale(Locale.forLanguageTag("es"))
+    .withLocale(SPANISH)
+private val DAY_TITLE_FORMAT = DateTimeFormatter.ofPattern("EEEE d 'de' MMMM", SPANISH)
+private val MONTH_TITLE_FORMAT = DateTimeFormatter.ofPattern("MMMM 'de' yyyy", SPANISH)
+private val SHORT_DAY_FORMAT = DateTimeFormatter.ofPattern("d MMM", SPANISH)
+private val TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm")
+private const val MINUTES_PER_HOUR = 60
 
 fun LocalDate.toDisplayText(): String = format(DISPLAY_FORMAT)
+
+fun LocalDate.toDayTitle(): String =
+    format(DAY_TITLE_FORMAT).replaceFirstChar { it.titlecase(SPANISH) }
+
+fun LocalDate.toMonthTitle(): String =
+    format(MONTH_TITLE_FORMAT).replaceFirstChar { it.titlecase(SPANISH) }
+
+fun LocalDate.toShortDayText(): String = format(SHORT_DAY_FORMAT)
+
+fun LocalTime.toDisplayText(): String = format(TIME_FORMAT)
+
+@Composable
+fun formatDuration(minutes: Int): String {
+    val hours = minutes / MINUTES_PER_HOUR
+    val remainder = minutes % MINUTES_PER_HOUR
+    return when {
+        hours == 0 -> stringResource(R.string.tasks_minutes, minutes)
+        remainder == 0 -> stringResource(R.string.duration_hours, hours)
+        else -> stringResource(R.string.duration_hours_minutes, hours, remainder)
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

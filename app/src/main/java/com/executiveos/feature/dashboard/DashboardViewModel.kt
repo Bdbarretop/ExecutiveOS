@@ -6,14 +6,19 @@ import androidx.lifecycle.viewModelScope
 import com.executiveos.R
 import com.executiveos.domain.dashboard.Dashboard
 import com.executiveos.domain.dashboard.DashboardCalculator
+import com.executiveos.domain.dashboard.PlanningOverview
 import com.executiveos.domain.model.TaskStatus
+import com.executiveos.domain.projects.ProjectTracking
 import com.executiveos.domain.repository.DailyFocusRepository
+import com.executiveos.domain.repository.PlanningRepository
 import com.executiveos.domain.repository.PrioritySettingsRepository
+import com.executiveos.domain.repository.ProjectRepository
 import com.executiveos.domain.repository.TaskRepository
 import com.executiveos.domain.tasks.TaskQueries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Clock
 import java.time.LocalDate
+import java.time.ZoneId
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.Channel
@@ -30,24 +35,56 @@ class DashboardViewModel @Inject constructor(
     private val taskRepository: TaskRepository,
     settingsRepository: PrioritySettingsRepository,
     private val focusRepository: DailyFocusRepository,
+    planningRepository: PlanningRepository,
+    projectRepository: ProjectRepository,
     private val clock: Clock,
 ) : ViewModel() {
     private val messageChannel = Channel<Int>(Channel.BUFFERED)
 
     val messages: Flow<Int> = messageChannel.receiveAsFlow()
 
+    private val planning: Flow<PlanningOverview> = combine(
+        planningRepository.observeBlocks(),
+        planningRepository.capacity,
+        projectRepository.observeProjects(),
+    ) { blocks, capacity, projects ->
+        PlanningOverview(
+            blocks = blocks,
+            capacity = capacity,
+            delayedProjects = projects.count { details ->
+                ProjectTracking.progress(
+                    details.project,
+                    details.milestones,
+                    details.risks,
+                    details.openTasks,
+                    today(),
+                ).isDelayed
+            },
+        )
+    }
+
     val dashboard: StateFlow<Dashboard?> = combine(
         taskRepository.observeTaskList(),
         settingsRepository.settings,
         focusRepository.focus,
-    ) { items, settings, focus ->
+        planning,
+    ) { items, settings, focus, overview ->
         val today = today()
-        DashboardCalculator.build(TaskQueries.rank(items, settings, today), focus, today, clock.zone)
+        DashboardCalculator.build(
+            TaskQueries.rank(items, settings, today),
+            focus,
+            today,
+            clock.zone,
+            overview,
+            clock.instant(),
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
         initialValue = null,
     )
+
+    val zone: ZoneId get() = clock.zone
 
     fun today(): LocalDate = LocalDate.now(clock)
 
