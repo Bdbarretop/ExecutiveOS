@@ -1,6 +1,7 @@
 package com.executiveos.feature.tasks
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.executiveos.R
@@ -57,11 +58,16 @@ private data class Selection(val view: TaskView, val filters: TaskFilters, val q
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class TasksViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: TaskRepository,
     settingsRepository: PrioritySettingsRepository,
     private val clock: Clock,
 ) : ViewModel() {
-    private val view = MutableStateFlow(TaskView.ALL)
+    /** Inicio puede abrir directamente la vista de un indicador o una alerta. */
+    private val view = MutableStateFlow(
+        TaskView.entries.firstOrNull { it.name == savedStateHandle.get<String>(VIEW_ARGUMENT) }
+            ?: TaskView.ALL,
+    )
     private val filters = MutableStateFlow(TaskFilters())
     private val query = MutableStateFlow("")
     private val eventChannel = Channel<TasksEvent>(Channel.BUFFERED)
@@ -177,6 +183,7 @@ class TasksViewModel @Inject constructor(
     }
 
     private companion object {
+        const val VIEW_ARGUMENT = "view"
         const val STOP_TIMEOUT_MILLIS = 5_000L
         const val SEARCH_DEBOUNCE_MILLIS = 150L
     }

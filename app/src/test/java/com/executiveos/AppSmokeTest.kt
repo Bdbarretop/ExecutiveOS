@@ -211,6 +211,24 @@ class AppSmokeTest {
     }
 
     @Test
+    fun homeRecommendsARealTaskAndLetsTheUserRemoveIt() {
+        waitForText(text(R.string.home_focus_empty_title))
+        openTopLevel(TopLevelDestination.TASKS)
+        composeRule.onNodeWithTag(TASKS_NEW_TAG).performClick()
+        composeRule.onNodeWithTag(TASKS_NEW_FIELD_TAG).performTextInput("Preparar comité")
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+        waitForText(text(R.string.task_status_label))
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+
+        openTopLevel(TopLevelDestination.HOME)
+        waitForText("Preparar comité")
+
+        composeRule.onNodeWithText(text(R.string.home_focus_remove)).performScrollTo().performClick()
+        waitForText(text(R.string.home_focus_empty_title))
+        waitForText(text(R.string.home_focus_reset))
+    }
+
+    @Test
     fun moreListsTheRemainingSections() {
         openTopLevel(TopLevelDestination.MORE)
 

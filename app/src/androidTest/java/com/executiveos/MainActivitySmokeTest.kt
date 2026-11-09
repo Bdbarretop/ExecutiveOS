@@ -128,6 +128,21 @@ class MainActivitySmokeTest {
     }
 
     @Test
+    fun homeReflectsARealTask() {
+        openTopLevel(TopLevelDestination.TASKS)
+        composeRule.onNodeWithTag(TASKS_NEW_TAG).performClick()
+        composeRule.onNodeWithTag(TASKS_NEW_FIELD_TAG).performTextInput("Preparar comité")
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+        waitForText(text(R.string.task_status_label))
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+
+        openTopLevel(TopLevelDestination.HOME)
+
+        waitForText("Preparar comité")
+        waitForText(text(R.string.home_indicators_title))
+    }
+
+    @Test
     fun aTaskCanBeCreatedAndCompleted() {
         openTopLevel(TopLevelDestination.TASKS)
         composeRule.onNodeWithTag(TASKS_NEW_TAG).performClick()

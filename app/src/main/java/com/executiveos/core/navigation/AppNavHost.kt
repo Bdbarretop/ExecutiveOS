@@ -14,6 +14,7 @@ import com.executiveos.R
 import com.executiveos.core.designsystem.component.ExecutiveTopBar
 import com.executiveos.core.designsystem.component.SectionPlaceholder
 import com.executiveos.feature.capture.QuickCaptureScreen
+import com.executiveos.feature.dashboard.DashboardScreen
 import com.executiveos.feature.inbox.InboxScreen
 import com.executiveos.feature.more.MoreScreen
 import com.executiveos.feature.settings.PrioritySettingsScreen
@@ -32,7 +33,12 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
         startDestination = HomeRoute,
         modifier = modifier,
     ) {
-        composable<HomeRoute> { PendingSection(R.string.section_home, phase = 3) }
+        composable<HomeRoute> {
+            DashboardScreen(
+                onOpenTask = { navController.navigate(TaskEditorRoute(it)) },
+                onOpenView = { navController.navigate(TasksRoute(it.name)) },
+            )
+        }
         composable<InboxRoute> {
             InboxScreen(onOpenTask = { navController.navigate(TaskEditorRoute(it)) })
         }

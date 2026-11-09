@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable data object HomeRoute
 @Serializable data object InboxRoute
-@Serializable data object TasksRoute
+@Serializable data class TasksRoute(val view: String? = null)
 @Serializable data object ProjectsRoute
 @Serializable data object MoreGraph
 @Serializable data object MoreRoute
@@ -32,7 +32,7 @@ enum class TopLevelDestination(
 ) {
     HOME(R.string.section_home, R.drawable.ic_home, HomeRoute),
     INBOX(R.string.section_inbox, R.drawable.ic_inbox, InboxRoute),
-    TASKS(R.string.section_tasks, R.drawable.ic_task, TasksRoute),
+    TASKS(R.string.section_tasks, R.drawable.ic_task, TasksRoute()),
     PROJECTS(R.string.section_projects, R.drawable.ic_folder, ProjectsRoute),
     MORE(R.string.section_more, R.drawable.ic_more, MoreGraph),
 }

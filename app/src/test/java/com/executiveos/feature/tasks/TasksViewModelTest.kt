@@ -1,5 +1,6 @@
 package com.executiveos.feature.tasks
 
+import androidx.lifecycle.SavedStateHandle
 import com.executiveos.R
 import com.executiveos.domain.model.Task
 import com.executiveos.domain.model.TaskStatus
@@ -65,7 +66,22 @@ class TasksViewModelTest {
 
     private fun viewModelWith(vararg items: TaskListItem): TasksViewModel {
         every { repository.observeTaskList() } returns flowOf(items.toList())
-        return TasksViewModel(repository, settings, clock)
+        return TasksViewModel(SavedStateHandle(), repository, settings, clock)
+    }
+
+    @Test
+    fun opensOnTheViewRequestedByTheRoute() = runTest {
+        every { repository.observeTaskList() } returns flowOf(listOf(item("a")))
+        val viewModel = TasksViewModel(
+            SavedStateHandle(mapOf("view" to "OVERDUE")),
+            repository,
+            settings,
+            clock,
+        )
+
+        collectState(viewModel)
+
+        assertEquals(TaskView.OVERDUE, viewModel.uiState.value.view)
     }
 
     private fun TestScope.collectState(viewModel: TasksViewModel) {

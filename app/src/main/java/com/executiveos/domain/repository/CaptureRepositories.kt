@@ -1,6 +1,7 @@
 package com.executiveos.domain.repository
 
 import com.executiveos.domain.capture.SimilarTask
+import com.executiveos.domain.dashboard.DailyFocus
 import com.executiveos.domain.model.AddDependencyResult
 import com.executiveos.domain.model.CaptureDraft
 import com.executiveos.domain.model.CaptureTemplate
@@ -68,6 +69,16 @@ interface TaskRepository {
     suspend fun addDependency(taskId: String, dependsOnId: String): AddDependencyResult
 
     suspend fun removeDependency(taskId: String, dependsOnId: String)
+}
+
+interface DailyFocusRepository {
+    val focus: Flow<DailyFocus?>
+
+    suspend fun pin(taskId: String, today: LocalDate)
+
+    suspend fun dismiss(taskId: String, today: LocalDate)
+
+    suspend fun reset(today: LocalDate)
 }
 
 interface PrioritySettingsRepository {

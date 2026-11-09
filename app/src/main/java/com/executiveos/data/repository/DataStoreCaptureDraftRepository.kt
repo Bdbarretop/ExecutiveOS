@@ -85,7 +85,7 @@ private fun MutablePreferences.setOrRemove(key: Preferences.Key<String>, value: 
 private fun String?.toDateOption(): DateOption =
     DateOption.entries.firstOrNull { it.name == this } ?: DateOption.NONE
 
-private fun String?.toLocalDateOrNull(): LocalDate? = this?.let {
+internal fun String?.toLocalDateOrNull(): LocalDate? = this?.let {
     try {
         LocalDate.parse(it)
     } catch (_: DateTimeParseException) {

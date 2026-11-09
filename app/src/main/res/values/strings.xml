@@ -381,6 +381,57 @@
         <item quantity="other">%1$d tareas abiertas cambiarán de nivel. Las prioridades manuales no se modifican.</item>
     </plurals>
 
+    <!-- Inicio -->
+    <string name="home_focus_title">Prioridades de hoy</string>
+    <string name="home_focus_choose">Elegir</string>
+    <string name="home_focus_reset">Restaurar</string>
+    <string name="home_focus_remove">Quitar de hoy</string>
+    <string name="home_focus_empty_title">Sin prioridades para hoy</string>
+    <string name="home_focus_empty_message">Cuando tengas tareas abiertas, aquí verás por dónde empezar.</string>
+    <string name="home_focus_pinned">Elegida por ti</string>
+    <string name="home_focus_urgent">Atención urgente</string>
+    <string name="home_focus_reason">Motivo: %1$s</string>
+    <string name="home_focus_pick_title">Elige una tarea</string>
+    <string name="home_focus_pick_empty">No hay otras tareas abiertas.</string>
+    <string name="home_alerts_title">Alertas</string>
+    <plurals name="alert_overdue">
+        <item quantity="one">%1$d compromiso vencido</item>
+        <item quantity="many">%1$d compromisos vencidos</item>
+        <item quantity="other">%1$d compromisos vencidos</item>
+    </plurals>
+    <plurals name="alert_upcoming">
+        <item quantity="one">%1$d compromiso en los próximos 7 días</item>
+        <item quantity="many">%1$d compromisos en los próximos 7 días</item>
+        <item quantity="other">%1$d compromisos en los próximos 7 días</item>
+    </plurals>
+    <plurals name="alert_blocked">
+        <item quantity="one">%1$d tarea bloqueada</item>
+        <item quantity="many">%1$d tareas bloqueadas</item>
+        <item quantity="other">%1$d tareas bloqueadas</item>
+    </plurals>
+    <plurals name="alert_dependencies">
+        <item quantity="one">%1$d tarea con dependencias pendientes</item>
+        <item quantity="many">%1$d tareas con dependencias pendientes</item>
+        <item quantity="other">%1$d tareas con dependencias pendientes</item>
+    </plurals>
+    <plurals name="alert_no_next_action">
+        <item quantity="one">%1$d tarea crítica sin siguiente acción</item>
+        <item quantity="many">%1$d tareas críticas sin siguiente acción</item>
+        <item quantity="other">%1$d tareas críticas sin siguiente acción</item>
+    </plurals>
+    <string name="home_indicators_title">Situación general</string>
+    <string name="home_pending">Pendientes</string>
+    <string name="home_completed_week">Completadas esta semana</string>
+    <string name="home_time_estimated">Tiempo estimado esta semana</string>
+    <string name="home_time_available">Tiempo disponible</string>
+    <string name="home_time_available_pending">Llega en la Fase 4</string>
+    <string name="home_next_title">Próximas 24 horas</string>
+    <string name="home_next_empty">Sin compromisos para hoy ni mañana.</string>
+    <string name="home_day_today">Hoy</string>
+    <string name="home_day_tomorrow">Mañana</string>
+    <string name="duration_hours">%1$d h</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+
     <!-- Plantillas -->
     <string name="templates_title">Plantillas de captura</string>
     <string name="template_edit_title">Editar plantilla</string>
