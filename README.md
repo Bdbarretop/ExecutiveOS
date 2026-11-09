@@ -4,6 +4,8 @@ Sistema personal de dirección y ejecución para Android. Ayuda a capturar compr
 
 > **Estado: MVP 1.0.0.** Funcionan la captura, la bandeja, las tareas con motor de prioridad, el panel de Inicio, los proyectos con hitos ponderados, la planificación por bloques de tiempo, las revisiones, la formación, las métricas, los recordatorios locales y la copia de seguridad cifrada. Avance en [docs/ROADMAP.md](docs/ROADMAP.md).
 
+**¿Cómo sacarle partido?** Lee la **[guía completa de uso](docs/GUIA_DE_USO.md)**: puesta en marcha, rutinas diaria y semanal, buenas prácticas de cada módulo y señales para anticiparte a los problemas.
+
 ## Requisitos
 
 | Herramienta | Versión |
@@ -67,6 +69,7 @@ adb install -r app\build\outputs\apk\release\app-release.apk
 
 | Documento | Contenido |
 |---|---|
+| [GUIA_DE_USO](docs/GUIA_DE_USO.md) | Cómo usar la app de forma efectiva y proactiva |
 | [USER_GUIDE](docs/USER_GUIDE.md) | Manual básico de usuario |
 | [FUNCTIONAL](docs/FUNCTIONAL.md) | Qué hace cada módulo y con qué reglas |
 | [PRODUCT_VISION](docs/PRODUCT_VISION.md) | Qué es y qué principios sigue |

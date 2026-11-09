@@ -2,6 +2,8 @@
 
 EXECUTIVE OS te ayuda a capturar compromisos, decidir qué importa y convertirlo en acciones. Funciona sin conexión y tus datos no salen del teléfono.
 
+Este manual es una referencia rápida. Para aprender a usar la app de forma efectiva y proactiva, lee la **[guía completa de uso](GUIA_DE_USO.md)**.
+
 ## Instalar
 
 1. Copia `EXECUTIVE-OS-1.0.0.apk` al teléfono y ábrelo. Android 10 o superior.
