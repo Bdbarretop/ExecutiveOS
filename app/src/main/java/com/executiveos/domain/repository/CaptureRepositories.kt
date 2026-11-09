@@ -2,6 +2,8 @@ package com.executiveos.domain.repository
 
 import com.executiveos.domain.capture.SimilarTask
 import com.executiveos.domain.dashboard.DailyFocus
+import com.executiveos.domain.learning.LearningGoal
+import com.executiveos.domain.learning.LearningSession
 import com.executiveos.domain.model.AddDependencyResult
 import com.executiveos.domain.model.CaptureDraft
 import com.executiveos.domain.model.CaptureTemplate
@@ -21,6 +23,9 @@ import com.executiveos.domain.projects.ProjectRisk
 import com.executiveos.domain.reminders.ReminderSettings
 import com.executiveos.domain.reminders.ReminderType
 import com.executiveos.domain.reminders.TaskReminder
+import com.executiveos.domain.reviews.Review
+import com.executiveos.domain.reviews.ReviewQuestion
+import com.executiveos.domain.reviews.ReviewType
 import com.executiveos.domain.tasks.TaskListItem
 import java.time.Instant
 import java.time.LocalDate
@@ -162,6 +167,35 @@ interface PlanningRepository {
     suspend fun delete(blockId: String)
 
     suspend fun saveCapacity(settings: CapacitySettings)
+}
+
+interface ReviewRepository {
+    fun observeReview(type: ReviewType, date: LocalDate): Flow<Review?>
+
+    fun observeHistory(): Flow<List<Review>>
+
+    /** Crea la revisión del periodo o sustituye sus respuestas: nunca hay dos. */
+    suspend fun saveAnswers(type: ReviewType, date: LocalDate, answers: Map<ReviewQuestion, String>)
+}
+
+interface LearningRepository {
+    fun observeGoals(): Flow<List<LearningGoal>>
+
+    fun observeSessions(): Flow<List<LearningSession>>
+
+    suspend fun createGoal(title: String, topic: String): String
+
+    suspend fun saveGoal(goal: LearningGoal)
+
+    suspend fun addSession(
+        goalId: String,
+        date: LocalDate,
+        minutes: Int,
+        notes: String?,
+        evaluation: String?,
+    )
+
+    suspend fun deleteSession(sessionId: String)
 }
 
 interface PrioritySettingsRepository {

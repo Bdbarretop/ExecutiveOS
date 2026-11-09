@@ -127,6 +127,27 @@ class AppDatabaseSchemaTest {
         }
     }
 
+    @Test
+    fun migratingToVersionSixKeepsBlocksAndAddsReviewAndLearningTables() {
+        helper.createDatabase(REVIEWS_DATABASE, 5).use { database ->
+            database.execSQL(
+                "INSERT INTO time_blocks (id, type, title, start_at, end_at, updated_at) " +
+                    "VALUES ('b1', 'DEEP_WORK', 'Informe', 0, 3600000, 0)",
+            )
+        }
+
+        helper.runMigrationsAndValidate(
+            REVIEWS_DATABASE,
+            AppDatabase.SCHEMA_VERSION,
+            validateDroppedTables = true,
+        ).use { database ->
+            assertEquals(1, database.count("SELECT COUNT(*) FROM time_blocks WHERE id = 'b1'"))
+            assertEquals(0, database.count("SELECT COUNT(*) FROM reviews"))
+            assertEquals(0, database.count("SELECT COUNT(*) FROM learning_goals"))
+            assertEquals(0, database.count("SELECT COUNT(*) FROM learning_sessions"))
+        }
+    }
+
     private fun SupportSQLiteDatabase.count(sql: String): Int =
         query(sql).use { cursor ->
             cursor.moveToFirst()
@@ -139,5 +160,6 @@ class AppDatabaseSchemaTest {
         const val UPGRADED_DATABASE = "schema-upgrade.db"
         const val REMINDERS_DATABASE = "schema-reminders.db"
         const val PLANNING_DATABASE = "schema-planning.db"
+        const val REVIEWS_DATABASE = "schema-reviews.db"
     }
 }

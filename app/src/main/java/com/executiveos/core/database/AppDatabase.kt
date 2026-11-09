@@ -21,6 +21,11 @@ import com.executiveos.data.local.entity.CategoryEntity
 import com.executiveos.data.local.entity.InboxItemEntity
 import com.executiveos.data.local.entity.NoteEntity
 import com.executiveos.data.local.entity.CapacitySettingsEntity
+import com.executiveos.data.local.entity.LearningDao
+import com.executiveos.data.local.entity.LearningGoalEntity
+import com.executiveos.data.local.entity.LearningSessionEntity
+import com.executiveos.data.local.entity.ReviewDao
+import com.executiveos.data.local.entity.ReviewEntity
 import com.executiveos.data.local.entity.PlanningDao
 import com.executiveos.data.local.entity.ProjectEntity
 import com.executiveos.data.local.entity.ProjectMilestoneEntity
@@ -55,6 +60,9 @@ import com.executiveos.data.local.entity.UserSettingsEntity
         ProjectRiskEntity::class,
         TimeBlockEntity::class,
         CapacitySettingsEntity::class,
+        ReviewEntity::class,
+        LearningGoalEntity::class,
+        LearningSessionEntity::class,
     ],
     version = AppDatabase.SCHEMA_VERSION,
     exportSchema = true,
@@ -63,6 +71,7 @@ import com.executiveos.data.local.entity.UserSettingsEntity
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
+        AutoMigration(from = 5, to = 6),
     ],
 )
 @TypeConverters(Converters::class)
@@ -79,9 +88,11 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
     abstract fun projectTrackingDao(): ProjectTrackingDao
     abstract fun planningDao(): PlanningDao
+    abstract fun reviewDao(): ReviewDao
+    abstract fun learningDao(): LearningDao
 
     companion object {
-        const val SCHEMA_VERSION = 5
+        const val SCHEMA_VERSION = 6
         const val FILE_NAME = "executive_os.db"
     }
 }
