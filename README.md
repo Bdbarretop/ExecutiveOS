@@ -2,7 +2,7 @@
 
 Sistema personal de dirección y ejecución para Android. Ayuda a capturar compromisos, entender qué importa y convertirlo en acciones concretas. Funciona sin conexión y los datos no salen del dispositivo.
 
-> **Estado: recordatorios.** Funcionan los recordatorios locales, el panel de Inicio, la captura, la bandeja, la ficha completa, las vistas de tareas con búsqueda y filtros, el motor de prioridad, las subtareas y las dependencias. **Los proyectos, la planificación, la formación y las revisiones aún no están construidos**; sus secciones lo indican en pantalla y dicen en qué fase llegan. Avance en [docs/ROADMAP.md](docs/ROADMAP.md).
+> **Estado: Fase 4.** Funcionan los proyectos con hitos ponderados, la planificación por bloques de tiempo con control de capacidad, los recordatorios locales, el panel de Inicio, la captura, la bandeja, la ficha completa, las vistas de tareas con búsqueda y filtros, el motor de prioridad, las subtareas y las dependencias. **La formación y las revisiones aún no están construidas**; sus secciones lo indican en pantalla y dicen en qué fase llegan. Avance en [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Requisitos
 

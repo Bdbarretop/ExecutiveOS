@@ -35,6 +35,39 @@ HyperOS añade restricciones que afectan a las pruebas, no a la app:
 4. Para que los recordatorios lleguen con la app cerrada, conviene activar **Inicio automático** y quitar la restricción de batería en la información de la app.
 5. `adb shell input` y `pm clear` están bloqueados salvo que se active **Depuración USB (ajustes de seguridad)**. Las pruebas instrumentadas no los necesitan.
 
+## Resultados de la Fase 4: proyectos y planificación
+
+Ejecución del 2026-11-09 sobre la rama `sprint-5/proyectos-planificacion`.
+
+| Verificación | Resultado |
+|---|---|
+| `assembleDebug` | Correcto |
+| `testDebugUnitTest` | **247 de 247** |
+| `lintDebug` | **0 errores**, 2 avisos intencionados |
+| Pruebas instrumentadas en Xiaomi 23129RA5FL, Android 15 | **14 de 14** |
+| Migración 4 a 5 sobre SQLite real | Correcta en prueba instrumentada |
+| App real abierta en el teléfono tras actualizar sobre la versión anterior | Sin fallos; la base migró |
+| Permisos de la APK | No declara `INTERNET` |
+
+### Inventario
+
+| Clase | Nivel | Pruebas | Cubre |
+|---|---|---|---|
+| `ProjectTrackingTest` | JVM | 8 | Avance ponderado, próximo hito, previsión, desviación, retrasos y validación |
+| `PlanningRulesTest` | JVM | 15 | Solapamientos, capacidad al 75 %, periodos, mover bloques, plan frente a ejecución |
+| `DashboardCalculatorTest` | JVM | +4 | Tiempo disponible, sobrecarga, proyectos retrasados, bloques en 24 horas |
+| `ProjectsViewModelsTest` | JVM | 6 | Orden de la lista, creación, autoguardado y tareas asociadas |
+| `PlanningViewModelsTest` | JVM | 14 | Vistas, mover, tiempo real, editor de bloques y avisos |
+| `OfflineProjectRepositoriesTest` | Robolectric | 14 | Persistencia, conversión desde la Bandeja, cascadas y capacidad |
+| `AppSmokeTest` | Robolectric | +2 | Proyecto con hito y bloque planificado que llega a Inicio |
+| `AppDatabaseSchemaTest` | Instrumentada | +1 | Migración a la versión 5 |
+| `MainActivitySmokeTest` | Instrumentada | +2 | Los mismos dos recorridos en el teléfono |
+
+### Limitaciones
+
+- **Sin revisión visual completa.** En el teléfono se abrió la app real y se ejecutaron los recorridos automáticos, pero nadie ha revisado aún a mano la ficha de proyecto ni las vistas semanal y mensual.
+- **Sin pruebas en pantallas anchas ni en Android 10**, igual que en fases anteriores.
+
 ## Resultados del sprint de recordatorios
 
 Ejecución del 2026-11-09 sobre la rama `sprint-4/recordatorios`.

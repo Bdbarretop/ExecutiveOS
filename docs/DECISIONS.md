@@ -88,6 +88,24 @@
 
 **D-053. El recordatorio de la ficha ya existe.** Resuelve la parte de recordatorios de D-034; los adjuntos locales siguen pendientes.
 
+## Proyectos y planificación
+
+**D-054. La disponibilidad se consulta por capacidad, no por franjas.** El brief no define un horario laboral, y sin él cualquier hueco sería inventado. Se muestra cuánto margen queda hasta el objetivo de cada periodo. Las franjas quedan en el backlog.
+
+**D-055. Los solapamientos avisan, pero no impiden guardar.** A veces se aceptan dos compromisos a la vez a propósito; la decisión es de la persona. Lo mismo ocurre al superar el objetivo diario: nunca se reorganiza nada de forma automática.
+
+**D-056. Un bloque pertenece al día en que empieza.** El editor exige que termine el mismo día. Si al moverlo cruza la medianoche, cuenta entero para su día de inicio.
+
+**D-057. Un día no laborable no se sobrecarga.** No tiene capacidad configurada, así que planificar en él no genera alerta.
+
+**D-058. El tiempo disponible de Inicio va de hoy al domingo.** Los días ya pasados no aportan tiempo; contarlos daría un margen que ya no existe.
+
+**D-059. El peso inicial de un hito es 1.** Es visible y editable antes de guardar, y equivale a repartir el avance por igual hasta que la persona indique otra cosa.
+
+**D-060. Plan y ejecución comparan solo bloques con tiempo real.** Un bloque sin registrar no es una desviación; compararlo daría diferencias falsas.
+
+**D-061. Los ajustes de una sola fila usan `@Upsert`.** Sustituye a `REPLACE`, que las reglas del proyecto prohíben sobre datos del usuario. No cambia el esquema. D-048 queda resuelta con esta fase.
+
 ## Interfaz
 
 **D-015. Navegación: cuatro secciones y «Más».** Material recomienda un máximo de cinco destinos en la barra inferior. Se respeta el orden del brief: las cuatro primeras secciones van en la barra y las otras cuatro en «Más». Es fácil de ajustar si el uso real indica otra cosa.

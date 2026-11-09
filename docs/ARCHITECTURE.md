@@ -35,6 +35,8 @@ La base local es la fuente de verdad. La interfaz observa `Flow`: cualquier escr
 | `core/navigation` | Rutas, destinos, `NavHost` y shell | `core/designsystem`, `feature` |
 | `core/notifications` | Canales, publicación de avisos, workers y acciones de la notificación | `domain` |
 | `domain/reminders` | Horario silencioso, próximas ejecuciones y decisión de qué se notifica | `domain/tasks` |
+| `domain/projects` | Avance ponderado, previsión, desviación y retrasos | `domain/priority` |
+| `domain/planning` | Bloques, solapamientos, capacidad y plan frente a ejecución | Nada de otras capas |
 | `feature/*` | Pantalla + ViewModel de cada módulo | `core`, `domain` |
 | `di` | Módulos Hilt | Todas las capas |
 

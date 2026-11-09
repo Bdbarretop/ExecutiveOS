@@ -11,14 +11,14 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 4 | Captura inteligente | 1 | Implantada, salvo adjuntos locales (D-034). Detalle en [CAPTURE_UX.md](CAPTURE_UX.md) |
 | 5 | Módulo de tareas | 2 | Implantado: acciones, 8 estados, 11 vistas, filtros y búsqueda |
 | 6 | Motor de priorización | 2 | Implantado: fórmula configurable, explicación, prioridad manual y obligaciones críticas |
-| 7 | Dashboard ejecutivo | 3 | Implantado. Tiempo disponible, sobrecarga y retrasos de proyectos esperan a la Fase 4 |
-| 8 | Proyectos | 4 | Pendiente |
-| 9 | Planificación y tiempo | 4 | Pendiente |
+| 7 | Dashboard ejecutivo | 3 y 4 | Implantado, con tiempo planificado y disponible, sobrecarga y proyectos con retraso |
+| 8 | Proyectos | 4 | Implantado: ficha, 6 estados, hitos y entregables ponderados, riesgos, tareas y seguimiento |
+| 9 | Planificación y tiempo | 4 | Implantada: vistas diaria, semanal y mensual, 4 tipos de bloque, solapamientos, capacidad y tiempo real. Disponibilidad por capacidad, no por franjas (D-054) |
 | 10 | Formación | 5 | Pendiente |
 | 11 | Revisiones | 5 | Pendiente |
 | 12 | Analítica y métricas | 5 | Pendiente |
 | 13 | Recordatorios y notificaciones | Tras la 3 | Implantados con WorkManager; puntualidad aproximada (D-049) |
-| 14 | Base de datos | Progresiva | Esquema 4 implantado; el resto llega con su módulo. Ver [DATA_MODEL.md](DATA_MODEL.md) |
+| 14 | Base de datos | Progresiva | Esquema 5 implantado; el resto llega con su módulo. Ver [DATA_MODEL.md](DATA_MODEL.md) |
 | 15 | Seguridad y privacidad | 0 y 6 | Base implantada: sin internet ni copias automáticas. Exportación y restauración en Fase 6 |
 | 16 | Estructura del proyecto | 0 | Implantada con ajustes documentados (D-025) |
 | 17 | Calidad y pruebas | Continuo | Base implantada. Ver [TEST_PLAN.md](TEST_PLAN.md) |
@@ -38,12 +38,12 @@ Este documento conserva la especificación original íntegra, en el anexo final,
 | 9 | El motor de prioridad funciona | 2 | Cumplido |
 | 10 | El dashboard refleja información real | 3 | Cumplido |
 | 11 | Los filtros y la búsqueda funcionan | 2 | Cumplido |
-| 12 | Los proyectos permiten relacionar tareas | 4 | Pendiente |
+| 12 | Los proyectos permiten relacionar tareas | 4 | Cumplido |
 | 13 | Las revisiones pueden guardarse | 5 | Pendiente |
 | 14 | Los recordatorios funcionan | Tras la 3 | Cumplido dentro de las restricciones de Android |
 | 15 | Exportar y restaurar los datos | 6 | Pendiente |
-| 16 | Existen pruebas automatizadas relevantes | Continuo | 184 en computador y 11 en dispositivo |
-| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar el sprint de recordatorios |
+| 16 | Existen pruebas automatizadas relevantes | Continuo | 247 en computador y 14 en dispositivo |
+| 17 | No hay errores críticos conocidos | Continuo | Ninguno conocido al cerrar la Fase 4 |
 | 18 | La aplicación funciona sin conexión | Continuo | La APK no declara permiso de internet |
 
 ## Anexo: prompt maestro literal

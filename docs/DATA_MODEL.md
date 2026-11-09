@@ -19,7 +19,9 @@ Base local Room, archivo `executive_os.db`. Los esquemas se exportan a `app/sche
 
 **Política de migraciones:** cada cambio de esquema sube `SCHEMA_VERSION`, versiona su JSON y tiene prueba sobre SQLite real. Los cambios puramente aditivos usan `AutoMigration`, que Room verifica al compilar; los demás, una migración manual. No se usa `fallbackToDestructiveMigration`: si falta una migración, la app falla de forma visible en lugar de borrar datos.
 
-## Esquema actual: versión 4
+## Esquema actual: versión 5
+
+La versión 5 es aditiva: amplía `projects` con columnas opcionales y crea cuatro tablas. `capacity_settings` usa una sola fila; si no existe, se aplican 8 horas diarias, objetivo del 75 % y lunes a viernes.
 
 `reminders` guarda los recordatorios de tareas y las claves de los avisos ya enviados: `dedupe_key` es única, de modo que un aviso no se repite. `reminder_settings` guarda la configuración de avisos en una sola fila; si no existe, se usan los valores iniciales.
 
@@ -30,7 +32,11 @@ Base local Room, archivo `executive_os.db`. Los esquemas se exportan a `app/sche
 | `tasks` | Ficha completa, secciones A a I, prioridad manual y obligación crítica | `category_id`, `project_id`, `source_inbox_item_id`, `parent_task_id` (SET NULL) |
 | `task_dependencies` | Qué tarea depende de cuál; `DependencyRules` impide los ciclos | CASCADE en ambas columnas |
 | `user_settings` | Pesos y umbrales de prioridad, en una sola fila. Si no existe, se usan los del brief | |
-| `projects` | Datos mínimos para convertir capturas; se amplía en Fase 4 | `source_inbox_item_id`, sin clave foránea |
+| `projects` | Ficha del proyecto: objetivo, responsable, fechas, estado, prioridad y notas | `source_inbox_item_id`, sin clave foránea |
+| `project_milestones` | Hitos y entregables con su peso, fecha y momento de cierre | `project_id` → `projects` (CASCADE) |
+| `project_risks` | Riesgos con mitigación, severidad de 1 a 5 y si siguen abiertos | `project_id` → `projects` (CASCADE) |
+| `time_blocks` | Bloques planificados: tipo, inicio, fin y tiempo real | `task_id` → `tasks` (SET NULL) |
+| `capacity_settings` | Minutos por día, porcentaje objetivo y días laborables | |
 | `notes` | Capturas convertidas en nota | `source_inbox_item_id`, sin clave foránea |
 | `capture_templates` | Plantillas editables, con las 10 del brief | `category_id` → `categories` (SET NULL) |
 | `tags`, `task_tags` | Etiquetas, relación muchos a muchos | CASCADE en `task_tags` |
@@ -64,8 +70,6 @@ Las categorías y las plantillas se siembran en `onCreate`, que Android envuelve
 | Entidad | Fase | Notas |
 |---|---|---|
 | `TaskAttachmentEntity` | Por decidir | Adjuntos locales; requieren permisos persistentes de archivos |
-| `ProjectMilestoneEntity` | 4 | El progreso usa hitos y entregables ponderados |
-| `TimeBlockEntity` | 4 | Detección de solapamientos |
 | `ReviewEntity` | 5 | Respuestas de revisiones diarias y semanales |
 | `LearningGoalEntity`, `LearningSessionEntity` | 5 | Horas por semana y tema |
 

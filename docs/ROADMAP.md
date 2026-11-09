@@ -8,8 +8,8 @@ Se avanza por fases con aprobación entre ellas. Una fase no se considera termin
 | **1. Captura e Inbox** | Captura rápida, ficha completa, bandeja, procesamiento, plantillas, autoguardado | **Completada y aprobada** |
 | **2. Tareas y prioridad** | CRUD, estados, fechas, prioridad, búsqueda, filtros, subtareas, dependencias | **Completada y aprobada** |
 | **3. Dashboard** | Indicadores, tres prioridades, alertas, próximas 24 horas | **Completada y aprobada** |
-| **Recordatorios** | Recordatorios locales, horario silencioso, acciones desde la notificación | **Completada**, pendiente de aprobación. Resultados en [TEST_PLAN.md](TEST_PLAN.md) |
-| **4. Proyectos y planificación** | Proyectos, hitos, bloques de tiempo, planificación semanal | Pendiente |
+| **Recordatorios** | Recordatorios locales, horario silencioso, acciones desde la notificación | **Completada y aprobada** |
+| **4. Proyectos y planificación** | Proyectos, hitos, riesgos, bloques de tiempo, vistas diaria, semanal y mensual, capacidad | **Completada**, pendiente de aprobación. Resultados en [TEST_PLAN.md](TEST_PLAN.md) |
 | **5. Revisión y formación** | Revisiones diarias y semanales, formación, métricas | Pendiente |
 | **6. Estabilización** | QA, rendimiento, seguridad, copias de respaldo, APK, documentación | Pendiente |
 | **Futura. Integraciones** | Gmail, Calendar, Outlook, sincronización, funciones inteligentes | Sin planificar |
@@ -25,5 +25,8 @@ Se avanza por fases con aprobación entre ellas. Una fase no se considera termin
 | Actualizar Android Studio a Rabbit 2 (2026.2.2) | Narwhal 2025.1.1 no puede abrir un proyecto con AGP 9.5 |
 | Generar firma de release | Necesaria para la APK final en la Fase 6; las claves nunca van al repositorio |
 | Decidir adjuntos locales de la ficha | Requieren permisos persistentes de archivos (D-034) |
+| Editar hitos y riesgos ya creados | Hoy se quita y se vuelve a añadir un hito; un riesgo solo se cierra o reabre |
+| Decidir si un proyecto se puede eliminar | El brief no lo pide; hoy se marca como cancelado |
+| Definir horario laboral | Permitiría consultar disponibilidad por franjas (D-054) |
 | Evaluar Room 3 | La línea 2.8 es la elegida por madurez |
 | Evaluar `targetSdk` 37 | Requiere una imagen de sistema API 37 para probar el comportamiento |
