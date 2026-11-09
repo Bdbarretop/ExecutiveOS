@@ -166,6 +166,26 @@ fun ObligationBadge(obligation: CriticalObligation, modifier: Modifier = Modifie
     }
 }
 
+/** Estado del autoguardado de una ficha; en reposo no ocupa sitio. */
+@Composable
+fun SaveNotice(state: SaveState) {
+    val text = when (state) {
+        SaveState.IDLE -> return
+        SaveState.SAVED -> R.string.task_saved
+        SaveState.INVALID -> R.string.task_invalid
+        SaveState.FAILED -> R.string.task_save_failed
+    }
+    Text(
+        text = stringResource(text),
+        style = MaterialTheme.typography.bodySmall,
+        color = if (state == SaveState.SAVED) {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        } else {
+            MaterialTheme.colorScheme.error
+        },
+    )
+}
+
 /** Frase comprensible: «Prioridad alta porque tiene impacto elevado y una fecha próxima». */
 @Composable
 fun priorityExplanation(assessment: PriorityAssessment): String {

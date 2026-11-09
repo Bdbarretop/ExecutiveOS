@@ -71,7 +71,7 @@ import com.executiveos.domain.projects.ProjectProgress
 import com.executiveos.domain.projects.ProjectRisk
 import com.executiveos.domain.projects.ProjectStatus
 import com.executiveos.domain.projects.ProjectValidationError
-import com.executiveos.feature.tasks.SaveState
+import com.executiveos.feature.tasks.SaveNotice
 import com.executiveos.feature.tasks.labelRes
 import java.time.LocalDate
 
@@ -338,25 +338,6 @@ private fun ProjectForm(
         RisksSection(uiState.risks, viewModel)
         TasksSection(uiState.tasks, viewModel, onOpenTask)
     }
-}
-
-@Composable
-private fun SaveNotice(state: SaveState) {
-    val text = when (state) {
-        SaveState.IDLE -> return
-        SaveState.SAVED -> R.string.task_saved
-        SaveState.INVALID -> R.string.task_invalid
-        SaveState.FAILED -> R.string.task_save_failed
-    }
-    Text(
-        text = stringResource(text),
-        style = MaterialTheme.typography.bodySmall,
-        color = if (state == SaveState.SAVED) {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        } else {
-            MaterialTheme.colorScheme.error
-        },
-    )
 }
 
 @Composable

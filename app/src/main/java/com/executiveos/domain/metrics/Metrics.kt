@@ -61,6 +61,12 @@ object MetricsCalculator {
         }
     }
 
+    fun shift(period: MetricPeriod, anchor: LocalDate, steps: Long): LocalDate = when (period) {
+        MetricPeriod.WEEK -> anchor.plusWeeks(steps)
+        MetricPeriod.MONTH -> anchor.plusMonths(steps)
+        MetricPeriod.QUARTER -> anchor.plusMonths(steps * MONTHS_PER_QUARTER)
+    }
+
     /**
      * El filtro de categoría solo afecta a los indicadores de tareas. Las subtareas y las tareas de
      * prioridad baja no cuentan para el cumplimiento: trocear trabajo no debe mejorar el resultado.

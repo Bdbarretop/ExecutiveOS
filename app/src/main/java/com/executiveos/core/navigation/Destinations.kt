@@ -23,6 +23,12 @@ import kotlinx.serialization.Serializable
 @Serializable data object ReminderSettingsRoute
 @Serializable data class ProjectEditorRoute(val projectId: String)
 
+@Serializable data object MetricsRoute
+@Serializable data class LearningGoalRoute(val goalId: String)
+
+/** Sin [date] se abre la revisión del periodo actual. */
+@Serializable data class ReviewEditorRoute(val type: String, val date: String? = null)
+
 /** Sin [blockId] se crea un bloque nuevo; [date] es su día en formato ISO. */
 @Serializable data class BlockEditorRoute(val blockId: String? = null, val date: String? = null)
 
@@ -66,6 +72,12 @@ enum class MoreDestination(
         R.string.section_reviews_description,
         R.drawable.ic_review,
         ReviewsRoute,
+    ),
+    METRICS(
+        R.string.section_metrics,
+        R.string.section_metrics_description,
+        R.drawable.ic_insights,
+        MetricsRoute,
     ),
     SETTINGS(
         R.string.section_settings,

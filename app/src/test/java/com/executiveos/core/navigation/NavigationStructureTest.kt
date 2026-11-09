@@ -12,7 +12,7 @@ class NavigationStructureTest {
     }
 
     @Test
-    fun theEightSectionsOfTheBriefAreReachableInOrderWithoutRepetition() {
+    fun theSectionsOfTheBriefAreReachableInOrderWithoutRepetition() {
         val sectionLabels = (TopLevelDestination.entries - TopLevelDestination.MORE)
             .map { it.labelRes } + MoreDestination.entries.map { it.labelRes }
 
@@ -24,6 +24,7 @@ class NavigationStructureTest {
             R.string.section_planning,
             R.string.section_learning,
             R.string.section_reviews,
+            R.string.section_metrics,
             R.string.section_settings,
         )
         assertEquals(expected, sectionLabels)

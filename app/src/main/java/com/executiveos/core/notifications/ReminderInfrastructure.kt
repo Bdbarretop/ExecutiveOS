@@ -127,9 +127,21 @@ class AndroidNotificationPublisher @Inject constructor(
         }
         post(
             id,
-            baseBuilder(CHANNEL_TASKS, openIntent(null))
+            baseBuilder(CHANNEL_TASKS, reviewIntent(kind))
                 .setContentTitle(context.getString(title))
                 .setContentText(context.getString(text)),
+        )
+    }
+
+    private fun reviewIntent(kind: ReviewKind): PendingIntent {
+        val intent = Intent(context, MainActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(MainActivity.EXTRA_REVIEW_TYPE, kind.name)
+        return PendingIntent.getActivity(
+            context,
+            "review_${kind.name}".hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 

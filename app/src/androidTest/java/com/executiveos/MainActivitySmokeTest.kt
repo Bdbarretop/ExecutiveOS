@@ -22,7 +22,15 @@ import com.executiveos.core.navigation.MoreDestination
 import com.executiveos.core.navigation.NavigationTags
 import com.executiveos.core.navigation.TopLevelDestination
 import com.executiveos.feature.capture.CAPTURE_SAVE_TAG
+import com.executiveos.domain.reviews.ReviewQuestion
+import com.executiveos.domain.reviews.ReviewType
 import com.executiveos.feature.capture.CAPTURE_TITLE_TAG
+import com.executiveos.feature.learning.LEARNING_ADD_SESSION_TAG
+import com.executiveos.feature.learning.LEARNING_MINUTES_TAG
+import com.executiveos.feature.learning.LEARNING_NEW_TAG
+import com.executiveos.feature.learning.LEARNING_TITLE_FIELD_TAG
+import com.executiveos.feature.reviews.reviewAnswerTag
+import com.executiveos.feature.reviews.reviewOpenTag
 import com.executiveos.feature.planning.BLOCK_SAVE_TAG
 import com.executiveos.feature.planning.BLOCK_TITLE_TAG
 import com.executiveos.feature.planning.PLANNING_ADD_TAG
@@ -100,7 +108,7 @@ class MainActivitySmokeTest {
 
         MoreDestination.entries.forEach { destination ->
             openTopLevel(TopLevelDestination.MORE)
-            composeRule.onNodeWithTag(NavigationTags.more(destination)).performClick()
+            composeRule.onNodeWithTag(NavigationTags.more(destination)).performScrollTo().performClick()
             assertScreenTitle(destination.labelRes)
             composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
             assertScreenTitle(R.string.section_more)
@@ -212,11 +220,70 @@ class MainActivitySmokeTest {
         waitForText("1 h")
     }
 
+    private fun openMoreSection(destination: MoreDestination) {
+        openTopLevel(TopLevelDestination.MORE)
+        composeRule.onNodeWithTag(NavigationTags.more(destination)).performScrollTo().performClick()
+        assertScreenTitle(destination.labelRes)
+    }
+
+    private fun waitForTag(tag: String) {
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    @Test
+    fun aDailyReviewKeepsItsAnswers() {
+        openMoreSection(MoreDestination.REVIEWS)
+        waitForTag(reviewOpenTag(ReviewType.DAILY))
+
+        composeRule.onNodeWithTag(reviewOpenTag(ReviewType.DAILY)).performClick()
+        val field = reviewAnswerTag(ReviewQuestion.TOP_PRIORITIES)
+        waitForTag(field)
+        composeRule.onNodeWithTag(field).performScrollTo().performTextInput("Comité de riesgos")
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+
+        waitForText(text(R.string.review_done))
+        composeRule.onNodeWithTag(reviewOpenTag(ReviewType.DAILY)).performClick()
+        waitForText("Comité de riesgos")
+    }
+
+    @Test
+    fun aLearningGoalCountsItsSessions() {
+        openMoreSection(MoreDestination.LEARNING)
+        waitForText(text(R.string.learning_empty_title))
+
+        composeRule.onNodeWithTag(LEARNING_NEW_TAG).performClick()
+        composeRule.onNodeWithTag(LEARNING_TITLE_FIELD_TAG).performTextInput("Basilea III")
+        composeRule.onNodeWithText("Regulación").performScrollTo().performClick()
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+        waitForText(text(R.string.learning_sessions))
+
+        composeRule.onNodeWithTag(LEARNING_ADD_SESSION_TAG).performScrollTo().performClick()
+        composeRule.onNodeWithTag(LEARNING_MINUTES_TAG).performTextInput("45")
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+        waitForText(composeRule.activity.getString(R.string.learning_goal_total, "45 min"))
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+
+        waitForText("Basilea III")
+        waitForText("45 min")
+    }
+
+    @Test
+    fun metricsExplainEachIndicator() {
+        openMoreSection(MoreDestination.METRICS)
+
+        waitForText(text(R.string.metrics_priority))
+        waitForText(text(R.string.metrics_compliance_def))
+    }
+
     /** Vuelve a «Según el sistema» para no alterar las preferencias reales del teléfono. */
     @Test
     fun settingsReadsTheRoomCatalogAndSavesTheTheme() {
         openTopLevel(TopLevelDestination.MORE)
-        composeRule.onNodeWithTag(NavigationTags.more(MoreDestination.SETTINGS)).performClick()
+        composeRule.onNodeWithTag(NavigationTags.more(MoreDestination.SETTINGS))
+            .performScrollTo()
+            .performClick()
         waitForText(DefaultCategories.all.size.toString())
 
         selectTheme(R.string.settings_theme_light)

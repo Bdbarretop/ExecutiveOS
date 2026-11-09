@@ -33,13 +33,21 @@ import com.executiveos.R
 fun ExecutiveOsShell(
     pendingTaskId: String? = null,
     onPendingTaskHandled: () -> Unit = {},
+    pendingReviewType: String? = null,
+    onPendingReviewHandled: () -> Unit = {},
     navController: NavHostController = rememberNavController(),
 ) {
-    // Una notificación puede pedir abrir directamente una tarea.
+    // Una notificación puede pedir abrir directamente una tarea o una revisión.
     LaunchedEffect(pendingTaskId) {
         if (pendingTaskId != null) {
             navController.navigate(TaskEditorRoute(pendingTaskId))
             onPendingTaskHandled()
+        }
+    }
+    LaunchedEffect(pendingReviewType) {
+        if (pendingReviewType != null) {
+            navController.navigate(ReviewEditorRoute(pendingReviewType))
+            onPendingReviewHandled()
         }
     }
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -102,7 +110,9 @@ private fun NavDestination?.isFullScreen(): Boolean = this != null && (
         hasRoute(PrioritySettingsRoute::class) ||
         hasRoute(ReminderSettingsRoute::class) ||
         hasRoute(ProjectEditorRoute::class) ||
-        hasRoute(BlockEditorRoute::class)
+        hasRoute(BlockEditorRoute::class) ||
+        hasRoute(ReviewEditorRoute::class) ||
+        hasRoute(LearningGoalRoute::class)
     )
 
 private fun NavDestination?.isIn(destination: TopLevelDestination): Boolean =

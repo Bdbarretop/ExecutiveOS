@@ -2,14 +2,10 @@ package com.executiveos.core.designsystem.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -106,23 +102,5 @@ fun ErrorState(
                 Text(stringResource(R.string.action_retry))
             }
         }
-    }
-}
-
-/** Indica con honestidad que una sección aún no existe y en qué fase del plan llegará. */
-@Composable
-fun SectionPlaceholder(phase: Int, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        contentAlignment = Alignment.Center,
-    ) {
-        EmptyState(
-            title = stringResource(R.string.placeholder_title),
-            message = stringResource(R.string.placeholder_message, phase),
-            iconRes = R.drawable.ic_schedule,
-            modifier = Modifier.padding(bottom = Spacing.fabClearance),
-        )
     }
 }

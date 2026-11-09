@@ -212,6 +212,13 @@ class ReviewAndMetricsTest {
     }
 
     @Test
+    fun shiftingAdvancesByTheSizeOfTheMetricPeriod() {
+        assertEquals(today.plusWeeks(1), MetricsCalculator.shift(MetricPeriod.WEEK, today, 1))
+        assertEquals(today.minusMonths(1), MetricsCalculator.shift(MetricPeriod.MONTH, today, -1))
+        assertEquals(today.plusMonths(3), MetricsCalculator.shift(MetricPeriod.QUARTER, today, 1))
+    }
+
+    @Test
     fun withoutDataARatioHasNoPercentInsteadOfZero() {
         assertNull(Ratio(0, 0).percent)
         assertEquals(50, Ratio(1, 2).percent)

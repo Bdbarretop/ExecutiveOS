@@ -13,6 +13,8 @@
     <string name="section_learning_description">Objetivos, sesiones y horas de estudio</string>
     <string name="section_reviews">Revisiones</string>
     <string name="section_reviews_description">Revisión diaria, cierre y revisión semanal</string>
+    <string name="section_metrics">Métricas</string>
+    <string name="section_metrics_description">Indicadores por semana, mes o trimestre</string>
     <string name="section_settings">Configuración</string>
     <string name="section_settings_description">Apariencia, plantillas y estado del sistema</string>
 
@@ -28,8 +30,6 @@
     <string name="action_more_options">Más acciones</string>
 
     <string name="loading_default">Cargando…</string>
-    <string name="placeholder_title">Aún no disponible</string>
-    <string name="placeholder_message" tools:ignore="PluralsCandidate">Esta sección todavía no está construida. Llegará en la Fase %1$d del plan de desarrollo.</string>
 
     <string name="settings_appearance">Apariencia</string>
     <string name="settings_theme_system">Según el sistema</string>
@@ -128,7 +128,7 @@
     <string name="task_invalid">Revisa los datos marcados; aún no se han guardado.</string>
     <string name="task_save_failed">No se pudo guardar. Tus cambios siguen en pantalla.</string>
     <string name="task_missing_prefix">Falta definir: %1$s</string>
-    <string name="task_suggest_split">Es una tarea larga: considera dividirla en subtareas. Las subtareas llegan en la Fase 2.</string>
+    <string name="task_suggest_split">Es una tarea larga: considera dividirla en subtareas.</string>
     <string name="task_convert_project_title">¿Convertir en proyecto?</string>
     <string name="task_convert_project_message">Se creará un proyecto con este contenido y la tarea se archivará. La captura original se conserva.</string>
 
@@ -624,6 +624,112 @@
     <string name="capacity_percent">Porcentaje objetivo</string>
     <string name="capacity_days">Días laborables</string>
     <string name="capacity_hint">Planifica por debajo del 100 %: no todo el tiempo libre es productivo y siempre surgen imprevistos.</string>
+
+    <!-- Revisiones -->
+    <string name="review_daily">Revisión diaria</string>
+    <string name="review_closing">Cierre diario</string>
+    <string name="review_weekly">Revisión semanal</string>
+    <string name="review_done">Hecha</string>
+    <string name="review_pending">Pendiente</string>
+    <string name="review_current">Hoy y esta semana</string>
+    <string name="review_history">Anteriores</string>
+    <string name="review_history_empty">Las revisiones que guardes aparecerán aquí.</string>
+    <string name="review_week_of">Semana del %1$s</string>
+    <string name="review_q_tasks_today">¿Qué tareas deben atenderse hoy?</string>
+    <string name="review_q_priorities">¿Cuáles son las tres prioridades?</string>
+    <string name="review_q_due">¿Qué compromisos vencen?</string>
+    <string name="review_q_blocked">¿Qué está bloqueado?</string>
+    <string name="review_q_delegate">¿Qué puedo delegar?</string>
+    <string name="review_q_postpone">¿Qué debo posponer conscientemente?</string>
+    <string name="review_q_protect">¿Qué tiempo necesito proteger?</string>
+    <string name="review_q_finished">¿Qué terminé?</string>
+    <string name="review_q_pending">¿Qué quedó pendiente?</string>
+    <string name="review_q_why">¿Por qué?</string>
+    <string name="review_q_changed">¿Qué cambió?</string>
+    <string name="review_q_tomorrow">¿Qué debo preparar para mañana?</string>
+    <string name="review_q_notes">Notas de la semana</string>
+    <string name="review_summary_title">Resumen de la semana</string>
+    <string name="review_summary_completed">Tareas completadas</string>
+    <string name="review_summary_pending">Tareas pendientes</string>
+    <string name="review_summary_overdue">Tareas vencidas</string>
+    <string name="review_summary_projects">Proyectos activos</string>
+    <string name="review_summary_delayed">Proyectos con retraso</string>
+    <string name="review_summary_learning">Formación</string>
+    <string name="review_summary_deep_work">Tiempo de concentración</string>
+    <string name="review_summary_overload">Días sobrecargados</string>
+    <string name="review_summary_next">Compromisos de la próxima semana</string>
+    <string name="review_summary_note">Pendientes y vencidas muestran la situación actual.</string>
+    <string name="review_recommendations">Sugerencias de la app</string>
+    <string name="review_recommendations_note">Son reglas sencillas aplicadas a tus datos, no conclusiones demostradas.</string>
+    <string name="review_recommendations_empty">Sin sugerencias para esta semana.</string>
+    <string name="recommend_overdue">Hay tareas vencidas: decide si las terminas, las replanificas o las descartas.</string>
+    <string name="recommend_delayed">Hay proyectos con retraso: revisa sus hitos y fechas.</string>
+    <string name="recommend_overload">Hubo días por encima de tu objetivo: podrías dejar más margen.</string>
+    <string name="recommend_deep_work">No hay tiempo de concentración registrado: podrías reservar un bloque de trabajo profundo.</string>
+    <string name="recommend_learning">Tienes objetivos de formación activos sin horas esta semana: podrías planificar una sesión.</string>
+    <string name="recommend_commitments">La próxima semana tiene compromisos: conviene prepararlos con antelación.</string>
+
+    <!-- Formación -->
+    <string name="learning_new">Nuevo objetivo</string>
+    <string name="learning_goal_field">Objetivo de aprendizaje</string>
+    <string name="learning_topic">Tema o categoría</string>
+    <string name="learning_empty_title">Sin objetivos de formación</string>
+    <string name="learning_empty_message">Crea uno para registrar cursos, sesiones y horas de estudio.</string>
+    <string name="learning_hours_title">Horas de formación</string>
+    <string name="learning_total">Total del periodo</string>
+    <string name="learning_by_topic">Por tema</string>
+    <string name="learning_by_week">Por semana</string>
+    <string name="learning_no_hours">Sin sesiones en este periodo.</string>
+    <string name="learning_goals">Objetivos</string>
+    <string name="learning_goal_title">Objetivo de formación</string>
+    <string name="learning_goal_not_found">Este objetivo ya no existe.</string>
+    <string name="learning_title_required">El objetivo necesita un título.</string>
+    <string name="learning_topic_required">Indica un tema.</string>
+    <string name="learning_course">Curso</string>
+    <string name="learning_materials">Materiales</string>
+    <string name="learning_evidence">Evidencias</string>
+    <string name="learning_mastery">Nivel de dominio (1 a 5)</string>
+    <string name="learning_mastery_none">Sin evaluar</string>
+    <string name="learning_sessions">Sesiones</string>
+    <string name="learning_sessions_empty">Aún no hay sesiones.</string>
+    <string name="learning_session_add">Registrar sesión</string>
+    <string name="learning_session_minutes">Tiempo dedicado (minutos)</string>
+    <string name="learning_session_notes">Qué trabajaste (opcional)</string>
+    <string name="learning_session_evaluation">Evaluación (opcional)</string>
+    <string name="learning_evaluation_value">Evaluación: %1$s</string>
+    <string name="learning_session_delete">Eliminar la sesión del %1$s</string>
+    <string name="learning_session_delete_title">¿Eliminar esta sesión?</string>
+    <string name="learning_session_delete_message">Su tiempo dejará de contar y no se podrá recuperar.</string>
+    <string name="learning_goal_total">Tiempo total: %1$s</string>
+
+    <!-- Métricas -->
+    <string name="metrics_period_quarter">Trimestre</string>
+    <string name="metrics_all_categories">Todas</string>
+    <string name="metrics_no_data">Sin datos en este periodo</string>
+    <string name="metrics_ratio" tools:ignore="PluralsCandidate">%1$d de %2$d (%3$d %%)</string>
+    <string name="metrics_estimated_actual">Estimado %1$s · Real %2$s</string>
+    <string name="metrics_priority">Prioridades completadas</string>
+    <string name="metrics_priority_def">Tareas críticas y altas con fecha o cierre en el periodo que ya están completadas.</string>
+    <string name="metrics_compliance">Cumplimiento de fechas</string>
+    <string name="metrics_compliance_def">Tareas con fecha ya alcanzada en el periodo que se terminaron a tiempo. No cuentan las subtareas ni la prioridad baja, para no premiar trocear el trabajo. Con la vista Semana es el cumplimiento semanal.</string>
+    <string name="metrics_overdue">Tareas vencidas</string>
+    <string name="metrics_overdue_def">Tareas abiertas cuya fecha ya pasó, a día de hoy.</string>
+    <string name="metrics_blocked">Tareas bloqueadas</string>
+    <string name="metrics_blocked_def">Tareas abiertas en estado Bloqueada, a día de hoy.</string>
+    <string name="metrics_estimate">Tiempo estimado frente a real</string>
+    <string name="metrics_estimate_def">Solo tareas completadas en el periodo que tienen ambos valores.</string>
+    <string name="metrics_deep_work">Horas de trabajo profundo</string>
+    <string name="metrics_deep_work_def">Tiempo real registrado en bloques de trabajo profundo. El filtro de categoría no le afecta.</string>
+    <string name="metrics_learning">Horas de formación</string>
+    <string name="metrics_learning_def">Tiempo de las sesiones de formación del periodo. El filtro de categoría no le afecta.</string>
+    <string name="metrics_projects">Progreso de proyectos</string>
+    <string name="metrics_projects_def">Avance ponderado por hitos y entregables de los proyectos en curso. Es el estado actual; ni el periodo ni la categoría le afectan.</string>
+    <string name="metrics_projects_none">Sin proyectos en curso.</string>
+    <string name="metrics_project_percent" tools:ignore="PluralsCandidate">%1$d %%</string>
+    <string name="metrics_project_unmeasured">Sin hitos</string>
+    <string name="metrics_by_category">Distribución del tiempo por categoría</string>
+    <string name="metrics_by_category_def">Tiempo real de las tareas completadas en el periodo. Las que no tienen tiempo real no cuentan.</string>
+    <string name="metrics_no_category">Sin categoría</string>
 
     <!-- Plantillas -->
     <string name="templates_title">Plantillas de captura</string>

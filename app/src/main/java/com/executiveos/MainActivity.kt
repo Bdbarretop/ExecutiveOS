@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val pendingTaskId = mutableStateOf<String?>(null)
+    private val pendingReviewType = mutableStateOf<String?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,8 @@ class MainActivity : ComponentActivity() {
                 ExecutiveOsShell(
                     pendingTaskId = pendingTaskId.value,
                     onPendingTaskHandled = { pendingTaskId.value = null },
+                    pendingReviewType = pendingReviewType.value,
+                    onPendingReviewHandled = { pendingReviewType.value = null },
                 )
             }
         }
@@ -54,14 +57,17 @@ class MainActivity : ComponentActivity() {
         consumeTaskExtra(intent)
     }
 
-    /** Se retira del intent para que al girar la pantalla no se vuelva a abrir la tarea. */
+    /** Se retira del intent para que al girar la pantalla no se vuelva a abrir el destino. */
     private fun consumeTaskExtra(intent: Intent) {
         intent.getStringExtra(EXTRA_TASK_ID)?.let { pendingTaskId.value = it }
         intent.removeExtra(EXTRA_TASK_ID)
+        intent.getStringExtra(EXTRA_REVIEW_TYPE)?.let { pendingReviewType.value = it }
+        intent.removeExtra(EXTRA_REVIEW_TYPE)
     }
 
     companion object {
         const val EXTRA_TASK_ID = "com.executiveos.extra.TASK_ID"
+        const val EXTRA_REVIEW_TYPE = "com.executiveos.extra.REVIEW_TYPE"
     }
 }
 

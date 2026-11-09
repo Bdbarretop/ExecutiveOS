@@ -23,7 +23,15 @@ import com.executiveos.core.navigation.MoreDestination
 import com.executiveos.core.navigation.NavigationTags
 import com.executiveos.core.navigation.TopLevelDestination
 import com.executiveos.feature.capture.CAPTURE_SAVE_TAG
+import com.executiveos.domain.reviews.ReviewQuestion
+import com.executiveos.domain.reviews.ReviewType
 import com.executiveos.feature.capture.CAPTURE_TITLE_TAG
+import com.executiveos.feature.learning.LEARNING_ADD_SESSION_TAG
+import com.executiveos.feature.learning.LEARNING_MINUTES_TAG
+import com.executiveos.feature.learning.LEARNING_NEW_TAG
+import com.executiveos.feature.learning.LEARNING_TITLE_FIELD_TAG
+import com.executiveos.feature.reviews.reviewAnswerTag
+import com.executiveos.feature.reviews.reviewOpenTag
 import com.executiveos.feature.planning.BLOCK_SAVE_TAG
 import com.executiveos.feature.planning.BLOCK_TITLE_TAG
 import com.executiveos.feature.planning.PLANNING_ADD_TAG
@@ -285,20 +293,95 @@ class AppSmokeTest {
         waitForText("1 h")
     }
 
+    private fun openMoreSection(destination: MoreDestination) {
+        openTopLevel(TopLevelDestination.MORE)
+        composeRule.onNodeWithTag(NavigationTags.more(destination)).performScrollTo().performClick()
+        assertScreenTitle(destination.labelRes)
+    }
+
+    private fun waitForTag(tag: String) {
+        composeRule.waitUntil(TIMEOUT_MILLIS) {
+            composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    @Test
+    fun aDailyReviewKeepsItsAnswers() {
+        openMoreSection(MoreDestination.REVIEWS)
+        waitForText(text(R.string.review_history_empty))
+
+        composeRule.onNodeWithTag(reviewOpenTag(ReviewType.DAILY)).performClick()
+        val field = reviewAnswerTag(ReviewQuestion.TOP_PRIORITIES)
+        waitForTag(field)
+        composeRule.onNodeWithTag(field).performScrollTo().performTextInput("Comité de riesgos")
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+
+        waitForText(text(R.string.review_done))
+        composeRule.onNodeWithTag(reviewOpenTag(ReviewType.DAILY)).performClick()
+        waitForText("Comité de riesgos")
+    }
+
+    @Test
+    fun theWeeklyReviewShowsSuggestionsLabelledAsHeuristics() {
+        openMoreSection(MoreDestination.REVIEWS)
+        waitForTag(reviewOpenTag(ReviewType.WEEKLY))
+
+        composeRule.onNodeWithTag(reviewOpenTag(ReviewType.WEEKLY)).performClick()
+
+        waitForText(text(R.string.review_summary_title))
+        waitForText(text(R.string.review_recommendations_note))
+        waitForText(text(R.string.recommend_deep_work))
+    }
+
+    @Test
+    fun aLearningGoalCountsItsSessions() {
+        openMoreSection(MoreDestination.LEARNING)
+        waitForText(text(R.string.learning_empty_title))
+
+        composeRule.onNodeWithTag(LEARNING_NEW_TAG).performClick()
+        composeRule.onNodeWithTag(LEARNING_TITLE_FIELD_TAG).performTextInput("Basilea III")
+        composeRule.onNodeWithText("Regulación").performScrollTo().performClick()
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+        waitForText(text(R.string.learning_sessions))
+
+        composeRule.onNodeWithTag(LEARNING_ADD_SESSION_TAG).performScrollTo().performClick()
+        composeRule.onNodeWithTag(LEARNING_MINUTES_TAG).performTextInput("45")
+        composeRule.onNodeWithText(text(R.string.action_accept)).performClick()
+        waitForText(composeRule.activity.getString(R.string.learning_goal_total, "45 min"))
+        composeRule.onNodeWithContentDescription(text(R.string.action_back)).performClick()
+
+        waitForText("Basilea III")
+        waitForText("45 min")
+    }
+
+    @Test
+    fun metricsExplainEachIndicator() {
+        openMoreSection(MoreDestination.METRICS)
+
+        waitForText(text(R.string.metrics_priority))
+        waitForText(text(R.string.metrics_compliance_def))
+        composeRule.onNodeWithText(text(R.string.metrics_period_quarter)).performClick()
+        waitForText(text(R.string.metrics_by_category_def))
+    }
+
     @Test
     fun moreListsTheRemainingSections() {
         openTopLevel(TopLevelDestination.MORE)
 
         assertScreenTitle(R.string.section_more)
         MoreDestination.entries.forEach { destination ->
-            composeRule.onNodeWithTag(NavigationTags.more(destination)).assertIsDisplayed()
+            composeRule.onNodeWithTag(NavigationTags.more(destination))
+                .performScrollTo()
+                .assertIsDisplayed()
         }
     }
 
     @Test
     fun settingsReadsRealCatalogFromRoomAndAppliesTheSelectedTheme() {
         openTopLevel(TopLevelDestination.MORE)
-        composeRule.onNodeWithTag(NavigationTags.more(MoreDestination.SETTINGS)).performClick()
+        composeRule.onNodeWithTag(NavigationTags.more(MoreDestination.SETTINGS))
+            .performScrollTo()
+            .performClick()
         assertScreenTitle(R.string.section_settings)
 
         waitForText(DefaultCategories.all.size.toString())
@@ -314,7 +397,9 @@ class AppSmokeTest {
     @Test
     fun templatesCanBeOpenedFromSettings() {
         openTopLevel(TopLevelDestination.MORE)
-        composeRule.onNodeWithTag(NavigationTags.more(MoreDestination.SETTINGS)).performClick()
+        composeRule.onNodeWithTag(NavigationTags.more(MoreDestination.SETTINGS))
+            .performScrollTo()
+            .performClick()
 
         composeRule.onNodeWithText(text(R.string.settings_templates)).performClick()
 
